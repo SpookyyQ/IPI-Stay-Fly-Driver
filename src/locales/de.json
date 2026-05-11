@@ -1,0 +1,104 @@
+{
+  "app": {
+    "title": "IPI FLY PRO Treiber",
+    "noDevice": "Kein Gerät verbunden",
+    "connecting": "Verbinde…"
+  },
+  "tabs": {
+    "home": "Home",
+    "dpi": "DPI",
+    "lightning": "Beleuchtung",
+    "performance": "Performance",
+    "buttons": "Tasten",
+    "advanced": "Erweitert",
+    "other": "Sonstiges"
+  },
+  "topbar": {
+    "battery": "Akku",
+    "connected": "Verbunden",
+    "disconnected": "Getrennt"
+  },
+  "dpi": {
+    "title": "DPI-Einstellungen",
+    "stage": "DPI-Stufe",
+    "value": "DPI-Wert"
+  },
+  "lightning": {
+    "title": "Beleuchtung",
+    "ledEffect": "LED-Effekt",
+    "ledOff": "Aus",
+    "ledSolid": "Dauerlicht",
+    "ledBreathing": "Atmen",
+    "brightness": "Helligkeit",
+    "speed": "Geschwindigkeit"
+  },
+  "performance": {
+    "title": "Performance",
+    "sleepTimer": "Sleep-Timer",
+    "sleepUnit": "× 10 s",
+    "pollingRate": "Abfragerate",
+    "experimental": "experimentell",
+    "debounce": "Entprellzeit",
+    "debounceUnit": "ms",
+    "lod": "Abhebedistanz (LOD)",
+    "ripple": "Wellenform-Korrektur",
+    "linear": "Linearkorrektur",
+    "angleSnap": "Winkelkorrektur",
+    "workingMode": "Vollleistungsmodus",
+    "workingModeDesc": "Sensor-LED leuchtet hell auf, Sensor läuft mit maximaler Performance.",
+    "workingModeDuration": "Dauer",
+    "longDistance": "Fernbereichsmodus",
+    "longDistanceDesc": "Vergrößert die WLAN-Reichweite und verbessert die Störungsfestigkeit.",
+    "longDistanceWarn": "Höherer Stromverbrauch — verkürzt die Akkulaufzeit.",
+    "fps20k": "20K FPS Abtastrate",
+    "fps20kDesc": "Erhöht die Sensor-Abtastrate auf 20.000 Bilder pro Sekunde für präzisere Positionierung.",
+    "fps20kWarn": "Höherer Stromverbrauch — verkürzt die Akkulaufzeit deutlich.",
+    "auto": "auto",
+    "ultraAutoNote": "Ultra Performance wird bei Abfrageraten über 1000 Hz automatisch aktiviert.",
+    "motionSync": "Motion Sync",
+    "workMode": "Arbeitsmodus",
+    "lowPower": "Energiesparmodus",
+    "highPerf": "Hohe Performance",
+    "ultraPerf": "Ultra Performance"
+  },
+  "buttons": {
+    "title": "Tastenbelegung",
+    "placeholder": "Tastenbelegung ist in Phase 2 verfügbar."
+  },
+  "advanced": {
+    "title": "Erweitert",
+    "receiverLed": "Empfänger-LED",
+    "receiverLedHz": "Hz-Anzeige",
+    "receiverLedBattery": "Akku-Anzeige",
+    "receiverLedWarning": "Nur Warnung"
+  },
+  "other": {
+    "title": "IPI FLY PRO",
+    "specs": "Technische Daten",
+    "spec_sensor": "Sensor",
+    "spec_dpi": "DPI-Bereich",
+    "spec_pollingRate": "Abfragerate",
+    "spec_switches": "Switches",
+    "spec_weight": "Gewicht",
+    "spec_connectivity": "Verbindung",
+    "spec_battery": "Akku",
+    "spec_dimensions": "Maße",
+    "spec_material": "Material",
+    "spec_chip": "Chip",
+    "factoryReset": "Werksreset",
+    "factoryResetConfirm": "Sicher? Dies kann nicht rückgängig gemacht werden.",
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "about": "Über",
+    "aboutText": "Open-Source Ersatztreiber für die IPI FLY PRO kabellose Gaming-Maus."
+  },
+  "dev": {
+    "title": "Entwickler-Panel",
+    "sendFrame": "Frame senden (hex)",
+    "send": "Senden",
+    "response": "Antwort",
+    "diffCapture": "Diff-Aufzeichnung",
+    "startCapture": "Start",
+    "stopCapture": "Stop"
+  }
+}

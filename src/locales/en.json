@@ -1,0 +1,104 @@
+{
+  "app": {
+    "title": "IPI FLY PRO Driver",
+    "noDevice": "No device connected",
+    "connecting": "Connecting…"
+  },
+  "tabs": {
+    "home": "Home",
+    "dpi": "DPI",
+    "lightning": "Lightning",
+    "performance": "Performance",
+    "buttons": "Buttons",
+    "advanced": "Advanced",
+    "other": "Other"
+  },
+  "topbar": {
+    "battery": "Battery",
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+  "dpi": {
+    "title": "DPI Settings",
+    "stage": "DPI Stage",
+    "value": "DPI Value"
+  },
+  "lightning": {
+    "title": "Lightning",
+    "ledEffect": "LED Effect",
+    "ledOff": "Off",
+    "ledSolid": "Solid",
+    "ledBreathing": "Breathing",
+    "brightness": "Brightness",
+    "speed": "Speed"
+  },
+  "performance": {
+    "title": "Performance",
+    "sleepTimer": "Sleep Timer",
+    "sleepUnit": "× 10 s",
+    "pollingRate": "Polling Rate",
+    "experimental": "experimental",
+    "debounce": "Debounce Time",
+    "debounceUnit": "ms",
+    "lod": "Lift-Off Distance",
+    "ripple": "Waveform control",
+    "linear": "Linear correction",
+    "angleSnap": "Angle Snapping",
+    "workingMode": "Full power mode",
+    "workingModeDesc": "Sensor LED lights up brightly and the sensor runs at maximum performance.",
+    "workingModeDuration": "Duration",
+    "longDistance": "Long-distance mode",
+    "longDistanceDesc": "Extends wireless range and improves interference resistance.",
+    "longDistanceWarn": "Higher power consumption — reduces battery life.",
+    "fps20k": "20K FPS scan rate",
+    "fps20kDesc": "Increases sensor scan rate to 20,000 frames per second for more precise tracking.",
+    "fps20kWarn": "Higher power consumption — reduces battery life significantly.",
+    "auto": "auto",
+    "ultraAutoNote": "Ultra performance is automatically activated at polling rates above 1000 Hz.",
+    "motionSync": "Motion Sync",
+    "workMode": "Work Mode",
+    "lowPower": "Low Power",
+    "highPerf": "High Performance",
+    "ultraPerf": "Ultra Performance"
+  },
+  "buttons": {
+    "title": "Button Assignment",
+    "placeholder": "Button remapping will be available in Phase 2."
+  },
+  "advanced": {
+    "title": "Advanced",
+    "receiverLed": "Receiver LED",
+    "receiverLedHz": "Hz indicator",
+    "receiverLedBattery": "Battery indicator",
+    "receiverLedWarning": "Warning only"
+  },
+  "other": {
+    "title": "IPI FLY PRO",
+    "specs": "Specifications",
+    "spec_sensor": "Sensor",
+    "spec_dpi": "DPI range",
+    "spec_pollingRate": "Polling rate",
+    "spec_switches": "Switches",
+    "spec_weight": "Weight",
+    "spec_connectivity": "Connectivity",
+    "spec_battery": "Battery",
+    "spec_dimensions": "Dimensions",
+    "spec_material": "Material",
+    "spec_chip": "Chip",
+    "factoryReset": "Factory Reset",
+    "factoryResetConfirm": "Are you sure? This cannot be undone.",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "about": "About",
+    "aboutText": "Open-source replacement driver for the IPI FLY PRO wireless gaming mouse."
+  },
+  "dev": {
+    "title": "Developer Panel",
+    "sendFrame": "Send Frame (hex)",
+    "send": "Send",
+    "response": "Response",
+    "diffCapture": "Diff Capture",
+    "startCapture": "Start",
+    "stopCapture": "Stop"
+  }
+}

@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Rajdhani", "Barlow Condensed", "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color-scheme: dark;
+  background-color: #050506;
+  color: #f7f0df;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 76% 16%, rgba(242, 182, 93, .18), transparent 26%),
+    radial-gradient(circle at 8% 86%, rgba(176, 118, 38, .13), transparent 34%),
+    linear-gradient(135deg, #141417 0%, #09090b 48%, #020203 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(8, 8, 10, 0.72);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(242, 182, 93, 0.6);
+  border-radius: 3px;
+}
+
+button, input {
+  font: inherit;
+}
+
+.atk-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.atk-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 22px),
+    linear-gradient(45deg, rgba(255,255,255,.025) 0 1px, transparent 1px 18px),
+    radial-gradient(ellipse at 74% 18%, rgba(242, 182, 93, .14), transparent 34%),
+    radial-gradient(ellipse at 46% 78%, rgba(255, 255, 255, .055), transparent 42%),
+    linear-gradient(120deg, rgba(255,255,255,.055), transparent 18%, rgba(242,182,93,.06) 42%, transparent 66%),
+    #070708;
+  background-size:
+    22px 22px,
+    18px 18px,
+    auto,
+    auto,
+    auto,
+    auto;
+}
+
+.atk-ribbon {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.atk-ribbon::before,
+.atk-ribbon::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, transparent, rgba(242, 182, 93, .2), transparent),
+    linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+  filter: blur(.4px);
+  transform: rotate(-12deg);
+}
+
+.atk-ribbon::before {
+  width: 72vw;
+  height: 10vh;
+  right: -10vw;
+  top: 9vh;
+}
+
+.atk-ribbon::after {
+  width: 82vw;
+  height: 13vh;
+  right: -18vw;
+  bottom: 16vh;
+}
+
+.glass-panel {
+  border: 1px solid rgba(242, 182, 93, .16);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .06), rgba(255,255,255,.015)),
+    linear-gradient(135deg, rgba(242, 182, 93, .075), transparent 34%),
+    rgba(13, 13, 15, .72);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, .46), inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter: blur(18px);
+}
+
+.atk-card {
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.atk-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(242, 182, 93, .34);
+}
