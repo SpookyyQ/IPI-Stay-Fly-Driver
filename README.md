@@ -47,6 +47,14 @@ Control receiver LED behavior, high-power modes, long-distance mode, angle snapp
 
 ![Advanced settings screen](Pics/advanced.png)
 
+> [!WARNING]
+> **Known Issues / Bugs**
+>
+> Sorry for the current limitations. Reverse-engineering the complete mouse protocol and rebuilding the driver UI from scratch takes a lot of time, so some areas are still incomplete.
+>
+> - **Battery level**: the battery status is difficult to read reliably from the device and is not implemented yet.
+> - **Button remapping**: a button remapping tab exists in the app, but it is currently only a visual preview of how the feature could look. It does not apply changes to the mouse yet.
+
 ## Supported Hardware
 
 | Field | Value |
