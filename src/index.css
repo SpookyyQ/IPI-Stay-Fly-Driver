@@ -93,22 +93,12 @@
   --color-topbar: 35 28 18;
   --theme-bg-1: rgba(242, 182, 93, .18);
   --theme-bg-2: rgba(176, 118, 38, .13);
-  --theme-bg-base: linear-gradient(135deg, #17130d 0%, #090907 48%, #020203 100%);
-  --theme-body-detail:
-    linear-gradient(118deg, transparent 0 54%, rgba(242, 182, 93, .045) 54% 55%, transparent 55% 100%),
-    linear-gradient(158deg, transparent 0 72%, rgba(255, 255, 255, .025) 72% 72.5%, transparent 72.5% 100%);
-  --theme-shell-pattern-a: linear-gradient(135deg, rgba(242, 182, 93, .055) 0 1px, transparent 1px 22px);
-  --theme-shell-pattern-b: linear-gradient(45deg, rgba(255, 255, 255, .024) 0 1px, transparent 1px 18px);
-  --theme-shell-detail:
-    linear-gradient(118deg, transparent 0 59%, rgba(242, 182, 93, .05) 59% 60%, transparent 60% 100%),
-    radial-gradient(circle at 17% 24%, rgba(242, 182, 93, .04), transparent 18%);
+  --theme-bg-base: linear-gradient(135deg, #141417 0%, #09090b 48%, #020203 100%);
   --theme-shell-radial-1: rgba(242, 182, 93, .14);
   --theme-shell-radial-2: rgba(255, 255, 255, .055);
   --theme-shell-ribbon: rgba(242, 182, 93, .06);
   --theme-ribbon-a: rgba(242, 182, 93, .2);
   --theme-ribbon-b: rgba(255, 255, 255, .06);
-  --theme-ribbon-blur: .4px;
-  --theme-ribbon-opacity: 1;
   --theme-panel-accent: rgba(242, 182, 93, .075);
   --theme-panel-border: rgba(242, 182, 93, .16);
   --theme-panel-border-hover: rgba(242, 182, 93, .34);
@@ -120,20 +110,9 @@
   --color-topbar: 4 44 38;
   --theme-bg-1: rgba(66, 230, 178, .16);
   --theme-bg-2: rgba(13, 148, 136, .12);
-  --theme-bg-base: linear-gradient(135deg, #061411 0%, #06100f 46%, #020505 100%);
-  --theme-body-detail:
-    linear-gradient(90deg, rgba(66, 230, 178, .035) 0 1px, transparent 1px 72px),
-    linear-gradient(0deg, rgba(66, 230, 178, .026) 0 1px, transparent 1px 72px);
-  --theme-shell-pattern-a: linear-gradient(90deg, rgba(66, 230, 178, .055) 0 1px, transparent 1px 26px);
-  --theme-shell-pattern-b: linear-gradient(0deg, rgba(66, 230, 178, .035) 0 1px, transparent 1px 26px);
-  --theme-shell-detail:
-    linear-gradient(90deg, transparent 0 49%, rgba(66, 230, 178, .055) 49% 49.4%, transparent 49.4% 100%),
-    radial-gradient(circle at 82% 24%, rgba(66, 230, 178, .06), transparent 22%);
   --theme-shell-radial-1: rgba(66, 230, 178, .13);
-  --theme-shell-radial-2: rgba(132, 255, 216, .045);
   --theme-shell-ribbon: rgba(66, 230, 178, .055);
   --theme-ribbon-a: rgba(66, 230, 178, .18);
-  --theme-ribbon-b: rgba(132, 255, 216, .055);
   --theme-panel-accent: rgba(66, 230, 178, .065);
   --theme-panel-border: rgba(66, 230, 178, .16);
   --theme-panel-border-hover: rgba(66, 230, 178, .34);
@@ -145,21 +124,9 @@
   --color-topbar: 6 25 54;
   --theme-bg-1: rgba(85, 183, 255, .15);
   --theme-bg-2: rgba(37, 99, 235, .12);
-  --theme-bg-base: linear-gradient(145deg, #07101c 0%, #050915 48%, #020308 100%);
-  --theme-body-detail:
-    linear-gradient(180deg, rgba(157, 215, 255, .035) 0 1px, transparent 1px 56px),
-    radial-gradient(ellipse at 50% 0%, rgba(85, 183, 255, .055), transparent 44%);
-  --theme-shell-pattern-a: linear-gradient(180deg, rgba(85, 183, 255, .045) 0 1px, transparent 1px 24px);
-  --theme-shell-pattern-b: linear-gradient(90deg, rgba(157, 215, 255, .02) 0 1px, transparent 1px 80px);
-  --theme-shell-detail:
-    linear-gradient(162deg, transparent 0 64%, rgba(85, 183, 255, .05) 64% 65%, transparent 65% 100%),
-    radial-gradient(ellipse at 24% 70%, rgba(85, 183, 255, .055), transparent 26%);
   --theme-shell-radial-1: rgba(85, 183, 255, .13);
-  --theme-shell-radial-2: rgba(157, 215, 255, .055);
   --theme-shell-ribbon: rgba(85, 183, 255, .055);
   --theme-ribbon-a: rgba(85, 183, 255, .18);
-  --theme-ribbon-b: rgba(157, 215, 255, .05);
-  --theme-ribbon-blur: 1px;
   --theme-panel-accent: rgba(85, 183, 255, .065);
   --theme-panel-border: rgba(85, 183, 255, .16);
   --theme-panel-border-hover: rgba(85, 183, 255, .34);
@@ -171,20 +138,9 @@
   --color-topbar: 55 7 20;
   --theme-bg-1: rgba(255, 79, 109, .14);
   --theme-bg-2: rgba(185, 28, 28, .12);
-  --theme-bg-base: linear-gradient(135deg, #17070b 0%, #0b0507 48%, #030102 100%);
-  --theme-body-detail:
-    linear-gradient(132deg, transparent 0 37%, rgba(255, 79, 109, .045) 37% 38%, transparent 38% 100%),
-    linear-gradient(132deg, transparent 0 66%, rgba(185, 28, 28, .04) 66% 68%, transparent 68% 100%);
-  --theme-shell-pattern-a: linear-gradient(132deg, rgba(255, 79, 109, .052) 0 1px, transparent 1px 30px);
-  --theme-shell-pattern-b: linear-gradient(42deg, rgba(255, 255, 255, .02) 0 1px, transparent 1px 38px);
-  --theme-shell-detail:
-    linear-gradient(132deg, transparent 0 32%, rgba(255, 79, 109, .055) 32% 33%, transparent 33% 100%),
-    linear-gradient(132deg, transparent 0 76%, rgba(255, 79, 109, .035) 76% 78%, transparent 78% 100%);
   --theme-shell-radial-1: rgba(255, 79, 109, .12);
-  --theme-shell-radial-2: rgba(255, 142, 162, .04);
   --theme-shell-ribbon: rgba(255, 79, 109, .055);
   --theme-ribbon-a: rgba(255, 79, 109, .17);
-  --theme-ribbon-b: rgba(255, 142, 162, .045);
   --theme-panel-accent: rgba(255, 79, 109, .06);
   --theme-panel-border: rgba(255, 79, 109, .16);
   --theme-panel-border-hover: rgba(255, 79, 109, .34);
@@ -196,21 +152,9 @@
   --color-topbar: 36 13 63;
   --theme-bg-1: rgba(177, 108, 255, .15);
   --theme-bg-2: rgba(126, 34, 206, .12);
-  --theme-bg-base: linear-gradient(140deg, #12081f 0%, #090510 48%, #030207 100%);
-  --theme-body-detail:
-    repeating-radial-gradient(circle at 78% 18%, rgba(177, 108, 255, .05) 0 1px, transparent 1px 62px),
-    radial-gradient(circle at 20% 72%, rgba(177, 108, 255, .055), transparent 24%);
-  --theme-shell-pattern-a: repeating-radial-gradient(circle at 74% 22%, rgba(177, 108, 255, .05) 0 1px, transparent 1px 48px);
-  --theme-shell-pattern-b: linear-gradient(135deg, rgba(255, 255, 255, .02) 0 1px, transparent 1px 28px);
-  --theme-shell-detail:
-    radial-gradient(circle at 78% 20%, rgba(177, 108, 255, .07), transparent 19%),
-    linear-gradient(116deg, transparent 0 58%, rgba(177, 108, 255, .042) 58% 59%, transparent 59% 100%);
   --theme-shell-radial-1: rgba(177, 108, 255, .13);
-  --theme-shell-radial-2: rgba(209, 171, 255, .045);
   --theme-shell-ribbon: rgba(177, 108, 255, .055);
   --theme-ribbon-a: rgba(177, 108, 255, .18);
-  --theme-ribbon-b: rgba(209, 171, 255, .048);
-  --theme-ribbon-blur: .8px;
   --theme-panel-accent: rgba(177, 108, 255, .065);
   --theme-panel-border: rgba(177, 108, 255, .16);
   --theme-panel-border-hover: rgba(177, 108, 255, .34);
@@ -222,21 +166,9 @@
   --color-topbar: 22 22 24;
   --theme-bg-1: rgba(255, 255, 255, .08);
   --theme-bg-2: rgba(148, 163, 184, .08);
-  --theme-bg-base: linear-gradient(135deg, #121214 0%, #08080a 48%, #020203 100%);
-  --theme-body-detail:
-    linear-gradient(90deg, rgba(255, 255, 255, .026) 0 1px, transparent 1px 96px),
-    linear-gradient(180deg, rgba(255, 255, 255, .018) 0 1px, transparent 1px 96px);
-  --theme-shell-pattern-a: linear-gradient(90deg, rgba(255, 255, 255, .035) 0 1px, transparent 1px 36px);
-  --theme-shell-pattern-b: linear-gradient(180deg, rgba(255, 255, 255, .024) 0 1px, transparent 1px 36px);
-  --theme-shell-detail:
-    linear-gradient(135deg, transparent 0 50%, rgba(255, 255, 255, .026) 50% 50.5%, transparent 50.5% 100%),
-    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, .035), transparent 18%);
   --theme-shell-radial-1: rgba(255, 255, 255, .07);
-  --theme-shell-radial-2: rgba(148, 163, 184, .045);
   --theme-shell-ribbon: rgba(255, 255, 255, .035);
   --theme-ribbon-a: rgba(255, 255, 255, .12);
-  --theme-ribbon-b: rgba(148, 163, 184, .042);
-  --theme-ribbon-opacity: .75;
   --theme-panel-accent: rgba(255, 255, 255, .035);
   --theme-panel-border: rgba(255, 255, 255, .13);
   --theme-panel-border-hover: rgba(255, 255, 255, .28);
@@ -247,7 +179,6 @@ body {
   min-height: 100vh;
   overflow: hidden;
   background:
-    var(--theme-body-detail),
     radial-gradient(circle at 76% 16%, var(--theme-bg-1), transparent 26%),
     radial-gradient(circle at 8% 86%, var(--theme-bg-2), transparent 34%),
     var(--theme-bg-base);
@@ -287,9 +218,8 @@ button, input {
   inset: 0;
   z-index: -2;
   background:
-    var(--theme-shell-pattern-a),
-    var(--theme-shell-pattern-b),
-    var(--theme-shell-detail),
+    linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 22px),
+    linear-gradient(45deg, rgba(255,255,255,.025) 0 1px, transparent 1px 18px),
     radial-gradient(ellipse at 74% 18%, var(--theme-shell-radial-1), transparent 34%),
     radial-gradient(ellipse at 46% 78%, var(--theme-shell-radial-2), transparent 42%),
     linear-gradient(120deg, rgba(255,255,255,.055), transparent 18%, var(--theme-shell-ribbon) 42%, transparent 66%),
@@ -319,8 +249,7 @@ button, input {
   background:
     linear-gradient(90deg, transparent, var(--theme-ribbon-a), transparent),
     linear-gradient(180deg, var(--theme-ribbon-b), transparent);
-  filter: blur(var(--theme-ribbon-blur));
-  opacity: var(--theme-ribbon-opacity);
+  filter: blur(.4px);
   transform: rotate(-12deg);
 }
 
