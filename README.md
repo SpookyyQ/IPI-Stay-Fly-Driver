@@ -37,6 +37,8 @@ The top bar includes a **Demo** button. When enabled, the app spawns a virtual I
 
 Demo mode is clearly marked with a banner and badge inside the app. While it is active, hardware polling and all HID write/read calls are disabled, so changing settings only affects the local demo state and never sends commands to a real device.
 
+![Demo mode with virtual mouse active](Pics/demo.png)
+
 ### Themes
 
 The app includes a small theme picker in the top bar. Themes currently change the accent color, selected navigation state, headings, control highlights and other UI accents. Available themes are **Stay Fly Gold**, **Cyber Mint**, **Ice Blue**, **Crimson Pro**, **Violet Pulse** and **Monochrome**.
