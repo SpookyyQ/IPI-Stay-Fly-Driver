@@ -24,7 +24,7 @@ export default function ThemePicker() {
   }, [open])
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative z-50" onPointerDown={event => event.stopPropagation()}>
       <button
         type="button"
         onClick={() => setOpen(value => !value)}
@@ -37,14 +37,19 @@ export default function ThemePicker() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-10 z-50 w-56 rounded-xl border border-white/10 bg-zinc-950/95 p-2 shadow-2xl shadow-black/50 backdrop-blur-xl">
+        <div
+          className="fixed right-16 top-11 z-[100] w-56 rounded-xl border border-white/10 bg-zinc-950/95 p-2 shadow-2xl shadow-black/50 backdrop-blur-xl"
+          onPointerDown={event => event.stopPropagation()}
+        >
           {themes.map(option => {
             const active = option.id === theme
             return (
               <button
                 key={option.id}
                 type="button"
-                onClick={() => {
+                onPointerDown={event => {
+                  event.preventDefault()
+                  event.stopPropagation()
                   setTheme(option.id)
                   setOpen(false)
                 }}
