@@ -2,12 +2,36 @@ import { useTranslation } from 'react-i18next'
 import mouseTopImage from '../../assets/fly-pro-top.png'
 
 const CALLOUTS = [
-  { label: 'Left Button',   className: 'left-[11%] top-[26%]', dot: 'right-[-28px] top-1/2' },
-  { label: 'Middle Button', className: 'right-[19%] top-[35%]', dot: 'left-[-28px] top-1/2' },
-  { label: 'Right Click',   className: 'right-[5%]  top-[48%]', dot: 'left-[-28px] top-1/2' },
-  { label: 'Forward',       className: 'left-[7%]   top-[55%]', dot: 'right-[-28px] top-1/2' },
-  { label: 'Backward',      className: 'left-[24%]  top-[68%]', dot: 'right-[-28px] top-1/2' },
-  { label: 'DPI Cycle',     className: 'right-[12%] top-[79%]', dot: 'left-[-28px] top-1/2' },
+  {
+    label: 'Left Button',
+    cardClass: 'left-[28%] top-[21%]',
+    markerClass: 'left-[44%] top-[25%]',
+  },
+  {
+    label: 'Middle Button',
+    cardClass: 'left-[56%] top-[19%]',
+    markerClass: 'left-[50%] top-[25%]',
+  },
+  {
+    label: 'Right Click',
+    cardClass: 'left-[63%] top-[30%]',
+    markerClass: 'left-[56%] top-[31%]',
+  },
+  {
+    label: 'Forward',
+    cardClass: 'left-[24%] top-[46%]',
+    markerClass: 'left-[40%] top-[47%]',
+  },
+  {
+    label: 'Backward',
+    cardClass: 'left-[31%] top-[58%]',
+    markerClass: 'left-[42%] top-[59%]',
+  },
+  {
+    label: 'DPI Cycle',
+    cardClass: 'left-[60%] top-[69%]',
+    markerClass: 'left-[51%] top-[67%]',
+  },
 ]
 
 export default function ButtonsTab() {
@@ -36,12 +60,16 @@ export default function ButtonsTab() {
         </div>
 
         {CALLOUTS.map(item => (
-          <div key={item.label} className={`absolute ${item.className}`}>
-            <div className="rounded-lg bg-zinc-900/80 px-4 py-2 shadow-xl shadow-black/30 ring-1 ring-white/10 backdrop-blur">
-              <p className="text-[10px] text-white/42">{item.label}</p>
-              <p className="text-sm font-bold">{item.label}</p>
+          <div key={item.label}>
+            <div className={`absolute ${item.cardClass}`}>
+              <div className="rounded-lg bg-zinc-900/80 px-4 py-2 shadow-xl shadow-black/30 ring-1 ring-white/10 backdrop-blur">
+                <p className="text-[10px] text-white/42">{item.label}</p>
+                <p className="text-sm font-bold">{item.label}</p>
+              </div>
             </div>
-            <span className={`absolute h-5 w-5 -translate-y-1/2 rounded-full border-2 border-dotted border-accent ${item.dot}`} />
+            <span
+              className={`absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dotted border-accent ${item.markerClass}`}
+            />
           </div>
         ))}
 
