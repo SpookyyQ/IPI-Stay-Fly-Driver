@@ -1,0 +1,105 @@
+{
+  "app": {
+    "title": "Driver IPI FLY PRO",
+    "noDevice": "Nenhum dispositivo conectado",
+    "connecting": "Conectando…",
+    "language": "Idioma"
+  },
+  "tabs": {
+    "home": "Início",
+    "dpi": "DPI",
+    "lightning": "Iluminação",
+    "performance": "Desempenho",
+    "buttons": "Botões",
+    "advanced": "Avançado",
+    "other": "Outros"
+  },
+  "topbar": {
+    "battery": "Bateria",
+    "connected": "Conectado",
+    "disconnected": "Desconectado"
+  },
+  "dpi": {
+    "title": "Configurações de DPI",
+    "stage": "Estágio de DPI",
+    "value": "Valor de DPI"
+  },
+  "lightning": {
+    "title": "Iluminação",
+    "ledEffect": "Efeito LED",
+    "ledOff": "Desligado",
+    "ledSolid": "Fixo",
+    "ledBreathing": "Respiração",
+    "brightness": "Brilho",
+    "speed": "Velocidade"
+  },
+  "performance": {
+    "title": "Desempenho",
+    "sleepTimer": "Temporizador de suspensão",
+    "sleepUnit": "× 10 s",
+    "pollingRate": "Taxa de polling",
+    "experimental": "experimental",
+    "debounce": "Tempo de debounce",
+    "debounceUnit": "ms",
+    "lod": "Distância de lift-off",
+    "ripple": "Controle de forma de onda",
+    "linear": "Correção linear",
+    "angleSnap": "Correção de ângulo",
+    "workingMode": "Modo de potência total",
+    "workingModeDesc": "O LED do sensor acende intensamente e o sensor opera com desempenho máximo.",
+    "workingModeDuration": "Duração",
+    "longDistance": "Modo de longa distância",
+    "longDistanceDesc": "Aumenta o alcance sem fio e melhora a resistência a interferências.",
+    "longDistanceWarn": "Maior consumo de energia — reduz a duração da bateria.",
+    "fps20k": "Taxa de varredura 20K FPS",
+    "fps20kDesc": "Aumenta a taxa de varredura do sensor para 20.000 quadros por segundo para rastreamento mais preciso.",
+    "fps20kWarn": "Maior consumo de energia — reduz significativamente a duração da bateria.",
+    "auto": "auto",
+    "ultraAutoNote": "Ultra Performance é ativado automaticamente com taxas de polling acima de 1000 Hz.",
+    "motionSync": "Motion Sync",
+    "workMode": "Modo de trabalho",
+    "lowPower": "Baixo consumo",
+    "highPerf": "Alto desempenho",
+    "ultraPerf": "Ultra Performance"
+  },
+  "buttons": {
+    "title": "Atribuição de botões",
+    "placeholder": "O remapeamento de botões estará disponível na fase 2."
+  },
+  "advanced": {
+    "title": "Avançado",
+    "receiverLed": "LED do receptor",
+    "receiverLedHz": "Indicador de Hz",
+    "receiverLedBattery": "Indicador de bateria",
+    "receiverLedWarning": "Apenas aviso"
+  },
+  "other": {
+    "title": "IPI FLY PRO",
+    "specs": "Especificações",
+    "spec_sensor": "Sensor",
+    "spec_dpi": "Faixa de DPI",
+    "spec_pollingRate": "Taxa de polling",
+    "spec_switches": "Switches",
+    "spec_weight": "Peso",
+    "spec_connectivity": "Conectividade",
+    "spec_battery": "Bateria",
+    "spec_dimensions": "Dimensões",
+    "spec_material": "Material",
+    "spec_chip": "Chip",
+    "factoryReset": "Restauração de fábrica",
+    "factoryResetConfirm": "Tem certeza? Isso não pode ser desfeito.",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "about": "Sobre",
+    "aboutText": "Driver open-source substituto para o mouse gamer sem fio IPI FLY PRO."
+  },
+  "dev": {
+    "title": "Painel de desenvolvedor",
+    "sendFrame": "Enviar frame (hex)",
+    "send": "Enviar",
+    "response": "Resposta",
+    "diffCapture": "Captura diff",
+    "startCapture": "Iniciar",
+    "stopCapture": "Parar"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "app": {
+    "title": "Sterownik IPI FLY PRO",
+    "noDevice": "Brak podłączonego urządzenia",
+    "connecting": "Łączenie…",
+    "language": "Język"
+  },
+  "tabs": {
+    "home": "Start",
+    "dpi": "DPI",
+    "lightning": "Podświetlenie",
+    "performance": "Wydajność",
+    "buttons": "Przyciski",
+    "advanced": "Zaawansowane",
+    "other": "Inne"
+  },
+  "topbar": {
+    "battery": "Bateria",
+    "connected": "Połączono",
+    "disconnected": "Rozłączono"
+  },
+  "dpi": {
+    "title": "Ustawienia DPI",
+    "stage": "Poziom DPI",
+    "value": "Wartość DPI"
+  },
+  "lightning": {
+    "title": "Podświetlenie",
+    "ledEffect": "Efekt LED",
+    "ledOff": "Wyłączone",
+    "ledSolid": "Stałe",
+    "ledBreathing": "Oddychanie",
+    "brightness": "Jasność",
+    "speed": "Prędkość"
+  },
+  "performance": {
+    "title": "Wydajność",
+    "sleepTimer": "Timer uśpienia",
+    "sleepUnit": "× 10 s",
+    "pollingRate": "Częstotliwość odpytywania",
+    "experimental": "eksperymentalne",
+    "debounce": "Czas debounce",
+    "debounceUnit": "ms",
+    "lod": "Odległość lift-off",
+    "ripple": "Kontrola przebiegu",
+    "linear": "Korekcja liniowa",
+    "angleSnap": "Korekcja kąta",
+    "workingMode": "Tryb pełnej mocy",
+    "workingModeDesc": "Dioda LED sensora świeci jasno, a sensor działa z maksymalną wydajnością.",
+    "workingModeDuration": "Czas trwania",
+    "longDistance": "Tryb dalekiego zasięgu",
+    "longDistanceDesc": "Zwiększa zasięg bezprzewodowy i poprawia odporność na zakłócenia.",
+    "longDistanceWarn": "Większe zużycie energii — skraca czas pracy baterii.",
+    "fps20k": "Częstotliwość skanowania 20K FPS",
+    "fps20kDesc": "Zwiększa częstotliwość skanowania sensora do 20 000 klatek na sekundę dla dokładniejszego śledzenia.",
+    "fps20kWarn": "Większe zużycie energii — znacząco skraca czas pracy baterii.",
+    "auto": "auto",
+    "ultraAutoNote": "Ultra Performance aktywuje się automatycznie przy odpytywaniu powyżej 1000 Hz.",
+    "motionSync": "Motion Sync",
+    "workMode": "Tryb pracy",
+    "lowPower": "Niskie zużycie energii",
+    "highPerf": "Wysoka wydajność",
+    "ultraPerf": "Ultra Performance"
+  },
+  "buttons": {
+    "title": "Przypisanie przycisków",
+    "placeholder": "Mapowanie przycisków będzie dostępne w fazie 2."
+  },
+  "advanced": {
+    "title": "Zaawansowane",
+    "receiverLed": "LED odbiornika",
+    "receiverLedHz": "Wskaźnik Hz",
+    "receiverLedBattery": "Wskaźnik baterii",
+    "receiverLedWarning": "Tylko ostrzeżenie"
+  },
+  "other": {
+    "title": "IPI FLY PRO",
+    "specs": "Specyfikacja",
+    "spec_sensor": "Sensor",
+    "spec_dpi": "Zakres DPI",
+    "spec_pollingRate": "Częstotliwość odpytywania",
+    "spec_switches": "Przełączniki",
+    "spec_weight": "Waga",
+    "spec_connectivity": "Łączność",
+    "spec_battery": "Bateria",
+    "spec_dimensions": "Wymiary",
+    "spec_material": "Materiał",
+    "spec_chip": "Układ",
+    "factoryReset": "Reset fabryczny",
+    "factoryResetConfirm": "Na pewno? Tej operacji nie można cofnąć.",
+    "confirm": "Potwierdź",
+    "cancel": "Anuluj",
+    "about": "O aplikacji",
+    "aboutText": "Open-source'owy zamiennik sterownika dla bezprzewodowej myszy gamingowej IPI FLY PRO."
+  },
+  "dev": {
+    "title": "Panel deweloperski",
+    "sendFrame": "Wyślij ramkę (hex)",
+    "send": "Wyślij",
+    "response": "Odpowiedź",
+    "diffCapture": "Przechwytywanie diff",
+    "startCapture": "Start",
+    "stopCapture": "Stop"
+  }
+}

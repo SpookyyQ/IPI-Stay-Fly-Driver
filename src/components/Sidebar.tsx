@@ -23,10 +23,19 @@ const navItems: { id: Tab; labelKey: string; icon: typeof Mouse }[] = [
 const languageOptions = [
   { code: 'de', label: 'Deutsch' },
   { code: 'en', label: 'English' },
+  { code: 'es', label: 'Español' },
+  { code: 'fr', label: 'Français' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'pl', label: 'Polski' },
+  { code: 'pt', label: 'Português' },
 ]
 
 export default function Sidebar({ activeTab, onTabChange }: Props) {
   const { i18n, t } = useTranslation()
+  const activeLanguage = i18n.resolvedLanguage?.split('-')[0] ?? i18n.language.split('-')[0]
+  const selectedLanguage = languageOptions.some(option => option.code === activeLanguage)
+    ? activeLanguage
+    : 'en'
 
   return (
     <aside className="w-[250px] shrink-0 border-r border-white/10 bg-black/55 shadow-2xl shadow-black/25 backdrop-blur-xl flex flex-col">
@@ -73,12 +82,12 @@ export default function Sidebar({ activeTab, onTabChange }: Props) {
       <div className="mx-3 mb-4 rounded-2xl border border-white/10 bg-white/[.07] p-3">
         <label htmlFor="language-select" className="mb-2 flex items-center gap-2 text-xs text-white/55">
           <Languages size={13} className="text-accent/80" />
-          Language
+          {t('app.language')}
         </label>
         <div className="relative">
           <select
             id="language-select"
-            value={languageOptions.some(option => option.code === i18n.language) ? i18n.language : 'en'}
+            value={selectedLanguage}
             onChange={event => i18n.changeLanguage(event.target.value)}
             className="h-10 w-full appearance-none rounded-lg border border-white/10 bg-white/[.08] px-3 pr-9 text-sm font-semibold text-white outline-none transition hover:bg-white/[.12] focus:border-accent/70 focus:ring-2 focus:ring-accent/20"
           >

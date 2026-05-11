@@ -1,0 +1,105 @@
+{
+  "app": {
+    "title": "Pilote IPI FLY PRO",
+    "noDevice": "Aucun appareil connecté",
+    "connecting": "Connexion…",
+    "language": "Langue"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "dpi": "DPI",
+    "lightning": "Éclairage",
+    "performance": "Performance",
+    "buttons": "Boutons",
+    "advanced": "Avancé",
+    "other": "Autre"
+  },
+  "topbar": {
+    "battery": "Batterie",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté"
+  },
+  "dpi": {
+    "title": "Paramètres DPI",
+    "stage": "Niveau DPI",
+    "value": "Valeur DPI"
+  },
+  "lightning": {
+    "title": "Éclairage",
+    "ledEffect": "Effet LED",
+    "ledOff": "Désactivé",
+    "ledSolid": "Fixe",
+    "ledBreathing": "Respiration",
+    "brightness": "Luminosité",
+    "speed": "Vitesse"
+  },
+  "performance": {
+    "title": "Performance",
+    "sleepTimer": "Minuterie de veille",
+    "sleepUnit": "× 10 s",
+    "pollingRate": "Taux d'interrogation",
+    "experimental": "expérimental",
+    "debounce": "Temps anti-rebond",
+    "debounceUnit": "ms",
+    "lod": "Distance de décrochage",
+    "ripple": "Contrôle de la forme d'onde",
+    "linear": "Correction linéaire",
+    "angleSnap": "Correction d'angle",
+    "workingMode": "Mode pleine puissance",
+    "workingModeDesc": "La LED du capteur s'allume fortement et le capteur fonctionne à performance maximale.",
+    "workingModeDuration": "Durée",
+    "longDistance": "Mode longue distance",
+    "longDistanceDesc": "Augmente la portée sans fil et améliore la résistance aux interférences.",
+    "longDistanceWarn": "Consommation plus élevée — réduit l'autonomie.",
+    "fps20k": "Taux de scan 20K FPS",
+    "fps20kDesc": "Augmente le taux de scan du capteur à 20 000 images par seconde pour un suivi plus précis.",
+    "fps20kWarn": "Consommation plus élevée — réduit fortement l'autonomie.",
+    "auto": "auto",
+    "ultraAutoNote": "Ultra Performance est activé automatiquement au-dessus de 1000 Hz.",
+    "motionSync": "Motion Sync",
+    "workMode": "Mode de fonctionnement",
+    "lowPower": "Basse consommation",
+    "highPerf": "Haute performance",
+    "ultraPerf": "Ultra Performance"
+  },
+  "buttons": {
+    "title": "Attribution des boutons",
+    "placeholder": "Le remappage des boutons sera disponible en phase 2."
+  },
+  "advanced": {
+    "title": "Avancé",
+    "receiverLed": "LED du récepteur",
+    "receiverLedHz": "Indicateur Hz",
+    "receiverLedBattery": "Indicateur de batterie",
+    "receiverLedWarning": "Avertissement uniquement"
+  },
+  "other": {
+    "title": "IPI FLY PRO",
+    "specs": "Caractéristiques",
+    "spec_sensor": "Capteur",
+    "spec_dpi": "Plage DPI",
+    "spec_pollingRate": "Taux d'interrogation",
+    "spec_switches": "Switches",
+    "spec_weight": "Poids",
+    "spec_connectivity": "Connectivité",
+    "spec_battery": "Batterie",
+    "spec_dimensions": "Dimensions",
+    "spec_material": "Matériau",
+    "spec_chip": "Puce",
+    "factoryReset": "Réinitialisation usine",
+    "factoryResetConfirm": "Êtes-vous sûr ? Cette action est irréversible.",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "about": "À propos",
+    "aboutText": "Pilote open-source de remplacement pour la souris gaming sans fil IPI FLY PRO."
+  },
+  "dev": {
+    "title": "Panneau développeur",
+    "sendFrame": "Envoyer une trame (hex)",
+    "send": "Envoyer",
+    "response": "Réponse",
+    "diffCapture": "Capture diff",
+    "startCapture": "Démarrer",
+    "stopCapture": "Arrêter"
+  }
+}

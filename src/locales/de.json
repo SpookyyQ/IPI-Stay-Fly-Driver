@@ -2,7 +2,8 @@
   "app": {
     "title": "IPI FLY PRO Treiber",
     "noDevice": "Kein Gerät verbunden",
-    "connecting": "Verbinde…"
+    "connecting": "Verbinde…",
+    "language": "Sprache"
   },
   "tabs": {
     "home": "Home",

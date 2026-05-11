@@ -1,0 +1,105 @@
+{
+  "app": {
+    "title": "Driver IPI FLY PRO",
+    "noDevice": "Nessun dispositivo collegato",
+    "connecting": "Connessione…",
+    "language": "Lingua"
+  },
+  "tabs": {
+    "home": "Home",
+    "dpi": "DPI",
+    "lightning": "Illuminazione",
+    "performance": "Prestazioni",
+    "buttons": "Pulsanti",
+    "advanced": "Avanzate",
+    "other": "Altro"
+  },
+  "topbar": {
+    "battery": "Batteria",
+    "connected": "Connesso",
+    "disconnected": "Disconnesso"
+  },
+  "dpi": {
+    "title": "Impostazioni DPI",
+    "stage": "Livello DPI",
+    "value": "Valore DPI"
+  },
+  "lightning": {
+    "title": "Illuminazione",
+    "ledEffect": "Effetto LED",
+    "ledOff": "Spento",
+    "ledSolid": "Fisso",
+    "ledBreathing": "Respiro",
+    "brightness": "Luminosità",
+    "speed": "Velocità"
+  },
+  "performance": {
+    "title": "Prestazioni",
+    "sleepTimer": "Timer sospensione",
+    "sleepUnit": "× 10 s",
+    "pollingRate": "Frequenza di polling",
+    "experimental": "sperimentale",
+    "debounce": "Tempo debounce",
+    "debounceUnit": "ms",
+    "lod": "Distanza lift-off",
+    "ripple": "Controllo forma d'onda",
+    "linear": "Correzione lineare",
+    "angleSnap": "Correzione angolo",
+    "workingMode": "Modalità piena potenza",
+    "workingModeDesc": "Il LED del sensore si illumina intensamente e il sensore funziona al massimo delle prestazioni.",
+    "workingModeDuration": "Durata",
+    "longDistance": "Modalità lunga distanza",
+    "longDistanceDesc": "Estende la portata wireless e migliora la resistenza alle interferenze.",
+    "longDistanceWarn": "Consumo energetico maggiore — riduce l'autonomia.",
+    "fps20k": "Frequenza scansione 20K FPS",
+    "fps20kDesc": "Aumenta la frequenza di scansione del sensore a 20.000 frame al secondo per un tracciamento più preciso.",
+    "fps20kWarn": "Consumo energetico maggiore — riduce sensibilmente l'autonomia.",
+    "auto": "auto",
+    "ultraAutoNote": "Ultra Performance si attiva automaticamente con polling superiore a 1000 Hz.",
+    "motionSync": "Motion Sync",
+    "workMode": "Modalità operativa",
+    "lowPower": "Basso consumo",
+    "highPerf": "Alte prestazioni",
+    "ultraPerf": "Ultra Performance"
+  },
+  "buttons": {
+    "title": "Assegnazione pulsanti",
+    "placeholder": "La rimappatura dei pulsanti sarà disponibile nella fase 2."
+  },
+  "advanced": {
+    "title": "Avanzate",
+    "receiverLed": "LED ricevitore",
+    "receiverLedHz": "Indicatore Hz",
+    "receiverLedBattery": "Indicatore batteria",
+    "receiverLedWarning": "Solo avviso"
+  },
+  "other": {
+    "title": "IPI FLY PRO",
+    "specs": "Specifiche",
+    "spec_sensor": "Sensore",
+    "spec_dpi": "Intervallo DPI",
+    "spec_pollingRate": "Frequenza di polling",
+    "spec_switches": "Switch",
+    "spec_weight": "Peso",
+    "spec_connectivity": "Connettività",
+    "spec_battery": "Batteria",
+    "spec_dimensions": "Dimensioni",
+    "spec_material": "Materiale",
+    "spec_chip": "Chip",
+    "factoryReset": "Ripristino di fabbrica",
+    "factoryResetConfirm": "Sei sicuro? L'azione non può essere annullata.",
+    "confirm": "Conferma",
+    "cancel": "Annulla",
+    "about": "Informazioni",
+    "aboutText": "Driver open-source sostitutivo per il mouse gaming wireless IPI FLY PRO."
+  },
+  "dev": {
+    "title": "Pannello sviluppatore",
+    "sendFrame": "Invia frame (hex)",
+    "send": "Invia",
+    "response": "Risposta",
+    "diffCapture": "Cattura diff",
+    "startCapture": "Avvia",
+    "stopCapture": "Ferma"
+  }
+}

@@ -2,7 +2,8 @@
   "app": {
     "title": "IPI FLY PRO Driver",
     "noDevice": "No device connected",
-    "connecting": "Connecting…"
+    "connecting": "Connecting…",
+    "language": "Language"
   },
   "tabs": {
     "home": "Home",
