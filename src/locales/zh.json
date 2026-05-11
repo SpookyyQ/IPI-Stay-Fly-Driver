@@ -1,0 +1,105 @@
+{
+  "app": {
+    "title": "IPI FLY PRO 驱动",
+    "noDevice": "未连接设备",
+    "connecting": "正在连接…",
+    "language": "语言"
+  },
+  "tabs": {
+    "home": "主页",
+    "dpi": "DPI",
+    "lightning": "灯光",
+    "performance": "性能",
+    "buttons": "按键",
+    "advanced": "高级",
+    "other": "其他"
+  },
+  "topbar": {
+    "battery": "电池",
+    "connected": "已连接",
+    "disconnected": "未连接"
+  },
+  "dpi": {
+    "title": "DPI 设置",
+    "stage": "DPI 档位",
+    "value": "DPI 数值"
+  },
+  "lightning": {
+    "title": "灯光",
+    "ledEffect": "LED 效果",
+    "ledOff": "关闭",
+    "ledSolid": "常亮",
+    "ledBreathing": "呼吸",
+    "brightness": "亮度",
+    "speed": "速度"
+  },
+  "performance": {
+    "title": "性能",
+    "sleepTimer": "休眠计时器",
+    "sleepUnit": "× 10 秒",
+    "pollingRate": "回报率",
+    "experimental": "实验性",
+    "debounce": "消抖时间",
+    "debounceUnit": "毫秒",
+    "lod": "抬升距离",
+    "ripple": "波形控制",
+    "linear": "线性修正",
+    "angleSnap": "角度修正",
+    "workingMode": "全功率模式",
+    "workingModeDesc": "传感器 LED 会高亮，传感器以最高性能运行。",
+    "workingModeDuration": "持续时间",
+    "longDistance": "长距离模式",
+    "longDistanceDesc": "提升无线距离并增强抗干扰能力。",
+    "longDistanceWarn": "更高功耗 — 会缩短电池续航。",
+    "fps20k": "20K FPS 扫描率",
+    "fps20kDesc": "将传感器扫描率提升到每秒 20,000 帧，以获得更精确的追踪。",
+    "fps20kWarn": "更高功耗 — 会明显缩短电池续航。",
+    "auto": "自动",
+    "ultraAutoNote": "回报率高于 1000 Hz 时会自动启用 Ultra Performance。",
+    "motionSync": "Motion Sync",
+    "workMode": "工作模式",
+    "lowPower": "低功耗",
+    "highPerf": "高性能",
+    "ultraPerf": "Ultra Performance"
+  },
+  "buttons": {
+    "title": "按键分配",
+    "placeholder": "按键重映射将在第二阶段提供。"
+  },
+  "advanced": {
+    "title": "高级",
+    "receiverLed": "接收器 LED",
+    "receiverLedHz": "Hz 指示",
+    "receiverLedBattery": "电量指示",
+    "receiverLedWarning": "仅警告"
+  },
+  "other": {
+    "title": "IPI FLY PRO",
+    "specs": "规格",
+    "spec_sensor": "传感器",
+    "spec_dpi": "DPI 范围",
+    "spec_pollingRate": "回报率",
+    "spec_switches": "微动",
+    "spec_weight": "重量",
+    "spec_connectivity": "连接方式",
+    "spec_battery": "电池",
+    "spec_dimensions": "尺寸",
+    "spec_material": "材质",
+    "spec_chip": "芯片",
+    "factoryReset": "恢复出厂设置",
+    "factoryResetConfirm": "确定吗？此操作无法撤销。",
+    "confirm": "确认",
+    "cancel": "取消",
+    "about": "关于",
+    "aboutText": "用于 IPI FLY PRO 无线游戏鼠标的开源替代驱动。"
+  },
+  "dev": {
+    "title": "开发者面板",
+    "sendFrame": "发送帧（hex）",
+    "send": "发送",
+    "response": "响应",
+    "diffCapture": "差异捕获",
+    "startCapture": "开始",
+    "stopCapture": "停止"
+  }
+}

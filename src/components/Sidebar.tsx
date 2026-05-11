@@ -24,17 +24,22 @@ const languageOptions = [
   { code: 'de', label: 'Deutsch' },
   { code: 'en', label: 'English' },
   { code: 'es', label: 'Español' },
+  { code: 'es-MX', label: 'Español (México)' },
   { code: 'fr', label: 'Français' },
   { code: 'it', label: 'Italiano' },
   { code: 'pl', label: 'Polski' },
   { code: 'pt', label: 'Português' },
+  { code: 'zh', label: '中文（简体）' },
 ]
 
 export default function Sidebar({ activeTab, onTabChange }: Props) {
   const { i18n, t } = useTranslation()
-  const activeLanguage = i18n.resolvedLanguage?.split('-')[0] ?? i18n.language.split('-')[0]
+  const activeLanguage = i18n.resolvedLanguage ?? i18n.language
+  const baseLanguage = activeLanguage.split('-')[0]
   const selectedLanguage = languageOptions.some(option => option.code === activeLanguage)
     ? activeLanguage
+    : languageOptions.some(option => option.code === baseLanguage)
+      ? baseLanguage
     : 'en'
 
   return (
