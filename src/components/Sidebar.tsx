@@ -44,7 +44,7 @@ export default function Sidebar({ activeTab, onTabChange }: Props) {
 
   return (
     <aside className="w-[250px] shrink-0 border-r border-white/10 bg-black/55 shadow-2xl shadow-black/25 backdrop-blur-xl flex flex-col">
-      <div className="px-4 py-4 border-b border-white/10">
+      <div className="px-4 py-4">
         <button onClick={() => onTabChange('home')} className="w-full rounded-xl bg-white/[.05] px-4 py-3 text-left transition hover:bg-white/[.08]">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-between w-full">
