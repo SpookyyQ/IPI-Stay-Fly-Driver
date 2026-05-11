@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Boxes, Gauge, Mouse, SlidersHorizontal, Wand2, Zap } from 'lucide-react'
+import { Boxes, Gauge, Home, Mouse, SlidersHorizontal, Wand2, Zap } from 'lucide-react'
 import mouseImage from '../assets/fly-pro-top.png'
 
 type Tab = 'home' | 'dpi' | 'performance' | 'buttons' | 'advanced' | 'other' | 'lightning'
@@ -30,6 +30,7 @@ export default function Sidebar({ activeTab, onTabChange }: Props) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <img src={mouseImage} alt="" className="h-8 w-8 object-contain opacity-80" draggable={false} />
+              <Home size={14} className="text-white/40" />
               <p className="text-base font-semibold">IPI FLY PRO</p>
             </div>
 
