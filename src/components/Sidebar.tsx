@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { Boxes, Gauge, Mouse, SlidersHorizontal, Wand2, Zap } from 'lucide-react'
 import mouseImage from '../assets/fly-pro-top.png'
-import { StatusInfo } from '../lib/ipc'
 
 type Tab = 'home' | 'dpi' | 'performance' | 'buttons' | 'advanced' | 'other' | 'lightning'
 
@@ -10,7 +9,6 @@ export type { Tab }
 interface Props {
   activeTab: Tab
   onTabChange: (tab: Tab) => void
-  status: StatusInfo
 }
 
 const navItems: { id: Tab; labelKey: string; icon: typeof Mouse }[] = [
@@ -22,7 +20,7 @@ const navItems: { id: Tab; labelKey: string; icon: typeof Mouse }[] = [
   { id: 'other', labelKey: 'tabs.other', icon: Boxes },
 ]
 
-export default function Sidebar({ activeTab, onTabChange, status }: Props) {
+export default function Sidebar({ activeTab, onTabChange }: Props) {
   const { i18n, t } = useTranslation()
 
   return (

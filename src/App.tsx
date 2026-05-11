@@ -61,7 +61,7 @@ export default function App() {
   return (
     <div className="atk-shell flex h-screen w-screen overflow-hidden text-white">
       <div className="atk-ribbon" />
-      {tab !== 'home' && <Sidebar activeTab={tab} onTabChange={setTab} status={status} />}
+      {tab !== 'home' && <Sidebar activeTab={tab} onTabChange={setTab} />}
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopBar status={status} />
         <main className="relative flex-1 overflow-y-auto p-7">
