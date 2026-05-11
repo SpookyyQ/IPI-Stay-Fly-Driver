@@ -24,13 +24,24 @@ Support for more devices depends on community help. If you own a related mouse s
 - Polling rates from 125 Hz up to 8,000 Hz
 - Sleep timer, debounce, lift-off distance and work mode controls
 - Advanced wireless and sensor behavior, including receiver LED, full power mode, long-distance mode and 20K FPS scan rate
+- Hardware-free demo mode with a virtual mouse for exploring the UI
 - Simple selectable color themes
 - Multi-language interface with German, English, Spanish, Mexican Spanish, French, Italian, Polish, Portuguese and Simplified Chinese
 - No account, no cloud dependency, no telemetry
 
 ## Interface
 
+### Demo Mode
+
+The top bar includes a **Demo** button. When enabled, the app spawns a virtual IPI FLY PRO so users can open the device card, navigate through every configuration tab and try the interface without owning or connecting the mouse.
+
+Demo mode is clearly marked with a banner and badge inside the app. While it is active, hardware polling and all HID write/read calls are disabled, so changing settings only affects the local demo state and never sends commands to a real device.
+
+### Themes
+
 The app includes a small theme picker in the top bar. Themes currently change the accent color, selected navigation state, headings, control highlights and other UI accents. Available themes are **Stay Fly Gold**, **Cyber Mint**, **Ice Blue**, **Crimson Pro**, **Violet Pulse** and **Monochrome**.
+
+### Languages
 
 The language selector is available in the sidebar and uses a dropdown so more translations can be added later. Current languages are:
 
