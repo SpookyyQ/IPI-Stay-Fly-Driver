@@ -27,6 +27,11 @@ export default function HomeTab({ status, demoMode, onNavigate }: Props) {
         status.connected ? 'cursor-pointer hover:bg-white/[.07] hover:border-white/20' : 'cursor-default'
       }`}
     >
+      {demoMode && (
+        <div className="absolute left-4 top-4 z-10 rounded-full border border-accent/40 bg-accent/15 px-3 py-1 text-xs font-black uppercase tracking-[.18em] text-accent shadow-[0_0_24px_rgb(var(--color-accent)/.16)]">
+          Demo Mode
+        </div>
+      )}
       <div className="flex-1 flex items-center justify-center">
         <img
           src={mouseImage}

@@ -286,6 +286,38 @@ button, input {
   border-color: var(--theme-panel-border-hover);
 }
 
+.demo-shell {
+  box-shadow: inset 0 0 0 1px rgb(var(--color-accent) / .24);
+}
+
+.demo-mode-banner {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  min-height: 34px;
+  padding: 0 1.25rem;
+  border-bottom: 1px solid rgb(var(--color-accent) / .28);
+  background:
+    linear-gradient(90deg, rgb(var(--color-accent) / .18), rgb(var(--color-accent) / .065) 46%, transparent),
+    rgba(8, 8, 10, .72);
+  color: rgb(var(--color-accent) / 1);
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .22);
+}
+
+.demo-mode-dot {
+  width: .55rem;
+  height: .55rem;
+  border-radius: 999px;
+  background: rgb(var(--color-accent) / 1);
+  box-shadow: 0 0 18px rgb(var(--color-accent) / .75);
+}
+
 .tab-switcher {
   position: relative;
 }

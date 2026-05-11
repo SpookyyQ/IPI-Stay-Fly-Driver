@@ -94,11 +94,18 @@ export default function App() {
   }, [demoMode])
 
   return (
-    <div className="atk-shell flex h-screen w-screen overflow-hidden text-white">
+    <div className={`atk-shell flex h-screen w-screen overflow-hidden text-white ${demoMode ? 'demo-shell' : ''}`}>
       <div className="atk-ribbon" />
       {tab !== 'home' && <Sidebar activeTab={tab} onTabChange={setTab} />}
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopBar status={status} demoMode={demoMode} onDemoModeChange={setDemoMode} />
+        {demoMode && (
+          <div className="demo-mode-banner">
+            <span className="demo-mode-dot" />
+            <span>DEMO MODE</span>
+            <span className="font-semibold text-white/68">Virtual mouse active - hardware communication disabled</span>
+          </div>
+        )}
         <main className="relative flex-1 overflow-y-auto p-7">
           <div className="tab-switcher">
             <div className={`tab-panel ${tab === 'home' ? 'tab-panel-active' : ''}`}>
