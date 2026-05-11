@@ -9,6 +9,90 @@
   color-scheme: dark;
   background-color: #050506;
   color: #f7f0df;
+  --color-accent: 242 182 93;
+  --color-accent-hover: 255 210 138;
+  --color-topbar: 34 4 56;
+  --theme-bg-1: rgba(242, 182, 93, .18);
+  --theme-bg-2: rgba(176, 118, 38, .13);
+  --theme-bg-base: linear-gradient(135deg, #141417 0%, #09090b 48%, #020203 100%);
+  --theme-shell-radial-1: rgba(242, 182, 93, .14);
+  --theme-shell-radial-2: rgba(255, 255, 255, .055);
+  --theme-shell-ribbon: rgba(242, 182, 93, .06);
+  --theme-ribbon-a: rgba(242, 182, 93, .2);
+  --theme-ribbon-b: rgba(255, 255, 255, .06);
+  --theme-panel-accent: rgba(242, 182, 93, .075);
+  --theme-panel-border: rgba(242, 182, 93, .16);
+  --theme-panel-border-hover: rgba(242, 182, 93, .34);
+}
+
+:root[data-theme="mint"] {
+  --color-accent: 66 230 178;
+  --color-accent-hover: 145 255 218;
+  --color-topbar: 4 44 38;
+  --theme-bg-1: rgba(66, 230, 178, .16);
+  --theme-bg-2: rgba(13, 148, 136, .12);
+  --theme-shell-radial-1: rgba(66, 230, 178, .13);
+  --theme-shell-ribbon: rgba(66, 230, 178, .055);
+  --theme-ribbon-a: rgba(66, 230, 178, .18);
+  --theme-panel-accent: rgba(66, 230, 178, .065);
+  --theme-panel-border: rgba(66, 230, 178, .16);
+  --theme-panel-border-hover: rgba(66, 230, 178, .34);
+}
+
+:root[data-theme="blue"] {
+  --color-accent: 85 183 255;
+  --color-accent-hover: 157 215 255;
+  --color-topbar: 6 25 54;
+  --theme-bg-1: rgba(85, 183, 255, .15);
+  --theme-bg-2: rgba(37, 99, 235, .12);
+  --theme-shell-radial-1: rgba(85, 183, 255, .13);
+  --theme-shell-ribbon: rgba(85, 183, 255, .055);
+  --theme-ribbon-a: rgba(85, 183, 255, .18);
+  --theme-panel-accent: rgba(85, 183, 255, .065);
+  --theme-panel-border: rgba(85, 183, 255, .16);
+  --theme-panel-border-hover: rgba(85, 183, 255, .34);
+}
+
+:root[data-theme="crimson"] {
+  --color-accent: 255 79 109;
+  --color-accent-hover: 255 142 162;
+  --color-topbar: 55 7 20;
+  --theme-bg-1: rgba(255, 79, 109, .14);
+  --theme-bg-2: rgba(185, 28, 28, .12);
+  --theme-shell-radial-1: rgba(255, 79, 109, .12);
+  --theme-shell-ribbon: rgba(255, 79, 109, .055);
+  --theme-ribbon-a: rgba(255, 79, 109, .17);
+  --theme-panel-accent: rgba(255, 79, 109, .06);
+  --theme-panel-border: rgba(255, 79, 109, .16);
+  --theme-panel-border-hover: rgba(255, 79, 109, .34);
+}
+
+:root[data-theme="violet"] {
+  --color-accent: 177 108 255;
+  --color-accent-hover: 209 171 255;
+  --color-topbar: 36 13 63;
+  --theme-bg-1: rgba(177, 108, 255, .15);
+  --theme-bg-2: rgba(126, 34, 206, .12);
+  --theme-shell-radial-1: rgba(177, 108, 255, .13);
+  --theme-shell-ribbon: rgba(177, 108, 255, .055);
+  --theme-ribbon-a: rgba(177, 108, 255, .18);
+  --theme-panel-accent: rgba(177, 108, 255, .065);
+  --theme-panel-border: rgba(177, 108, 255, .16);
+  --theme-panel-border-hover: rgba(177, 108, 255, .34);
+}
+
+:root[data-theme="mono"] {
+  --color-accent: 243 244 246;
+  --color-accent-hover: 255 255 255;
+  --color-topbar: 22 22 24;
+  --theme-bg-1: rgba(255, 255, 255, .08);
+  --theme-bg-2: rgba(148, 163, 184, .08);
+  --theme-shell-radial-1: rgba(255, 255, 255, .07);
+  --theme-shell-ribbon: rgba(255, 255, 255, .035);
+  --theme-ribbon-a: rgba(255, 255, 255, .12);
+  --theme-panel-accent: rgba(255, 255, 255, .035);
+  --theme-panel-border: rgba(255, 255, 255, .13);
+  --theme-panel-border-hover: rgba(255, 255, 255, .28);
 }
 
 body {
@@ -16,9 +100,9 @@ body {
   min-height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 76% 16%, rgba(242, 182, 93, .18), transparent 26%),
-    radial-gradient(circle at 8% 86%, rgba(176, 118, 38, .13), transparent 34%),
-    linear-gradient(135deg, #141417 0%, #09090b 48%, #020203 100%);
+    radial-gradient(circle at 76% 16%, var(--theme-bg-1), transparent 26%),
+    radial-gradient(circle at 8% 86%, var(--theme-bg-2), transparent 34%),
+    var(--theme-bg-base);
 }
 
 * {
@@ -32,12 +116,16 @@ body {
   background: rgba(8, 8, 10, 0.72);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(242, 182, 93, 0.6);
+  background: rgb(var(--color-accent) / .6);
   border-radius: 3px;
 }
 
 button, input {
   font: inherit;
+}
+
+.theme-topbar {
+  background: rgb(var(--color-topbar) / .58);
 }
 
 .atk-shell {
@@ -53,9 +141,9 @@ button, input {
   background:
     linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 22px),
     linear-gradient(45deg, rgba(255,255,255,.025) 0 1px, transparent 1px 18px),
-    radial-gradient(ellipse at 74% 18%, rgba(242, 182, 93, .14), transparent 34%),
-    radial-gradient(ellipse at 46% 78%, rgba(255, 255, 255, .055), transparent 42%),
-    linear-gradient(120deg, rgba(255,255,255,.055), transparent 18%, rgba(242,182,93,.06) 42%, transparent 66%),
+    radial-gradient(ellipse at 74% 18%, var(--theme-shell-radial-1), transparent 34%),
+    radial-gradient(ellipse at 46% 78%, var(--theme-shell-radial-2), transparent 42%),
+    linear-gradient(120deg, rgba(255,255,255,.055), transparent 18%, var(--theme-shell-ribbon) 42%, transparent 66%),
     #070708;
   background-size:
     22px 22px,
@@ -80,8 +168,8 @@ button, input {
   position: absolute;
   border-radius: 999px;
   background:
-    linear-gradient(90deg, transparent, rgba(242, 182, 93, .2), transparent),
-    linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+    linear-gradient(90deg, transparent, var(--theme-ribbon-a), transparent),
+    linear-gradient(180deg, var(--theme-ribbon-b), transparent);
   filter: blur(.4px);
   transform: rotate(-12deg);
 }
@@ -101,10 +189,10 @@ button, input {
 }
 
 .glass-panel {
-  border: 1px solid rgba(242, 182, 93, .16);
+  border: 1px solid var(--theme-panel-border);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, .06), rgba(255,255,255,.015)),
-    linear-gradient(135deg, rgba(242, 182, 93, .075), transparent 34%),
+    linear-gradient(135deg, var(--theme-panel-accent), transparent 34%),
     rgba(13, 13, 15, .72);
   box-shadow: 0 22px 70px rgba(0, 0, 0, .46), inset 0 1px 0 rgba(255,255,255,.08);
   backdrop-filter: blur(18px);
@@ -116,5 +204,5 @@ button, input {
 
 .atk-card:hover {
   transform: translateY(-1px);
-  border-color: rgba(242, 182, 93, .34);
+  border-color: var(--theme-panel-border-hover);
 }

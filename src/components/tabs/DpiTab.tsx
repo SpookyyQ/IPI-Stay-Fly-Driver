@@ -63,7 +63,7 @@ export default function DpiTab({ connected, initialSettings }: Props) {
               disabled={!connected}
               className={`rounded-2xl border p-4 text-left transition-all disabled:opacity-40 ${
                 activeStage === i
-                  ? 'border-accent bg-white/[.13] shadow-[0_0_30px_rgba(242,182,93,.12)]'
+                  ? 'border-accent bg-white/[.13] shadow-[0_0_30px_rgb(var(--color-accent)/.12)]'
                   : 'border-white/10 bg-white/[.05] hover:bg-white/[.09]'
               }`}
             >

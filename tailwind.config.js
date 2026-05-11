@@ -14,8 +14,8 @@ export default {
           950: '#0a0a0a',
         },
         accent: {
-          DEFAULT: '#f2b65d',
-          hover: '#ffd28a',
+          DEFAULT: 'rgb(var(--color-accent) / <alpha-value>)',
+          hover: 'rgb(var(--color-accent-hover) / <alpha-value>)',
         },
         atk: {
           plum: '#2b064f',

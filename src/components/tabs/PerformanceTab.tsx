@@ -136,7 +136,7 @@ export default function PerformanceTab({ connected, initialSettings }: Props) {
               disabled={!connected || !isEnabledOption(o.experimental)}
               className={`rounded-xl border px-3 py-2 text-xs font-bold transition ${
                 pollingRate === o.value
-                  ? 'border-accent bg-accent/15 text-accent shadow-[0_0_22px_rgba(242,182,93,.12)]'
+                  ? 'border-accent bg-accent/15 text-accent shadow-[0_0_22px_rgb(var(--color-accent)/.12)]'
                   : 'border-white/10 bg-white/[.05] text-white/78 hover:border-white/25 hover:bg-white/[.09]'
               } disabled:cursor-not-allowed disabled:opacity-40`}
               title={o.experimental ? 'Not sent to the mouse until this frame is verified.' : undefined}

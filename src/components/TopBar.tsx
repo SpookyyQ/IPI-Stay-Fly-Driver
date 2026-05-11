@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Minus, Square, X, Wifi, WifiOff } from 'lucide-react'
 import { appWindow } from '@tauri-apps/api/window'
 import { StatusInfo } from '../lib/ipc'
+import ThemePicker from './ThemePicker'
 
 interface Props { status: StatusInfo }
 
@@ -11,7 +12,7 @@ export default function TopBar({ status }: Props) {
   return (
     <header
       data-tauri-drag-region
-      className="h-12 flex items-center justify-between gap-4 border-b border-white/10 bg-[#220438]/58 px-5 shadow-lg shadow-black/15 backdrop-blur-xl select-none"
+      className="theme-topbar h-12 flex items-center justify-between gap-4 border-b border-white/10 px-5 shadow-lg shadow-black/15 backdrop-blur-xl select-none"
     >
       <div className="absolute left-1/2 -translate-x-1/2 select-none pointer-events-none" data-tauri-drag-region>
         <span className="text-xl font-black italic tracking-tight text-white">IPI</span>
@@ -38,6 +39,7 @@ export default function TopBar({ status }: Props) {
       </div>
 
       <div className="flex items-center gap-1">
+        <ThemePicker />
         <button
           onClick={() => appWindow.minimize()}
           className="grid h-8 w-8 place-items-center rounded-lg text-white/50 transition hover:bg-white/[.08] hover:text-white"
