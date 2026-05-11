@@ -5,6 +5,12 @@
 Open-source desktop driver for the **IPI FLY PRO** wireless gaming mouse.  
 Built as a fast native Windows app with Tauri, React and Rust, it replaces the closed web driver with a local configuration tool for DPI, latency, wireless behavior and advanced sensor options.
 
+## Why This Exists
+
+This project was started because the official web driver is hard to find, only available in Chinese, and clearly not designed with users outside China in mind. The goal is to make IPI mouse configuration more accessible for the western market through an open, local and understandable desktop app.
+
+Support for more devices depends on community help. If you own a related mouse such as the **IPI FLOAT 88**, **QI Pro** or another IPI-compatible model, protocol captures, USB/HID identifiers and testing feedback are very welcome.
+
 [![Windows](https://img.shields.io/badge/Windows-10%20%2F%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)](#requirements)
 [![Tauri](https://img.shields.io/badge/Tauri-1.5-24C8DB?style=for-the-badge&logo=tauri&logoColor=white)](https://tauri.app)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=111)](https://react.dev)
