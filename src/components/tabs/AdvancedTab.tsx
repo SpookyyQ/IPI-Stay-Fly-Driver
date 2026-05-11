@@ -4,9 +4,9 @@ import Card from '../ui/Card'
 import Switch from '../ui/Switch'
 import { ipc } from '../../lib/ipc'
 
-interface Props { connected: boolean }
+interface Props { connected: boolean; demoMode?: boolean }
 
-export default function AdvancedTab({ connected }: Props) {
+export default function AdvancedTab({ connected, demoMode = false }: Props) {
   const { t } = useTranslation()
   const [receiverLed, setReceiverLed] = useState(2) // modes: 1=Hz, 2=battery, 3=warning
   const [fps20k, setFps20k] = useState(false)
@@ -20,37 +20,44 @@ export default function AdvancedTab({ connected }: Props) {
 
   const handleReceiverLed = async (mode: number) => {
     setReceiverLed(mode)
+    if (demoMode) return
     try { await ipc.setReceiverLed(mode) } catch {}
   }
 
   const handleFps20k = async (enabled: boolean) => {
     setFps20k(enabled)
+    if (demoMode) return
     try { await ipc.setFps20k(enabled) } catch {}
   }
 
   const handleLongDistance = async (enabled: boolean) => {
     setLongDistance(enabled)
+    if (demoMode) return
     try { await ipc.setLongDistance(enabled) } catch {}
   }
 
   const handleWorkingMode = async (enabled: boolean) => {
     const mode = enabled ? 1 : 0
     setWorkingMode(mode)
+    if (demoMode) return
     try { await ipc.setWorkingMode(mode) } catch {}
   }
 
   const handleRageTime = async (seconds: number) => {
     setRageTime(seconds)
+    if (demoMode) return
     try { await ipc.setRageTime(seconds) } catch {}
   }
 
   const handleAngleEnabled = async (enabled: boolean) => {
     setAngleEnabled(enabled)
+    if (demoMode) return
     try { await ipc.setAngle(enabled, angle) } catch {}
   }
 
   const handleAngle = async (val: number) => {
     setAngle(val)
+    if (demoMode) return
     if (angleEnabled) try { await ipc.setAngle(true, val) } catch {}
   }
 

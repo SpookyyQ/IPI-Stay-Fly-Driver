@@ -6,9 +6,10 @@ import { ipc } from '../../lib/ipc'
 
 interface Props {
   connected: boolean
+  demoMode?: boolean
 }
 
-export default function LightningTab({ connected }: Props) {
+export default function LightningTab({ connected, demoMode = false }: Props) {
   const { t } = useTranslation()
   const [ledMode, setLedMode] = useState<'off' | 'solid' | 'breathing'>('off')
   const [brightness, setBrightness] = useState(5)
@@ -18,21 +19,25 @@ export default function LightningTab({ connected }: Props) {
 
   const handleLedOff = async () => {
     setLedMode('off')
+    if (demoMode) return
     try { await ipc.setDpiLedMode('Off') } catch {}
   }
 
   const handleLedSolid = async () => {
     setLedMode('solid')
+    if (demoMode) return
     try { await ipc.setDpiLedMode('Solid') } catch {}
   }
 
   const handleLedBreathing = async () => {
     setLedMode('breathing')
+    if (demoMode) return
     try { await ipc.setDpiLedMode('Breathing') } catch {}
   }
 
   const handleBrightness = (v: number) => {
     setBrightness(v)
+    if (demoMode) return
     if (brightnessRef.current) clearTimeout(brightnessRef.current)
     brightnessRef.current = setTimeout(async () => {
       try { await ipc.setDpiLedBrightness(v) } catch {}
@@ -41,6 +46,7 @@ export default function LightningTab({ connected }: Props) {
 
   const handleSpeed = (v: number) => {
     setSpeed(v)
+    if (demoMode) return
     if (speedRef.current) clearTimeout(speedRef.current)
     speedRef.current = setTimeout(async () => {
       try { await ipc.setBreathingSpeed(v) } catch {}

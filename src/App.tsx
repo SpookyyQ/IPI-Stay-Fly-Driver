@@ -12,8 +12,31 @@ import HomeTab from './components/tabs/HomeTab'
 import DevPanel from './components/DevPanel'
 import { ipc, StatusInfo, DeviceSettings } from './lib/ipc'
 
+const DEMO_STATUS: StatusInfo = {
+  connected: true,
+  battery_percent: 87,
+  raw_status: 'demo',
+  raw_battery: 'demo',
+  last_error: '',
+}
+
+const DEMO_SETTINGS: DeviceSettings = {
+  polling_rate: 'Hz2000',
+  lod: 'Mm07',
+  dpi_values: [400, 800, 1600, 5600],
+  active_dpi_stage: 1,
+  motion_sync: true,
+  linear_correction: false,
+  waveform_control: false,
+  sleep: 6,
+  full_power: 0,
+  work_mode: 1,
+  rage_time: 6,
+}
+
 export default function App() {
   const [tab, setTab] = useState<Tab>('home')
+  const [demoMode, setDemoMode] = useState(false)
   const [status, setStatus] = useState<StatusInfo>({
     connected: false,
     battery_percent: 0,
@@ -25,6 +48,12 @@ export default function App() {
   const [devOpen, setDevOpen] = useState(false)
 
   const pollStatus = useCallback(async () => {
+    if (demoMode) {
+      setStatus(DEMO_STATUS)
+      setSettings(DEMO_SETTINGS)
+      return
+    }
+
     try {
       const s = await ipc.getStatus()
       setStatus(prev => {
@@ -42,47 +71,55 @@ export default function App() {
     } catch (e) {
       setStatus(prev => ({ ...prev, connected: false, last_error: String(e) }))
     }
-  }, [])
+  }, [demoMode])
 
   useEffect(() => {
     pollStatus()
+    if (demoMode) return
     const id = setInterval(pollStatus, 5000)
     return () => clearInterval(id)
-  }, [pollStatus])
+  }, [demoMode, pollStatus])
+
+  useEffect(() => {
+    if (demoMode && devOpen) setDevOpen(false)
+  }, [demoMode, devOpen])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (demoMode) return
       if (e.ctrlKey && e.shiftKey && e.key === 'D') setDevOpen(v => !v)
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [])
+  }, [demoMode])
 
   return (
     <div className="atk-shell flex h-screen w-screen overflow-hidden text-white">
       <div className="atk-ribbon" />
       {tab !== 'home' && <Sidebar activeTab={tab} onTabChange={setTab} />}
       <div className="flex flex-col flex-1 overflow-hidden">
-        <TopBar status={status} />
+        <TopBar status={status} demoMode={demoMode} onDemoModeChange={setDemoMode} />
         <main className="relative flex-1 overflow-y-auto p-7">
           <div className="tab-switcher">
             <div className={`tab-panel ${tab === 'home' ? 'tab-panel-active' : ''}`}>
-              <HomeTab status={status} onNavigate={setTab} />
+              <HomeTab status={status} demoMode={demoMode} onNavigate={setTab} />
             </div>
             <div className={`tab-panel ${tab === 'buttons' ? 'tab-panel-active' : ''}`}><ButtonsTab /></div>
             <div className={`tab-panel ${tab === 'dpi' ? 'tab-panel-active' : ''}`}>
-              <DpiTab connected={status.connected} initialSettings={settings} />
+              <DpiTab connected={status.connected} demoMode={demoMode} initialSettings={settings} />
             </div>
             <div className={`tab-panel ${tab === 'lightning' ? 'tab-panel-active' : ''}`}>
-              <LightningTab connected={status.connected} />
+              <LightningTab connected={status.connected} demoMode={demoMode} />
             </div>
             <div className={`tab-panel ${tab === 'performance' ? 'tab-panel-active' : ''}`}>
-              <PerformanceTab connected={status.connected} initialSettings={settings} />
+              <PerformanceTab connected={status.connected} demoMode={demoMode} initialSettings={settings} />
             </div>
-            <div className={`tab-panel ${tab === 'advanced' ? 'tab-panel-active' : ''}`}><AdvancedTab connected={status.connected} /></div>
+            <div className={`tab-panel ${tab === 'advanced' ? 'tab-panel-active' : ''}`}><AdvancedTab connected={status.connected} demoMode={demoMode} /></div>
             <div className={`tab-panel ${tab === 'other' ? 'tab-panel-active' : ''}`}>
               <OtherTab onReset={() =>
-                ipc.factoryReset().then(() => ipc.readSettings()).then(setSettings).catch(() => {})
+                demoMode
+                  ? Promise.resolve()
+                  : ipc.factoryReset().then(() => ipc.readSettings()).then(setSettings).catch(() => {})
               } />
             </div>
           </div>

@@ -17,7 +17,9 @@
   "topbar": {
     "battery": "电池",
     "connected": "已连接",
-    "disconnected": "未连接"
+    "disconnected": "未连接",
+    "demo": "演示",
+    "demoMode": "演示模式"
   },
   "dpi": {
     "title": "DPI 设置",

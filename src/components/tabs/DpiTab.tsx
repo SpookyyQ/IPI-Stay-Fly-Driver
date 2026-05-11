@@ -12,10 +12,11 @@ const DPI_STEP = 50
 
 interface Props {
   connected: boolean
+  demoMode?: boolean
   initialSettings: DeviceSettings | null
 }
 
-export default function DpiTab({ connected, initialSettings }: Props) {
+export default function DpiTab({ connected, demoMode = false, initialSettings }: Props) {
   const { t } = useTranslation()
   const [activeStage, setActiveStage] = useState(0)
   const [dpis, setDpis] = useState(DEFAULT_DPIS)
@@ -29,6 +30,7 @@ export default function DpiTab({ connected, initialSettings }: Props) {
 
   const handleStageClick = async (i: number) => {
     setActiveStage(i)
+    if (demoMode) return
     try { await ipc.setDpiStage(i) } catch {}
   }
 
@@ -40,6 +42,7 @@ export default function DpiTab({ connected, initialSettings }: Props) {
   const handleDpiChange = (v: number) => {
     const nextDpi = normalizeDpi(v)
     setDpis(prev => { const next = [...prev]; next[activeStage] = nextDpi; return next })
+    if (demoMode) return
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(async () => {
       try { await ipc.setDpiValue(activeStage, nextDpi) } catch {}

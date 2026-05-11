@@ -1,12 +1,16 @@
 import { useTranslation } from 'react-i18next'
-import { Minus, Square, X, Wifi, WifiOff } from 'lucide-react'
+import { Minus, MonitorPlay, Square, X, Wifi, WifiOff } from 'lucide-react'
 import { appWindow } from '@tauri-apps/api/window'
 import { StatusInfo } from '../lib/ipc'
 import ThemePicker from './ThemePicker'
 
-interface Props { status: StatusInfo }
+interface Props {
+  status: StatusInfo
+  demoMode: boolean
+  onDemoModeChange: (enabled: boolean) => void
+}
 
-export default function TopBar({ status }: Props) {
+export default function TopBar({ status, demoMode, onDemoModeChange }: Props) {
   const { t } = useTranslation()
 
   return (
@@ -22,12 +26,14 @@ export default function TopBar({ status }: Props) {
       <div className="relative z-10 flex items-center gap-3 text-sm" data-tauri-drag-region>
         <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[.06] px-3 py-1.5">
           <span className="flex items-center gap-1.5">
-            {status.connected ? (
+            {demoMode ? (
+              <MonitorPlay size={15} className="text-accent" />
+            ) : status.connected ? (
               <Wifi size={15} className="text-emerald-300" />
             ) : (
               <WifiOff size={15} className="text-red-300" />
             )}
-            {status.connected ? t('topbar.connected') : t('topbar.disconnected')}
+            {demoMode ? t('topbar.demo') : status.connected ? t('topbar.connected') : t('topbar.disconnected')}
           </span>
 
         </div>
@@ -40,6 +46,18 @@ export default function TopBar({ status }: Props) {
       </div>
 
       <div className="relative z-20 flex items-center gap-1">
+        <button
+          onClick={() => onDemoModeChange(!demoMode)}
+          className={`flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-xs font-bold transition ${
+            demoMode
+              ? 'bg-accent/15 text-accent ring-1 ring-accent/40'
+              : 'text-white/50 hover:bg-white/[.08] hover:text-white'
+          }`}
+          title={t('topbar.demoMode')}
+        >
+          <MonitorPlay size={14} />
+          <span>{t('topbar.demo')}</span>
+        </button>
         <ThemePicker />
         <button
           onClick={() => appWindow.minimize()}

@@ -17,7 +17,9 @@
   "topbar": {
     "battery": "Battery",
     "connected": "Connected",
-    "disconnected": "Disconnected"
+    "disconnected": "Disconnected",
+    "demo": "Demo",
+    "demoMode": "Demo mode"
   },
   "dpi": {
     "title": "DPI Settings",

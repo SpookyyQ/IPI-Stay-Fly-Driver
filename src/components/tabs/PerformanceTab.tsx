@@ -23,9 +23,9 @@ const LOD_OPTIONS: { label: string; value: Lod; experimental?: boolean }[] = [
 
 const isEnabledOption = (experimental?: boolean) => !experimental
 
-interface Props { connected: boolean; initialSettings: DeviceSettings | null }
+interface Props { connected: boolean; demoMode?: boolean; initialSettings: DeviceSettings | null }
 
-export default function PerformanceTab({ connected, initialSettings }: Props) {
+export default function PerformanceTab({ connected, demoMode = false, initialSettings }: Props) {
   const { t } = useTranslation()
   const [pollingRate, setPollingRate] = useState<PollingRate>('Hz2000')
   const [lod, setLod] = useState<Lod>('Mm07')
@@ -53,6 +53,7 @@ export default function PerformanceTab({ connected, initialSettings }: Props) {
 
   const handleSleep = (v: number) => {
     setSleep(v)
+    if (demoMode) return
     if (sleepRef.current) clearTimeout(sleepRef.current)
     sleepRef.current = setTimeout(async () => {
       try { await ipc.setSleep(v) } catch {}
@@ -61,11 +62,13 @@ export default function PerformanceTab({ connected, initialSettings }: Props) {
 
   const handleMotionSync = async (enabled: boolean) => {
     setMotionSync(enabled)
+    if (demoMode) return
     try { await ipc.setMotionSync(enabled) } catch {}
   }
 
   const handleWorkMode = async (mode: number) => {
     setWorkMode(mode)
+    if (demoMode) return
     try { await ipc.setWorkMode(mode) } catch {}
   }
 
@@ -73,6 +76,11 @@ export default function PerformanceTab({ connected, initialSettings }: Props) {
     const option = POLLING_OPTIONS.find(o => o.value === rate)
     if (!option || !isEnabledOption(option.experimental)) return
     setPollingRate(rate)
+    if (demoMode) {
+      if (isHighPolling(rate)) setWorkMode(2)
+      else if (workMode === 2) setWorkMode(1)
+      return
+    }
     try {
       if (isHighPolling(rate)) {
         await ipc.setWorkMode(2)
@@ -93,16 +101,19 @@ export default function PerformanceTab({ connected, initialSettings }: Props) {
     if (!option || !isEnabledOption(option.experimental)) return
 
     setLod(l)
+    if (demoMode) return
     try { await ipc.setLod(l) } catch {}
   }
 
   const handleLinearCorrection = async (enabled: boolean) => {
     setLinearCorrection(enabled)
+    if (demoMode) return
     try { await ipc.setLinearCorrection(enabled) } catch {}
   }
 
   const handleWaveformControl = async (enabled: boolean) => {
     setRipple(enabled)
+    if (demoMode) return
     try { await ipc.setWaveformControl(enabled) } catch {}
   }
 
@@ -154,6 +165,7 @@ export default function PerformanceTab({ connected, initialSettings }: Props) {
         </div>
         <Slider min={0} max={20} value={debounce} onChange={v => {
           setDebounce(v)
+          if (demoMode) return
           if (debounceRef.current) clearTimeout(debounceRef.current)
           debounceRef.current = setTimeout(async () => {
             try { await ipc.setDebounce(v) } catch {}

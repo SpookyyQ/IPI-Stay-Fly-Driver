@@ -7,16 +7,18 @@ import AddDeviceDialog from '../AddDeviceDialog'
 
 interface Props {
   status: StatusInfo
+  demoMode: boolean
   onNavigate: (tab: Tab) => void
 }
 
-export default function HomeTab({ status, onNavigate }: Props) {
+export default function HomeTab({ status, demoMode, onNavigate }: Props) {
   const [addOpen, setAddOpen] = useState(false)
 
   const handleConnect = useCallback(() => {
+    if (demoMode) return
     // trigger immediate status refresh so the card updates without waiting 5s
     ipc.getStatus().catch(() => {})
-  }, [])
+  }, [demoMode])
 
   const mouseCard = (
     <div
@@ -46,7 +48,7 @@ export default function HomeTab({ status, onNavigate }: Props) {
             <span className={`text-sm ${
               status.connected ? 'text-white/65' : 'text-white/30'
             }`}>
-              {status.connected ? 'Connected' : 'Not connected'}
+              {demoMode ? 'Demo mouse' : status.connected ? 'Connected' : 'Not connected'}
             </span>
           </div>
           {status.connected && (
