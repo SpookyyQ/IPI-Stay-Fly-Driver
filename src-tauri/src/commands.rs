@@ -279,6 +279,18 @@ pub struct HidDeviceInfo {
 }
 
 #[tauri::command]
+pub fn cmd_set_angle(enabled: bool, angle: i8) -> Result<(), String> {
+    with_device(|dev| {
+        if enabled {
+            dev.write(&protocol::cmd_angle_enable(true))?;
+            dev.write(&protocol::cmd_angle(angle))
+        } else {
+            dev.write(&protocol::cmd_angle_enable(false))
+        }
+    })
+}
+
+#[tauri::command]
 pub fn cmd_list_hid_devices() -> Result<Vec<HidDeviceInfo>, String> {
     use hidapi::HidApi;
     use std::collections::HashSet;

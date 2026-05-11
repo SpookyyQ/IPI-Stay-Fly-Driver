@@ -13,6 +13,8 @@ export default function AdvancedTab({ connected }: Props) {
   const [longDistance, setLongDistance] = useState(false)
   const [workingMode, setWorkingMode] = useState(0)
   const [rageTime, setRageTime] = useState(6)
+  const [angleEnabled, setAngleEnabled] = useState(false)
+  const [angle, setAngle] = useState(0)
 
   const RAGE_TIMES = [1, 3, 6, 12, 18, 36, 60, 90]
 
@@ -40,6 +42,16 @@ export default function AdvancedTab({ connected }: Props) {
   const handleRageTime = async (seconds: number) => {
     setRageTime(seconds)
     try { await ipc.setRageTime(seconds) } catch {}
+  }
+
+  const handleAngleEnabled = async (enabled: boolean) => {
+    setAngleEnabled(enabled)
+    try { await ipc.setAngle(enabled, angle) } catch {}
+  }
+
+  const handleAngle = async (val: number) => {
+    setAngle(val)
+    if (angleEnabled) try { await ipc.setAngle(true, val) } catch {}
   }
 
   return (
@@ -104,6 +116,36 @@ export default function AdvancedTab({ connected }: Props) {
         </div>
         <p className="text-xs text-white/55 mb-2">{t('performance.longDistanceDesc')}</p>
         <p className="text-xs text-amber-400/80">⚠ {t('performance.longDistanceWarn')}</p>
+      </Card>
+
+      <Card>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm font-semibold">Angle Snapping</p>
+          <Switch checked={angleEnabled} onChange={handleAngleEnabled} disabled={!connected} />
+        </div>
+        <p className="text-xs text-white/55 mb-4">Corrects cursor drift when the mouse is held at a slight angle. Range: −45° to +45°.</p>
+        {angleEnabled && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-white/50">Angle</span>
+              <span className="text-sm font-bold tabular-nums">{angle > 0 ? `+${angle}` : angle}°</span>
+            </div>
+            <input
+              type="range"
+              min={-45}
+              max={45}
+              value={angle}
+              onChange={e => handleAngle(Number(e.target.value))}
+              disabled={!connected}
+              className="w-full accent-accent disabled:opacity-40"
+            />
+            <div className="flex justify-between text-[10px] text-white/30">
+              <span>−45°</span>
+              <span>0°</span>
+              <span>+45°</span>
+            </div>
+          </div>
+        )}
       </Card>
 
       <Card>

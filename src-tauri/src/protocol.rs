@@ -354,6 +354,25 @@ pub fn cmd_block_read(addr: u8) -> [u8; FRAME_LEN] {
     f
 }
 
+/// Angle snapping enable/disable. ENCAP=0xBF. 0=off, 1=on.
+pub fn cmd_angle_enable(enabled: bool) -> [u8; FRAME_LEN] {
+    let mut f = [0u8; FRAME_LEN];
+    f[3] = 0xBF;
+    f[4] = 0x02;
+    f[5] = u8::from(enabled);
+    build(f)
+}
+
+/// Angle snapping value. ENCAP=0xBD. Range: -45..=+45.
+/// Positive values stored as-is; negative as two's-complement u8 (e.g. -10 → 0xF6).
+pub fn cmd_angle(angle: i8) -> [u8; FRAME_LEN] {
+    let mut f = [0u8; FRAME_LEN];
+    f[3] = 0xBD;
+    f[4] = 0x02;
+    f[5] = angle as u8;
+    build(f)
+}
+
 /// Factory reset. Hardcoded frame verified from capture.
 pub fn cmd_factory_reset() -> [u8; FRAME_LEN] {
     [0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

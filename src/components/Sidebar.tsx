@@ -28,10 +28,12 @@ export default function Sidebar({ activeTab, onTabChange }: Props) {
       <div className="px-4 py-4 border-b border-white/10">
         <button onClick={() => onTabChange('home')} className="w-full rounded-xl bg-white/[.05] px-4 py-3 text-left transition hover:bg-white/[.08]">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <img src={mouseImage} alt="" className="h-8 w-8 object-contain opacity-80" draggable={false} />
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                <img src={mouseImage} alt="" className="h-8 w-8 object-contain opacity-80" draggable={false} />
+                <p className="text-base font-semibold">IPI FLY PRO</p>
+              </div>
               <Home size={14} className="text-white/40" />
-              <p className="text-base font-semibold">IPI FLY PRO</p>
             </div>
 
           </div>

@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "IPI FLY PRO WebHID Sniffer",
+  "version": "0.1.0",
+  "description": "Logs WebHID reports on qbz.ipigame.cn for reverse engineering the IPI FLY PRO driver.",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://qbz.ipigame.cn/*",
+        "http://qbz.ipigame.cn/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "pageHook.js"
+      ],
+      "matches": [
+        "https://qbz.ipigame.cn/*",
+        "http://qbz.ipigame.cn/*"
+      ]
+    }
+  ]
+}

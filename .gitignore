@@ -7,3 +7,6 @@ src-tauri/target/
 Thumbs.db
 src/assets/*.exe
 src/assets/*.msi
+.claude/
+*.pem
+*.crx

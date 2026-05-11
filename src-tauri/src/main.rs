@@ -27,6 +27,7 @@ fn main() {
             commands::cmd_set_fps20k,
             commands::cmd_set_receiver_led,
             commands::cmd_read_settings,
+            commands::cmd_set_angle,
             commands::cmd_list_hid_devices,
             commands::cmd_factory_reset,
             commands::cmd_raw,

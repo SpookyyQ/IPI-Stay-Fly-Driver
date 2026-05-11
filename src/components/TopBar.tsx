@@ -13,6 +13,10 @@ export default function TopBar({ status }: Props) {
       data-tauri-drag-region
       className="h-12 flex items-center justify-between gap-4 border-b border-white/10 bg-[#220438]/58 px-5 shadow-lg shadow-black/15 backdrop-blur-xl select-none"
     >
+      <div className="absolute left-1/2 -translate-x-1/2 select-none pointer-events-none" data-tauri-drag-region>
+        <span className="text-xl font-black italic tracking-tight text-white">IPI</span>
+      </div>
+
       <div className="flex items-center gap-3 text-sm" data-tauri-drag-region>
         <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[.06] px-3 py-1.5">
           <span className="flex items-center gap-1.5">

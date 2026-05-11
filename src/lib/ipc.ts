@@ -53,6 +53,7 @@ export const ipc = {
   setLinearCorrection: (enabled: boolean) => invoke<void>('cmd_set_linear_correction', { enabled }),
   setWaveformControl: (enabled: boolean) => invoke<void>('cmd_set_waveform_control', { enabled }),
   setMotionSync: (enabled: boolean) => invoke<void>('cmd_set_motion_sync', { enabled }),
+  setAngle: (enabled: boolean, angle: number) => invoke<void>('cmd_set_angle', { enabled, angle }),
   listHidDevices: () => invoke<HidDeviceInfo[]>('cmd_list_hid_devices'),
   factoryReset: () => invoke<void>('cmd_factory_reset'),
   readSettings: () => invoke<DeviceSettings>('cmd_read_settings'),
