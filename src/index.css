@@ -285,3 +285,44 @@ button, input {
   transform: translateY(-1px);
   border-color: var(--theme-panel-border-hover);
 }
+
+.tab-switcher {
+  position: relative;
+}
+
+.tab-panel {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 12px, 0) scale(.992);
+  filter: blur(2px);
+  transition:
+    opacity .16s ease,
+    transform .18s ease,
+    filter .18s ease,
+    visibility 0s linear .18s;
+}
+
+.tab-panel-active {
+  position: relative;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+  transition:
+    opacity .2s ease,
+    transform .24s cubic-bezier(.2, .8, .2, 1),
+    filter .2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel,
+  .tab-panel-active {
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}

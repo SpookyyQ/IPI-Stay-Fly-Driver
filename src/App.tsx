@@ -65,24 +65,26 @@ export default function App() {
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopBar status={status} />
         <main className="relative flex-1 overflow-y-auto p-7">
-          <div className={tab === 'home' ? '' : 'hidden'}>
-            <HomeTab status={status} onNavigate={setTab} />
-          </div>
-          <div className={tab === 'buttons' ? '' : 'hidden'}><ButtonsTab /></div>
-          <div className={tab === 'dpi' ? '' : 'hidden'}>
-            <DpiTab connected={status.connected} initialSettings={settings} />
-          </div>
-          <div className={tab === 'lightning' ? '' : 'hidden'}>
-            <LightningTab connected={status.connected} />
-          </div>
-          <div className={tab === 'performance' ? '' : 'hidden'}>
-            <PerformanceTab connected={status.connected} initialSettings={settings} />
-          </div>
-          <div className={tab === 'advanced' ? '' : 'hidden'}><AdvancedTab connected={status.connected} /></div>
-          <div className={tab === 'other' ? '' : 'hidden'}>
-            <OtherTab onReset={() =>
-              ipc.factoryReset().then(() => ipc.readSettings()).then(setSettings).catch(() => {})
-            } />
+          <div className="tab-switcher">
+            <div className={`tab-panel ${tab === 'home' ? 'tab-panel-active' : ''}`}>
+              <HomeTab status={status} onNavigate={setTab} />
+            </div>
+            <div className={`tab-panel ${tab === 'buttons' ? 'tab-panel-active' : ''}`}><ButtonsTab /></div>
+            <div className={`tab-panel ${tab === 'dpi' ? 'tab-panel-active' : ''}`}>
+              <DpiTab connected={status.connected} initialSettings={settings} />
+            </div>
+            <div className={`tab-panel ${tab === 'lightning' ? 'tab-panel-active' : ''}`}>
+              <LightningTab connected={status.connected} />
+            </div>
+            <div className={`tab-panel ${tab === 'performance' ? 'tab-panel-active' : ''}`}>
+              <PerformanceTab connected={status.connected} initialSettings={settings} />
+            </div>
+            <div className={`tab-panel ${tab === 'advanced' ? 'tab-panel-active' : ''}`}><AdvancedTab connected={status.connected} /></div>
+            <div className={`tab-panel ${tab === 'other' ? 'tab-panel-active' : ''}`}>
+              <OtherTab onReset={() =>
+                ipc.factoryReset().then(() => ipc.readSettings()).then(setSettings).catch(() => {})
+              } />
+            </div>
           </div>
         </main>
       </div>
