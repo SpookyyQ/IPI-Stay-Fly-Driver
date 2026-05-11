@@ -2,6 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .text-accent {
+    color: rgb(var(--color-accent) / 1);
+  }
+
+  .text-accent\/70 {
+    color: rgb(var(--color-accent) / .7);
+  }
+
+  .text-accent\/80 {
+    color: rgb(var(--color-accent) / .8);
+  }
+
+  .bg-accent {
+    background-color: rgb(var(--color-accent) / 1);
+  }
+
+  .bg-accent\/15 {
+    background-color: rgb(var(--color-accent) / .15);
+  }
+
+  .bg-accent\/\[\.07\] {
+    background-color: rgb(var(--color-accent) / .07);
+  }
+
+  .bg-accent\/\[\.14\] {
+    background-color: rgb(var(--color-accent) / .14);
+  }
+
+  .border-accent {
+    border-color: rgb(var(--color-accent) / 1);
+  }
+
+  .border-accent\/30 {
+    border-color: rgb(var(--color-accent) / .3);
+  }
+
+  .border-accent\/40 {
+    border-color: rgb(var(--color-accent) / .4);
+  }
+
+  .border-accent\/50 {
+    border-color: rgb(var(--color-accent) / .5);
+  }
+
+  .border-accent\/70 {
+    border-color: rgb(var(--color-accent) / .7);
+  }
+
+  .accent-accent {
+    accent-color: rgb(var(--color-accent) / 1);
+  }
+
+  .hover\:text-accent:hover,
+  .group:hover .group-hover\:text-accent {
+    color: rgb(var(--color-accent) / 1);
+  }
+
+  .hover\:bg-accent\/\[\.14\]:hover {
+    background-color: rgb(var(--color-accent) / .14);
+  }
+
+  .hover\:border-accent\/50:hover {
+    border-color: rgb(var(--color-accent) / .5);
+  }
+
+  .focus\:border-accent:focus {
+    border-color: rgb(var(--color-accent) / 1);
+  }
+
+  .focus\:border-accent\/70:focus {
+    border-color: rgb(var(--color-accent) / .7);
+  }
+
+  .focus\:ring-accent\/20:focus {
+    --tw-ring-color: rgb(var(--color-accent) / .2);
+  }
+}
+
 :root {
   font-family: "Rajdhani", "Barlow Condensed", "Segoe UI", sans-serif;
   font-size: 14px;
