@@ -26,7 +26,7 @@ fn main() -> Result<(), String> {
         "2000" => 0x10,
         "4000" => 0x20,
         "8000" => 0x40,
-        _ => return Err("usage: cargo run --bin recover_polling -- 125|250|500|1000|2000|4000|8000".to_string()),
+        _ => return Err("usage: cargo run --example recover_polling -- 125|250|500|1000|2000|4000|8000".to_string()),
     };
 
     let dev = open_device()?;

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Boxes, Gauge, Home, Mouse, SlidersHorizontal, Wand2, Zap } from 'lucide-react'
+import { Boxes, ChevronDown, Gauge, Home, Languages, Mouse, SlidersHorizontal, Wand2, Zap } from 'lucide-react'
 import mouseImage from '../assets/fly-pro-top.png'
 
 type Tab = 'home' | 'dpi' | 'performance' | 'buttons' | 'advanced' | 'other' | 'lightning'
@@ -18,6 +18,11 @@ const navItems: { id: Tab; labelKey: string; icon: typeof Mouse }[] = [
   { id: 'performance', labelKey: 'tabs.performance', icon: Gauge },
   { id: 'advanced', labelKey: 'tabs.advanced', icon: Wand2 },
   { id: 'other', labelKey: 'tabs.other', icon: Boxes },
+]
+
+const languageOptions = [
+  { code: 'de', label: 'Deutsch' },
+  { code: 'en', label: 'English' },
 ]
 
 export default function Sidebar({ activeTab, onTabChange }: Props) {
@@ -66,21 +71,27 @@ export default function Sidebar({ activeTab, onTabChange }: Props) {
       </nav>
 
       <div className="mx-3 mb-4 rounded-2xl border border-white/10 bg-white/[.07] p-3">
-        <p className="text-xs text-white/55 mb-2">Language</p>
-        <div className="flex gap-2">
-          {(['de', 'en'] as const).map(lang => (
-            <button
-              key={lang}
-              onClick={() => i18n.changeLanguage(lang)}
-              className={`flex-1 rounded-lg py-2 text-xs font-bold transition ${
-                i18n.language === lang
-                  ? 'bg-accent text-[#2b064f]'
-                  : 'bg-white/[.07] text-white/72 hover:bg-white/[.12]'
-              }`}
-            >
-              {lang.toUpperCase()}
-            </button>
-          ))}
+        <label htmlFor="language-select" className="mb-2 flex items-center gap-2 text-xs text-white/55">
+          <Languages size={13} className="text-accent/80" />
+          Language
+        </label>
+        <div className="relative">
+          <select
+            id="language-select"
+            value={languageOptions.some(option => option.code === i18n.language) ? i18n.language : 'en'}
+            onChange={event => i18n.changeLanguage(event.target.value)}
+            className="h-10 w-full appearance-none rounded-lg border border-white/10 bg-white/[.08] px-3 pr-9 text-sm font-semibold text-white outline-none transition hover:bg-white/[.12] focus:border-accent/70 focus:ring-2 focus:ring-accent/20"
+          >
+            {languageOptions.map(option => (
+              <option key={option.code} value={option.code} className="bg-zinc-950 text-white">
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown
+            size={16}
+            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/45"
+          />
         </div>
       </div>
     </aside>

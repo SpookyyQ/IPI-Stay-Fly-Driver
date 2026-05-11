@@ -27,11 +27,6 @@ const CALLOUTS = [
     cardClass: 'left-[31%] top-[58%]',
     markerClass: 'left-[42%] top-[59%]',
   },
-  {
-    label: 'DPI Cycle',
-    cardClass: 'left-[60%] top-[69%]',
-    markerClass: 'left-[51%] top-[67%]',
-  },
 ]
 
 export default function ButtonsTab() {
