@@ -24,8 +24,27 @@ Support for more devices depends on community help. If you own a related mouse s
 - Polling rates from 125 Hz up to 8,000 Hz
 - Sleep timer, debounce, lift-off distance and work mode controls
 - Advanced wireless and sensor behavior, including receiver LED, full power mode, long-distance mode and 20K FPS scan rate
-- German and English interface
+- Simple selectable color themes
+- Multi-language interface with German, English, Spanish, Mexican Spanish, French, Italian, Polish, Portuguese and Simplified Chinese
 - No account, no cloud dependency, no telemetry
+
+## Interface
+
+The app includes a small theme picker in the top bar. Themes currently change the accent color, selected navigation state, headings, control highlights and other UI accents. Available themes are **Stay Fly Gold**, **Cyber Mint**, **Ice Blue**, **Crimson Pro**, **Violet Pulse** and **Monochrome**.
+
+The language selector is available in the sidebar and uses a dropdown so more translations can be added later. Current languages are:
+
+| Language | Locale |
+| --- | --- |
+| German | `de` |
+| English | `en` |
+| Spanish | `es` |
+| Mexican Spanish | `es-MX` |
+| French | `fr` |
+| Italian | `it` |
+| Polish | `pl` |
+| Portuguese | `pt` |
+| Simplified Chinese | `zh` |
 
 ## Screenshots
 
