@@ -325,6 +325,25 @@ raw value in bytes 7/8. The first pair remained `01 54` in these captures.
 Do not implement this as a standalone command yet. Treat it as part of the
 sleep-timer write sequence until a cleaner capture proves otherwise.
 
+The same `0xB5` block also stores the ATK firmware/performance mode. Captured
+labels:
+
+```txt
+ATK Juesha competition firmware:
+07 00 00 b5 06 00 55 06 4f 01 54 00 00 00 00 8c
+
+Basic mode:
+07 00 00 b5 06 00 55 06 4f 00 55 00 00 00 00 8c
+```
+
+Observed `0xB5` field layout:
+
+```txt
+byte[5..6]  unknown value/check pair
+byte[7..8]  timer raw/check pair, raw = seconds / 10
+byte[9..10] firmware/performance mode: 0=basic, 1=ATK Juesha competition firmware
+```
+
 ### Lift-Off Distance
 
 Captured from decrease/increase controls. This is command/address `0x0A` with
