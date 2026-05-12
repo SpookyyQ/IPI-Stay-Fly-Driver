@@ -151,10 +151,23 @@ b7 b7 00 e7
 b8 b8 00 e5
 ```
 
+Additional DPI slider captures show that the third byte in the group can also
+change. This means the group is not simply `[raw, raw, 0x00, check]`; the third
+byte is DPI-related data or a high/flag byte.
+
+```txt
+3d 3d cc 0f
+cb cb 22 9d
+79 79 33 30
+b8 b8 33 b2
+bd bd 00 db
+b4 b4 00 ed
+```
+
 Likely DPI group shape:
 
 ```txt
-[raw, raw, flags_or_hi, group_check]
+[raw_low_or_value, raw_low_or_value, raw_hi_or_flags, group_check]
 ```
 
 For the observed `flags_or_hi = 0x00` DPI groups:
@@ -192,6 +205,9 @@ Examples:
 with the `(raw + 1) * 10` rule, or `1800 DPI` if ATK rounds/displays this slot
 differently. Capture known fixed values, especially `800`, `900`, `1600` and
 `1800`, before wiring writes into the app.
+
+Do not implement DPI value writes until captures include the exact visible DPI
+number for each changed group.
 
 ### Polling Rate
 
