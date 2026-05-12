@@ -193,6 +193,8 @@ dpi = (raw + 1) * 10
 raw = (dpi / 10) - 1
 ```
 
+ATK V HUB allows DPI changes in 10 DPI steps, which matches this encoding.
+
 Examples:
 
 ```txt
