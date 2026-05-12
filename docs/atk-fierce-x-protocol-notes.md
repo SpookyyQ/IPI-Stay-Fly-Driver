@@ -625,6 +625,50 @@ driver's restore-defaults sequence unless testing proves the primary reset frame
 is insufficient.
 ```
 
+Post-reset readback captured these defaults:
+
+```txt
+Status/device reads:
+10 -> 10 00 00 00 03 02 2c 27 00 00 00 00 00 00 00 e5
+12 -> 12 00 00 00 02 02 18 00 00 00 00 00 00 00 00 1f
+04 -> 04 00 00 00 02 5f 00 0f f4 00 00 00 00 00 00 e5
+
+Config block 0x00:
+08 00 00 00 08 10 45 04 51 03 52 00 55 00 00 e9
+
+DPI blocks:
+08 00 00 0c 08 4f 4f 00 b7 b4 b4 00 ed 00 00 87
+08 00 00 14 08 59 59 00 a3 9f 9f 00 17 00 00 7f
+08 00 00 1c 08 3f 3f 44 93 3f 3f 44 93 00 00 77
+08 00 00 24 08 3f 3f 44 93 3f 3f 44 93 00 00 6f
+
+Color blocks:
+08 00 00 2c 08 ff 00 00 56 00 ff 00 56 00 00 67
+08 00 00 34 08 00 00 ff 56 f0 34 05 2c 00 00 5f
+08 00 00 3c 08 ff 00 ff 57 ff 00 ff 57 00 00 57
+08 00 00 44 08 ff 00 ff 57 ff 00 ff 57 00 00 4f
+
+Other defaults:
+LOD raw 6:              08 00 00 0a 02 06 4f 00 00 00 00 00 00 00 00 e4
+Ultra Distance off:     16 00 00 00 0a 00 00 00 00 00 00 00 00 00 00 2d
+Sleep/debounce/toggles: 07 00 00 a9 0a 08 4d 00 55 03 52 00 55 00 55 ea
+Firmware mode block:    07 00 00 b5 06 00 55 06 4f 00 55 00 00 00 00 8c
+LED mode block:         07 00 00 4c 08 00 00 ff 56 03 52 00 55 00 00 f3
+```
+
+Likely default interpretation from this capture:
+
+```txt
+polling rate = 2000 Hz
+active DPI stage = 4
+LOD raw = 6
+Ultra Distance = off
+debounce = 8 ms
+sleep = 30 s
+motion sync / linear correction / ripple correction = off
+firmware/performance mode = basic
+```
+
 ## Initial Observations
 
 - ATK and IPI share enough framing that the current Rust checksum helpers can be reused.
