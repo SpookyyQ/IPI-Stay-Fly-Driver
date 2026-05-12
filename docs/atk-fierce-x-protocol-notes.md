@@ -199,15 +199,19 @@ Examples:
 0x4f = 79  -> 800 DPI
 0x59 = 89  -> 900 DPI
 0x9f = 159 -> 1600 DPI
+0xb3 = 179 -> 1800 DPI
 ```
 
-`0xb4` is ambiguous without the exact UI value: it could represent `1810 DPI`
-with the `(raw + 1) * 10` rule, or `1800 DPI` if ATK rounds/displays this slot
-differently. Capture known fixed values, especially `800`, `900`, `1600` and
-`1800`, before wiring writes into the app.
+Confirmed fixed-value captures:
 
-Do not implement DPI value writes until captures include the exact visible DPI
-number for each changed group.
+```txt
+1600 DPI: 9f 9f 00 17
+1800 DPI: b3 b3 00 ef
+```
+
+This confirms `0xb4` is `1810 DPI`, not `1800 DPI`, for standard DPI groups.
+The non-zero third byte cases from slider dragging still need exact visible DPI
+values before implementing the high/flag byte path.
 
 ### Polling Rate
 
@@ -591,7 +595,7 @@ action 01 08 00 4c = side back button
 
 For each capture: click `Clear`, change exactly one setting, then use `Copy hex`.
 
-1. DPI value: set stage 1 to known fixed values, especially `800`, `900`, `1600` and `1800`, to remove the remaining raw-value ambiguity.
+1. DPI value: capture exact visible DPI numbers for groups where the third byte is non-zero.
 2. DPI preset / receiver LED color slots: capture DPI 1, DPI 2 and any receiver-only color slot one at a time.
 3. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
 4. Button remapping: capture additional physical buttons and action codes.
