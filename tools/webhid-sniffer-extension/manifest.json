@@ -1,13 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "IPI FLY PRO WebHID Sniffer",
-  "version": "0.1.0",
-  "description": "Logs WebHID reports on qbz.ipigame.cn for reverse engineering the IPI FLY PRO driver.",
+  "name": "Mouse WebHID Sniffer",
+  "version": "0.2.0",
+  "description": "Logs WebHID reports for reverse engineering mouse web drivers.",
   "content_scripts": [
     {
       "matches": [
         "https://qbz.ipigame.cn/*",
-        "http://qbz.ipigame.cn/*"
+        "http://qbz.ipigame.cn/*",
+        "https://hub.atk.pro/*",
+        "http://hub.atk.pro/*"
       ],
       "js": [
         "content.js"
@@ -24,7 +26,9 @@
       ],
       "matches": [
         "https://qbz.ipigame.cn/*",
-        "http://qbz.ipigame.cn/*"
+        "http://qbz.ipigame.cn/*",
+        "https://hub.atk.pro/*",
+        "http://hub.atk.pro/*"
       ]
     }
   ]

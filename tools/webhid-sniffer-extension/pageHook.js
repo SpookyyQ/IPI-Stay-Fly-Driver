@@ -1,6 +1,6 @@
 (() => {
-  if (window.__ipiFlyWebhidSnifferInstalled) return
-  window.__ipiFlyWebhidSnifferInstalled = true
+  if (window.__mouseWebhidSnifferInstalled) return
+  window.__mouseWebhidSnifferInstalled = true
 
   const state = {
     logs: [],
@@ -29,16 +29,31 @@
 
   const hex = bytes => bytes.map(byte => byte.toString(16).padStart(2, '0')).join(' ')
 
+  const describeReports = reports => (reports || []).map(report => ({
+    reportId: report.reportId,
+    itemCount: report.items?.length ?? 0,
+  }))
+
+  const describeCollections = collections => (collections || []).map(collection => ({
+    usagePage: collection.usagePage,
+    usage: collection.usage,
+    inputReports: describeReports(collection.inputReports),
+    outputReports: describeReports(collection.outputReports),
+    featureReports: describeReports(collection.featureReports),
+    children: describeCollections(collection.children),
+  }))
+
   const describeDevice = device => ({
     productName: device?.productName || '',
     vendorId: device?.vendorId ?? null,
     productId: device?.productId ?? null,
     opened: Boolean(device?.opened),
+    collections: describeCollections(device?.collections),
   })
 
   const cleanText = value => String(value || '').replace(/\s+/g, ' ').trim()
 
-  const isSnifferElement = target => Boolean(target?.closest?.('#ipi-webhid-sniffer'))
+  const isSnifferElement = target => Boolean(target?.closest?.('#mouse-webhid-sniffer'))
 
   const visibleText = element => {
     if (!element) return ''
@@ -162,7 +177,7 @@
     }
     state.logs.push(full)
     renderRows()
-    console.debug('[IPI WebHID]', full)
+    console.debug('[Mouse WebHID]', full)
   }
 
   const attachInputLogger = device => {
@@ -205,8 +220,8 @@
 
     const proto = window.HIDDevice.prototype
 
-    if (!proto.__ipiFlySnifferSendReport && proto.sendReport) {
-      proto.__ipiFlySnifferSendReport = proto.sendReport
+    if (!proto.__mouseSnifferSendReport && proto.sendReport) {
+      proto.__mouseSnifferSendReport = proto.sendReport
       proto.sendReport = function patchedSendReport(reportId, data) {
         attachInputLogger(this)
         const bytes = toBytes(data)
@@ -218,12 +233,12 @@
           hex: hex(bytes),
           device: describeDevice(this),
         })
-        return proto.__ipiFlySnifferSendReport.call(this, reportId, data)
+        return proto.__mouseSnifferSendReport.call(this, reportId, data)
       }
     }
 
-    if (!proto.__ipiFlySnifferSendFeatureReport && proto.sendFeatureReport) {
-      proto.__ipiFlySnifferSendFeatureReport = proto.sendFeatureReport
+    if (!proto.__mouseSnifferSendFeatureReport && proto.sendFeatureReport) {
+      proto.__mouseSnifferSendFeatureReport = proto.sendFeatureReport
       proto.sendFeatureReport = function patchedSendFeatureReport(reportId, data) {
         attachInputLogger(this)
         const bytes = toBytes(data)
@@ -235,15 +250,15 @@
           hex: hex(bytes),
           device: describeDevice(this),
         })
-        return proto.__ipiFlySnifferSendFeatureReport.call(this, reportId, data)
+        return proto.__mouseSnifferSendFeatureReport.call(this, reportId, data)
       }
     }
 
-    if (!proto.__ipiFlySnifferReceiveFeatureReport && proto.receiveFeatureReport) {
-      proto.__ipiFlySnifferReceiveFeatureReport = proto.receiveFeatureReport
+    if (!proto.__mouseSnifferReceiveFeatureReport && proto.receiveFeatureReport) {
+      proto.__mouseSnifferReceiveFeatureReport = proto.receiveFeatureReport
       proto.receiveFeatureReport = async function patchedReceiveFeatureReport(reportId) {
         attachInputLogger(this)
-        const result = await proto.__ipiFlySnifferReceiveFeatureReport.call(this, reportId)
+        const result = await proto.__mouseSnifferReceiveFeatureReport.call(this, reportId)
         const bytes = toBytes(result)
         log({
           direction: 'in',
@@ -257,10 +272,10 @@
       }
     }
 
-    if (!proto.__ipiFlySnifferOpen && proto.open) {
-      proto.__ipiFlySnifferOpen = proto.open
+    if (!proto.__mouseSnifferOpen && proto.open) {
+      proto.__mouseSnifferOpen = proto.open
       proto.open = async function patchedOpen(...args) {
-        const result = await proto.__ipiFlySnifferOpen.apply(this, args)
+        const result = await proto.__mouseSnifferOpen.apply(this, args)
         attachInputLogger(this)
         log({
           direction: 'meta',
@@ -274,10 +289,10 @@
       }
     }
 
-    if (!navigator.hid.__ipiFlySnifferRequestDevice && navigator.hid.requestDevice) {
-      navigator.hid.__ipiFlySnifferRequestDevice = navigator.hid.requestDevice.bind(navigator.hid)
+    if (!navigator.hid.__mouseSnifferRequestDevice && navigator.hid.requestDevice) {
+      navigator.hid.__mouseSnifferRequestDevice = navigator.hid.requestDevice.bind(navigator.hid)
       navigator.hid.requestDevice = async (...args) => {
-        const devices = await navigator.hid.__ipiFlySnifferRequestDevice(...args)
+        const devices = await navigator.hid.__mouseSnifferRequestDevice(...args)
         attachMany(devices)
         log({
           direction: 'meta',
@@ -285,16 +300,17 @@
           reportId: null,
           bytes: [],
           hex: '',
+          requestOptions: args[0] || null,
           devices: devices.map(describeDevice),
         })
         return devices
       }
     }
 
-    if (!navigator.hid.__ipiFlySnifferGetDevices && navigator.hid.getDevices) {
-      navigator.hid.__ipiFlySnifferGetDevices = navigator.hid.getDevices.bind(navigator.hid)
+    if (!navigator.hid.__mouseSnifferGetDevices && navigator.hid.getDevices) {
+      navigator.hid.__mouseSnifferGetDevices = navigator.hid.getDevices.bind(navigator.hid)
       navigator.hid.getDevices = async (...args) => {
-        const devices = await navigator.hid.__ipiFlySnifferGetDevices(...args)
+        const devices = await navigator.hid.__mouseSnifferGetDevices(...args)
         attachMany(devices)
         return devices
       }
@@ -321,6 +337,24 @@
   let rowsEl = null
   let counterEl = null
   let captureButton = null
+  let rootEl = null
+  let positionIndex = 0
+
+  const positions = [
+    { right: '16px', bottom: '16px', left: '', top: '' },
+    { right: '16px', top: '16px', left: '', bottom: '' },
+    { left: '16px', bottom: '16px', right: '', top: '' },
+    { left: '16px', top: '16px', right: '', bottom: '' },
+  ]
+
+  const applyOverlayPosition = () => {
+    if (!rootEl) return
+    const position = positions[positionIndex]
+    rootEl.style.left = position.left
+    rootEl.style.right = position.right
+    rootEl.style.top = position.top
+    rootEl.style.bottom = position.bottom
+  }
 
   const download = (name, type, text) => {
     const url = URL.createObjectURL(new Blob([text], { type }))
@@ -333,18 +367,35 @@
 
   const exportJson = () => {
     download(
-      `ipi-webhid-capture-${Date.now()}.json`,
+      `mouse-webhid-capture-${Date.now()}.json`,
       'application/json',
       JSON.stringify(state.logs, null, 2),
     )
   }
 
+  const compactDevice = device => {
+    if (!device) return ''
+    const vid = device.vendorId == null ? '????' : device.vendorId.toString(16).padStart(4, '0')
+    const pid = device.productId == null ? '????' : device.productId.toString(16).padStart(4, '0')
+    return `${device.productName || 'Unknown'} vid=0x${vid} pid=0x${pid}`
+  }
+
+  const compactDevices = entry => {
+    if (entry.device) return compactDevice(entry.device)
+    if (entry.devices?.length) return entry.devices.map(compactDevice).join(' | ')
+    return ''
+  }
+
   const copyHex = async () => {
     const lines = state.logs
       .filter(entry => entry.hex)
-      .map(entry => `${entry.id}\t${entry.direction}\t${entry.method}\treport ${entry.reportId}\t${entry.hex}\t${entry.actionSummary || ''}`)
+      .map(entry => `${entry.id}\t${entry.direction}\t${entry.method}\treport ${entry.reportId}\t${entry.hex}\t${compactDevices(entry)}\t${entry.actionSummary || ''}`)
       .join('\n')
     await navigator.clipboard.writeText(lines)
+  }
+
+  const copyAll = async () => {
+    await navigator.clipboard.writeText(JSON.stringify(state.logs, null, 2))
   }
 
   const clearLogs = () => {
@@ -356,6 +407,11 @@
   const toggleCapture = () => {
     state.capture = !state.capture
     captureButton.textContent = state.capture ? 'Pause' : 'Resume'
+  }
+
+  const moveOverlay = () => {
+    positionIndex = (positionIndex + 1) % positions.length
+    applyOverlayPosition()
   }
 
   const renderRows = () => {
@@ -378,14 +434,13 @@
   }
 
   const installOverlay = () => {
-    if (document.getElementById('ipi-webhid-sniffer')) return
+    if (document.getElementById('mouse-webhid-sniffer')) return
 
     const root = document.createElement('div')
-    root.id = 'ipi-webhid-sniffer'
+    root.id = 'mouse-webhid-sniffer'
+    rootEl = root
     Object.assign(root.style, {
       position: 'fixed',
-      right: '16px',
-      bottom: '16px',
       zIndex: '2147483647',
       width: '720px',
       maxWidth: 'calc(100vw - 32px)',
@@ -412,7 +467,7 @@
     })
 
     const title = document.createElement('strong')
-    title.innerHTML = 'IPI WebHID Sniffer <span style="color:#9ca3af;font-weight:400">frames: </span>'
+    title.innerHTML = 'Mouse WebHID Sniffer <span style="color:#9ca3af;font-weight:400">frames: </span>'
     counterEl = document.createElement('span')
     counterEl.textContent = '0'
     title.appendChild(counterEl)
@@ -422,7 +477,9 @@
     captureButton = makeButton('Pause', toggleCapture)
     actions.append(
       captureButton,
+      makeButton('Move', moveOverlay),
       makeButton('Copy hex', copyHex),
+      makeButton('Copy all', copyAll),
       makeButton('Export JSON', exportJson),
       makeButton('Clear', clearLogs),
       makeButton('Hide', () => { root.style.display = 'none' }),
@@ -439,6 +496,7 @@
     })
 
     root.append(header, rowsEl)
+    applyOverlayPosition()
     document.documentElement.appendChild(root)
   }
 
