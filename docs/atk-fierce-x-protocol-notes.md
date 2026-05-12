@@ -504,6 +504,34 @@ This strongly suggests a palette/preset table with two color slots per address:
 The exact UI mapping still needs clean one-slot captures because the color picker
 emitted several intermediate colors while dragging.
 
+### Button / Action Slot Writes
+
+Captured while selecting `System` and confirming an action assignment. ATK V HUB
+wrote several 4-byte action slots at addresses `0x60..0x74`.
+
+```txt
+07 00 00 70 04 01 04 00 50 00 00 00 00 00 00 7d
+
+07 00 00 60 04 01 01 00 53 00 00 00 00 00 00 8d
+07 00 00 64 04 01 02 00 52 00 00 00 00 00 00 89
+07 00 00 68 04 01 04 00 50 00 00 00 00 00 00 85
+07 00 00 6c 04 01 08 00 4c 00 00 00 00 00 00 81
+07 00 00 70 04 01 10 00 44 00 00 00 00 00 00 7d
+07 00 00 74 04 02 01 00 52 00 00 00 00 00 00 79
+```
+
+Observed slot layout:
+
+```txt
+byte[3] = slot address
+byte[4] = 0x04
+byte[5..8] = action data
+```
+
+The initial slot addresses match the startup reads at `0x60`, `0x68` and
+`0x70`. The exact mapping from slot address to physical button and action code
+still needs one clean capture per remap.
+
 ## Initial Observations
 
 - ATK and IPI share enough framing that the current Rust checksum helpers can be reused.
@@ -518,4 +546,4 @@ For each capture: click `Clear`, change exactly one setting, then use `Copy hex`
 1. DPI value: set stage 1 to known fixed values, especially `800`, `900`, `1600` and `1800`, to remove the remaining raw-value ambiguity.
 2. DPI preset / receiver LED color slots: capture one slot at a time with a single click, not a drag, to map slot order exactly.
 3. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
-4. Button remapping: capture one simple remap, for example side button -> DPI cycle.
+4. Button remapping: capture one physical button changed to one known action, with the source button and target action named in the log message.
