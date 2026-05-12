@@ -501,8 +501,26 @@ This strongly suggests a palette/preset table with two color slots per address:
 0x44 -> color slots 7 and 8
 ```
 
-The exact UI mapping still needs clean one-slot captures because the color picker
-emitted several intermediate colors while dragging.
+DPI 4 color assignment confirmed the second group of address `0x34`:
+
+```txt
+DPI 4 color changed:
+07 00 00 34 08 00 00 ff 56 92 38 07 84 00 00 60
+07 00 00 34 08 00 00 ff 56 07 17 92 a5 00 00 60
+07 00 00 34 08 00 00 ff 56 09 21 d7 54 00 00 60
+07 00 00 34 08 00 00 ff 56 d7 32 09 43 00 00 60
+07 00 00 34 08 00 00 ff 56 f0 34 05 2c 00 00 60
+```
+
+This confirms:
+
+```txt
+0x34 first group  = DPI 3 color
+0x34 second group = DPI 4 color
+```
+
+The RGB values above are color-picker intermediate values, not final preset
+defaults.
 
 ### Button / Action Slot Writes
 
@@ -558,6 +576,6 @@ action 01 08 00 4c = side back button
 For each capture: click `Clear`, change exactly one setting, then use `Copy hex`.
 
 1. DPI value: set stage 1 to known fixed values, especially `800`, `900`, `1600` and `1800`, to remove the remaining raw-value ambiguity.
-2. DPI preset / receiver LED color slots: capture one slot at a time with a single click, not a drag, to map slot order exactly.
+2. DPI preset / receiver LED color slots: capture DPI 1, DPI 2 and any receiver-only color slot one at a time.
 3. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
 4. Button remapping: capture additional physical buttons and action codes.
