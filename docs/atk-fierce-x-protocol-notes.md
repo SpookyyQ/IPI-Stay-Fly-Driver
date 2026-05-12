@@ -532,6 +532,20 @@ The initial slot addresses match the startup reads at `0x60`, `0x68` and
 `0x70`. The exact mapping from slot address to physical button and action code
 still needs one clean capture per remap.
 
+Confirmed single remap:
+
+```txt
+Forward side button -> Back side button:
+07 00 00 70 04 01 08 00 4c 00 00 00 00 00 00 7d
+```
+
+This indicates:
+
+```txt
+slot 0x70 = physical forward side button, likely
+action 01 08 00 4c = side back button
+```
+
 ## Initial Observations
 
 - ATK and IPI share enough framing that the current Rust checksum helpers can be reused.
@@ -546,4 +560,4 @@ For each capture: click `Clear`, change exactly one setting, then use `Copy hex`
 1. DPI value: set stage 1 to known fixed values, especially `800`, `900`, `1600` and `1800`, to remove the remaining raw-value ambiguity.
 2. DPI preset / receiver LED color slots: capture one slot at a time with a single click, not a drag, to map slot order exactly.
 3. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
-4. Button remapping: capture one physical button changed to one known action, with the source button and target action named in the log message.
+4. Button remapping: capture additional physical buttons and action codes.
