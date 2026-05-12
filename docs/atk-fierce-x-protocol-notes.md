@@ -246,6 +246,35 @@ byte[11] = enable: 0=off, 1=on
 byte[12] = 0x55 - enable
 ```
 
+Additional captures show the same `0x4C` block also carries LED brightness and
+speed. This was captured while changing the receiver/DPI LED controls.
+
+```txt
+off:       07 00 00 4c 08 00 00 ff 56 05 50 00 55 00 00 f3
+solid:     07 00 00 4c 08 01 54 ff 56 05 50 01 54 00 00 9e
+breathing: 07 00 00 4c 08 02 53 ff 56 05 50 01 54 00 00 9e
+
+speed slow: 07 00 00 4c 08 02 53 ff 56 01 54 01 54 00 00 9e
+speed mid:  07 00 00 4c 08 02 53 ff 56 03 52 01 54 00 00 9e
+
+brightness min: 07 00 00 4c 08 01 54 10 45 03 52 01 54 00 00 9e
+brightness mid: 07 00 00 4c 08 01 54 80 d5 03 52 01 54 00 00 9e
+brightness max: 07 00 00 4c 08 01 54 ff 56 03 52 01 54 00 00 9e
+```
+
+Observed `0x4C` field layout:
+
+```txt
+byte[5]    mode: 0=off, 1=solid, 2=breathing
+byte[6]    0x55 - mode, except off has also been captured as 0x00
+byte[7]    brightness raw: 0x10=min, 0x80=middle, 0xff=max
+byte[8]    0x55 - brightness
+byte[9]    speed raw: 0x01=slow, 0x03=middle
+byte[10]   0x55 - speed
+byte[11]   enable: 0=off, 1=on
+byte[12]   0x55 - enable
+```
+
 ### Debounce
 
 Debounce is stored in the `0xA9` block. Bytes 5/6 are the debounce value and
@@ -298,15 +327,27 @@ sleep-timer write sequence until a cleaner capture proves otherwise.
 
 ### Lift-Off Distance
 
-Captured from decrease/increase controls:
+Captured from decrease/increase controls. This is command/address `0x0A` with
+payload length `0x02`. Byte 5 is the raw value and byte 6 follows
+`0x55 - value`.
 
 ```txt
+07 00 00 0a 02 01 54 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 02 53 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 03 52 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 04 51 00 00 00 00 00 00 00 00 e5
 07 00 00 0a 02 05 50 00 00 00 00 00 00 00 00 e5
 07 00 00 0a 02 06 4f 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 07 4e 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 08 4d 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 09 4c 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 0a 4b 00 00 00 00 00 00 00 00 e5
+07 00 00 0a 02 0b 4a 00 00 00 00 00 00 00 00 e5
 ```
 
-This differs from IPI's 0.7/1/2 mm mapping. The exact ATK UI values need one
-clean capture per visible LOD option before implementing.
+This differs from IPI's 0.7/1/2 mm mapping. If this was captured from the ATK
+LOD control, the visible control likely maps to raw values `1..11`. The exact
+ATK UI label/unit still needs confirmation before implementing.
 
 ### A9 Toggle Fields
 
@@ -399,6 +440,52 @@ This indicates direct RGB bytes:
 byte[6..8] = red, green, blue
 ```
 
+### DPI Preset / Receiver LED Color Table
+
+Captured while changing the receiver LED color from red to green and back to
+red. ATK V HUB wrote a color table at addresses `0x2C`, `0x34`, `0x3C` and
+`0x44`. Each 8-byte block carries two RGB color groups.
+
+Group format:
+
+```txt
+[red, green, blue, check]
+check = (0x255 - red - green - blue) & 0xFF
+```
+
+Examples:
+
+```txt
+red:     ff 00 00 56
+green:   00 ff 00 56
+blue:    00 00 ff 56
+magenta: ff 00 ff 57
+```
+
+Observed block writes:
+
+```txt
+07 00 00 2c 08 ff 00 00 56 00 ff 00 56 00 00 68
+07 00 00 34 08 00 00 ff 56 04 00 ff 52 00 00 60
+07 00 00 3c 08 ff 00 ff 57 ff 00 ff 57 00 00 58
+07 00 00 44 08 ff 00 ff 57 ff 00 ff 57 00 00 50
+
+07 00 00 34 08 00 00 ff 56 59 ff 00 fd 00 00 60
+07 00 00 34 08 00 00 ff 56 ff 59 00 fd 00 00 60
+```
+
+This strongly suggests a palette/preset table with two color slots per address:
+
+```txt
+0x2C -> color slots 1 and 2
+0x34 -> color slots 3 and 4
+0x3C -> color slots 5 and 6
+0x44 -> color slots 7 and 8
+```
+
+The exact UI mapping still needs clean one-slot captures because the color picker
+emitted several intermediate colors while dragging.
+
 ## Initial Observations
 
 - ATK and IPI share enough framing that the current Rust checksum helpers can be reused.
@@ -411,6 +498,7 @@ byte[6..8] = red, green, blue
 For each capture: click `Clear`, change exactly one setting, then use `Copy hex`.
 
 1. DPI value: set stage 1 to known fixed values, especially `800`, `900`, `1600` and `1800`, to remove the remaining raw-value ambiguity.
-2. LOD: set every visible lift-off distance option and record the exact UI label for each frame.
-3. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
-4. Button remapping: capture one simple remap, for example side button -> DPI cycle.
+2. Confirm the exact UI label/unit for the `0x0A` numeric setting, likely LOD.
+3. DPI preset / receiver LED color slots: capture one slot at a time with a single click, not a drag, to map slot order exactly.
+4. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
+5. Button remapping: capture one simple remap, for example side button -> DPI cycle.
