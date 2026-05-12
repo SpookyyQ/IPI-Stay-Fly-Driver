@@ -345,9 +345,8 @@ payload length `0x02`. Byte 5 is the raw value and byte 6 follows
 07 00 00 0a 02 0b 4a 00 00 00 00 00 00 00 00 e5
 ```
 
-This differs from IPI's 0.7/1/2 mm mapping. If this was captured from the ATK
-LOD control, the visible control likely maps to raw values `1..11`. The exact
-ATK UI label/unit still needs confirmation before implementing.
+This is confirmed as the ATK LOD settings control. It differs from IPI's
+0.7/1/2 mm mapping and uses raw values `1..11`.
 
 ### A9 Toggle Fields
 
@@ -498,7 +497,6 @@ emitted several intermediate colors while dragging.
 For each capture: click `Clear`, change exactly one setting, then use `Copy hex`.
 
 1. DPI value: set stage 1 to known fixed values, especially `800`, `900`, `1600` and `1800`, to remove the remaining raw-value ambiguity.
-2. Confirm the exact UI label/unit for the `0x0A` numeric setting, likely LOD.
-3. DPI preset / receiver LED color slots: capture one slot at a time with a single click, not a drag, to map slot order exactly.
-4. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
-5. Button remapping: capture one simple remap, for example side button -> DPI cycle.
+2. DPI preset / receiver LED color slots: capture one slot at a time with a single click, not a drag, to map slot order exactly.
+3. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
+4. Button remapping: capture one simple remap, for example side button -> DPI cycle.
