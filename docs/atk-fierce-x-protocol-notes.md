@@ -357,6 +357,48 @@ colorful solid:         18 00 00 00 0a 06 ff 00 08 05 09 01 00 00 00 0f
 Only byte 5 changed in this capture. Other bytes likely encode color,
 brightness and speed.
 
+Captured brightness, speed and timer fields for single-color breathing
+(`mode = 0x02`):
+
+```txt
+brightness min: 18 00 00 00 0a 02 ff 00 08 05 00 01 00 00 00 1c
+brightness mid: 18 00 00 00 0a 02 ff 00 08 05 05 01 00 00 00 17
+brightness max: 18 00 00 00 0a 02 ff 00 08 05 09 01 00 00 00 13
+
+speed slowest: 18 00 00 00 0a 02 ff 00 08 00 09 01 00 00 00 18
+speed mid:     18 00 00 00 0a 02 ff 00 08 05 09 01 00 00 00 13
+speed max:     18 00 00 00 0a 02 ff 00 08 09 09 01 00 00 00 0f
+
+timer 1 min:   18 00 00 00 0a 02 ff 00 08 09 09 01 00 00 00 0f
+timer 5 min:   18 00 00 00 0a 02 ff 00 08 09 09 05 00 00 00 0b
+timer 10 min:  18 00 00 00 0a 02 ff 00 08 09 09 0a 00 00 00 06
+```
+
+Observed field layout:
+
+```txt
+byte[5]  mode
+byte[6]  red
+byte[7]  green
+byte[8]  blue
+byte[9]  speed, range 0x00..0x09
+byte[10] brightness, range 0x00..0x09
+byte[11] timer in minutes
+```
+
+Captured color picker examples:
+
+```txt
+18 00 00 00 0a 02 12 ff 05 05 09 01 00 00 00 04
+18 00 00 00 0a 02 ff 00 0d 05 09 01 00 00 00 0e
+```
+
+This indicates direct RGB bytes:
+
+```txt
+byte[6..8] = red, green, blue
+```
+
 ## Initial Observations
 
 - ATK and IPI share enough framing that the current Rust checksum helpers can be reused.
@@ -370,6 +412,5 @@ For each capture: click `Clear`, change exactly one setting, then use `Copy hex`
 
 1. DPI value: set stage 1 to known fixed values, especially `800`, `900`, `1600` and `1800`, to remove the remaining raw-value ambiguity.
 2. LOD: set every visible lift-off distance option and record the exact UI label for each frame.
-3. RGB color, brightness and speed: change one field at a time for the `0x18` lighting command.
-4. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
-5. Button remapping: capture one simple remap, for example side button -> DPI cycle.
+3. Firmware/version reads: identify which startup responses map to mouse and dongle firmware versions.
+4. Button remapping: capture one simple remap, for example side button -> DPI cycle.
