@@ -586,6 +586,45 @@ slot 0x70 = physical forward side button, likely
 action 01 08 00 4c = side back button
 ```
 
+### Factory Reset
+
+Factory reset starts with the same primary reset frame observed on IPI:
+
+```txt
+09 00 00 00 00 00 00 00 00 00 00 00 00 00 00 44
+```
+
+ATK V HUB then writes a long sequence of default blocks. These are bulk default
+configuration writes, not separate UI feature commands.
+
+Observed reset block pattern:
+
+```txt
+07 00 03 00 0a 08 02 02 02 02 02 02 02 02 ff 22
+07 00 03 0a 0a ff ff ff ff ff ff ff ff ff ff 39
+07 00 03 14 0a ff ff ff ff ff ff ff ff ff ff 2f
+07 00 03 1e 0a ff 00 00 00 00 00 00 00 00 00 1c
+
+07 00 04 80 0a 08 02 02 02 02 02 02 02 02 ff a1
+07 00 04 8a 0a ff ff ff ff ff ff ff ff ff ff b8
+07 00 04 94 0a ff ff ff ff ff ff ff ff ff ff ae
+07 00 04 9e 0a ff 00 00 00 00 00 00 00 00 00 9b
+```
+
+The same four-block pattern repeats across multiple high address groups, for
+example `0x0600`, `0x0780`, `0x0900`, `0x0A80`, `0x0C00`, `0x0D80`,
+`0x0F00`, `0x1080`, `0x1200`, `0x1380`, `0x1500`, `0x1680`, `0x1800`
+and `0x1980`.
+
+Implementation note:
+
+```txt
+For app support, send only the primary reset frame first and verify whether the
+mouse performs the reset by itself. Treat the following bulk writes as the web
+driver's restore-defaults sequence unless testing proves the primary reset frame
+is insufficient.
+```
+
 ## Initial Observations
 
 - ATK and IPI share enough framing that the current Rust checksum helpers can be reused.
