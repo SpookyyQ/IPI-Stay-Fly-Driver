@@ -3,14 +3,28 @@ import { Minus, MonitorPlay, Square, X, Wifi, WifiOff } from 'lucide-react'
 import { appWindow } from '@tauri-apps/api/window'
 import { StatusInfo } from '../lib/ipc'
 import ThemePicker from './ThemePicker'
+import BackgroundPicker from './BackgroundPicker'
+import { BackgroundId } from '../lib/backgrounds'
 
 interface Props {
   status: StatusInfo
   demoMode: boolean
   onDemoModeChange: (enabled: boolean) => void
+  background: BackgroundId
+  onBackgroundChange: (id: BackgroundId) => void
+  wallpaper: string | null
+  onWallpaperChange: (dataUrl: string) => void
 }
 
-export default function TopBar({ status, demoMode, onDemoModeChange }: Props) {
+export default function TopBar({
+  status,
+  demoMode,
+  onDemoModeChange,
+  background,
+  onBackgroundChange,
+  wallpaper,
+  onWallpaperChange,
+}: Props) {
   const { t } = useTranslation()
 
   return (
@@ -58,6 +72,12 @@ export default function TopBar({ status, demoMode, onDemoModeChange }: Props) {
           <MonitorPlay size={14} />
           <span>{t('topbar.demo')}</span>
         </button>
+        <BackgroundPicker
+          background={background}
+          onBackgroundChange={onBackgroundChange}
+          hasWallpaper={!!wallpaper}
+          onWallpaperChange={onWallpaperChange}
+        />
         <ThemePicker />
         <button
           onClick={() => appWindow.minimize()}

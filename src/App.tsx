@@ -10,7 +10,15 @@ import AdvancedTab from './components/tabs/AdvancedTab'
 import OtherTab from './components/tabs/OtherTab'
 import HomeTab from './components/tabs/HomeTab'
 import DevPanel from './components/DevPanel'
+import BackgroundLayer from './components/BackgroundLayer'
 import { ipc, StatusInfo, DeviceSettings } from './lib/ipc'
+import {
+  BackgroundId,
+  BG_STORAGE_KEY,
+  BG_WALLPAPER_KEY,
+  getStoredBackground,
+  getStoredWallpaper,
+} from './lib/backgrounds'
 
 const DEMO_STATUS: StatusInfo = {
   connected: true,
@@ -46,6 +54,16 @@ export default function App() {
   })
   const [settings, setSettings] = useState<DeviceSettings | null>(null)
   const [devOpen, setDevOpen] = useState(false)
+  const [background, setBackground] = useState<BackgroundId>(() => getStoredBackground())
+  const [wallpaper, setWallpaper] = useState<string | null>(() => getStoredWallpaper())
+
+  useEffect(() => {
+    localStorage.setItem(BG_STORAGE_KEY, background)
+  }, [background])
+
+  useEffect(() => {
+    if (wallpaper) localStorage.setItem(BG_WALLPAPER_KEY, wallpaper)
+  }, [wallpaper])
 
   const pollStatus = useCallback(async () => {
     if (demoMode) {
@@ -96,9 +114,18 @@ export default function App() {
   return (
     <div className={`atk-shell flex h-screen w-screen overflow-hidden text-white ${demoMode ? 'demo-shell' : ''}`}>
       <div className="atk-ribbon" />
+      <BackgroundLayer mode={background} wallpaper={wallpaper} />
       {tab !== 'home' && <Sidebar activeTab={tab} onTabChange={setTab} />}
       <div className="flex flex-col flex-1 overflow-hidden">
-        <TopBar status={status} demoMode={demoMode} onDemoModeChange={setDemoMode} />
+        <TopBar
+          status={status}
+          demoMode={demoMode}
+          onDemoModeChange={setDemoMode}
+          background={background}
+          onBackgroundChange={setBackground}
+          wallpaper={wallpaper}
+          onWallpaperChange={setWallpaper}
+        />
         {demoMode && (
           <div className="demo-mode-banner">
             <span className="demo-mode-dot" />
