@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { AlertTriangle } from 'lucide-react'
 import mouseTopImage from '../../assets/fly-pro-top.png'
 
 const CALLOUTS = [
@@ -68,9 +69,14 @@ export default function ButtonsTab() {
           </div>
         ))}
 
-        <p className="absolute bottom-16 left-1/2 max-w-md -translate-x-1/2 text-center text-sm text-white/58">
-          {t('buttons.placeholder')}
-        </p>
+        <div className="absolute bottom-12 left-1/2 max-w-md -translate-x-1/2">
+          <div className="flex items-center gap-3 rounded-xl border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-amber-200 shadow-lg shadow-amber-950/20 backdrop-blur">
+            <AlertTriangle size={20} className="shrink-0 text-amber-400" />
+            <p className="text-sm font-semibold text-amber-100">
+              {t('buttons.placeholder')}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   )
