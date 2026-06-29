@@ -14,7 +14,7 @@ export default function AnimatedBackground({ mode }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    if (mode === 'none' || mode === 'custom') return
+    if (mode === 'none') return
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -290,6 +290,6 @@ export default function AnimatedBackground({ mode }: Props) {
     }
   }, [mode])
 
-  if (mode === 'none' || mode === 'custom') return null
+  if (mode === 'none') return null
   return <canvas ref={canvasRef} className="bg-canvas" aria-hidden="true" />
 }

@@ -63,6 +63,7 @@ export default function App() {
 
   useEffect(() => {
     if (wallpaper) localStorage.setItem(BG_WALLPAPER_KEY, wallpaper)
+    else localStorage.removeItem(BG_WALLPAPER_KEY)
   }, [wallpaper])
 
   const pollStatus = useCallback(async () => {

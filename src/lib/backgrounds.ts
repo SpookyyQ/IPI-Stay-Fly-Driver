@@ -1,22 +1,26 @@
+import forgedWallpaper from '../assets/forged-carbon.jpg'
+
+// The animation overlay rendered on top of the wallpaper. 'none' = wallpaper only.
 export type BackgroundId =
   | 'none'
   | 'constellation'
   | 'particles'
   | 'starfield'
   | 'waves'
-  | 'custom'
 
 export const BG_STORAGE_KEY = 'ipi-background'
 export const BG_WALLPAPER_KEY = 'ipi-wallpaper'
 export const DEFAULT_BACKGROUND: BackgroundId = 'none'
 
+/** Bundled default wallpaper shown as the base layer until the user uploads their own. */
+export const DEFAULT_WALLPAPER = forgedWallpaper
+
 export const backgrounds: { id: BackgroundId; label: string; animated: boolean }[] = [
-  { id: 'none', label: 'Default', animated: false },
+  { id: 'none', label: 'None', animated: false },
   { id: 'constellation', label: 'Constellation', animated: true },
   { id: 'particles', label: 'Floating Dots', animated: true },
   { id: 'starfield', label: 'Starfield', animated: true },
   { id: 'waves', label: 'Aurora Waves', animated: true },
-  { id: 'custom', label: 'Custom Wallpaper', animated: false },
 ]
 
 export function isBackgroundId(value: string | null): value is BackgroundId {
@@ -28,8 +32,14 @@ export function getStoredBackground(): BackgroundId {
   return isBackgroundId(stored) ? stored : DEFAULT_BACKGROUND
 }
 
+/** The user's uploaded custom wallpaper, or null when the default should be used. */
 export function getStoredWallpaper(): string | null {
   return localStorage.getItem(BG_WALLPAPER_KEY)
+}
+
+/** Resolve the wallpaper to actually render: the custom upload, else the bundled default. */
+export function resolveWallpaper(custom: string | null): string {
+  return custom ?? DEFAULT_WALLPAPER
 }
 
 /** Read the active theme accent (set as "r g b" in --color-accent) as an [r,g,b] tuple. */

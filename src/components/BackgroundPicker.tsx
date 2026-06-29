@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Check, Image as ImageIcon, Sparkles, Upload } from 'lucide-react'
+import { Check, Image as ImageIcon, Monitor, Sparkles, Upload } from 'lucide-react'
 import {
   BackgroundId,
   backgrounds,
@@ -10,7 +10,7 @@ interface Props {
   background: BackgroundId
   onBackgroundChange: (id: BackgroundId) => void
   hasWallpaper: boolean
-  onWallpaperChange: (dataUrl: string) => void
+  onWallpaperChange: (dataUrl: string | null) => void
 }
 
 export default function BackgroundPicker({
@@ -41,7 +41,6 @@ export default function BackgroundPicker({
     try {
       const dataUrl = await loadWallpaperFile(file)
       onWallpaperChange(dataUrl)
-      onBackgroundChange('custom')
     } catch {
       setError(true)
     } finally {
@@ -67,9 +66,11 @@ export default function BackgroundPicker({
           className="fixed right-16 top-11 z-[100] w-60 rounded-xl border border-white/10 bg-zinc-950/95 p-2 shadow-2xl shadow-black/50 backdrop-blur-xl"
           onPointerDown={event => event.stopPropagation()}
         >
+          <p className="px-3 pb-1 pt-1 text-[10px] font-bold uppercase tracking-[.18em] text-white/35">
+            Animation
+          </p>
           {backgrounds.map(option => {
             const active = option.id === background
-            const isCustom = option.id === 'custom'
             return (
               <button
                 key={option.id}
@@ -77,10 +78,6 @@ export default function BackgroundPicker({
                 onPointerDown={event => {
                   event.preventDefault()
                   event.stopPropagation()
-                  if (isCustom && !hasWallpaper) {
-                    fileRef.current?.click()
-                    return
-                  }
                   onBackgroundChange(option.id)
                   setOpen(false)
                 }}
@@ -89,7 +86,7 @@ export default function BackgroundPicker({
                 }`}
               >
                 <span className="grid h-4 w-4 place-items-center text-accent">
-                  {isCustom ? <ImageIcon size={14} /> : <Sparkles size={12} />}
+                  <Sparkles size={12} />
                 </span>
                 <span className="flex-1 font-semibold">{option.label}</span>
                 {active && <Check size={14} className="text-accent" />}
@@ -99,6 +96,28 @@ export default function BackgroundPicker({
 
           <div className="my-1 border-t border-white/10" />
 
+          <p className="px-3 pb-1 pt-1 text-[10px] font-bold uppercase tracking-[.18em] text-white/35">
+            Wallpaper
+          </p>
+
+          <button
+            type="button"
+            onPointerDown={event => {
+              event.preventDefault()
+              event.stopPropagation()
+              onWallpaperChange(null)
+            }}
+            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition ${
+              !hasWallpaper ? 'bg-white/[.10] text-white' : 'text-white/72 hover:bg-white/[.07] hover:text-white'
+            }`}
+          >
+            <span className="grid h-4 w-4 place-items-center text-accent">
+              <Monitor size={13} />
+            </span>
+            <span className="flex-1 font-semibold">Default</span>
+            {!hasWallpaper && <Check size={14} className="text-accent" />}
+          </button>
+
           <button
             type="button"
             onPointerDown={event => {
@@ -107,15 +126,36 @@ export default function BackgroundPicker({
               fileRef.current?.click()
             }}
             disabled={busy}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-white/72 transition hover:bg-white/[.07] hover:text-white disabled:opacity-50"
+            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition disabled:opacity-50 ${
+              hasWallpaper ? 'bg-white/[.10] text-white' : 'text-white/72 hover:bg-white/[.07] hover:text-white'
+            }`}
           >
             <span className="grid h-4 w-4 place-items-center text-accent">
-              <Upload size={13} />
+              {hasWallpaper ? <ImageIcon size={14} /> : <Upload size={13} />}
             </span>
             <span className="flex-1 font-semibold">
-              {busy ? 'Loading…' : hasWallpaper ? 'Replace wallpaper…' : 'Upload wallpaper…'}
+              {busy ? 'Loading…' : hasWallpaper ? 'Custom' : 'Upload wallpaper…'}
             </span>
+            {hasWallpaper && <Check size={14} className="text-accent" />}
           </button>
+
+          {hasWallpaper && (
+            <button
+              type="button"
+              onPointerDown={event => {
+                event.preventDefault()
+                event.stopPropagation()
+                fileRef.current?.click()
+              }}
+              disabled={busy}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-xs text-white/55 transition hover:bg-white/[.07] hover:text-white disabled:opacity-50"
+            >
+              <span className="grid h-4 w-4 place-items-center text-accent">
+                <Upload size={12} />
+              </span>
+              <span className="flex-1 font-semibold">Replace wallpaper…</span>
+            </button>
+          )}
 
           {error && (
             <p className="px-3 pb-1 pt-0.5 text-xs text-red-300">Could not load that image.</p>

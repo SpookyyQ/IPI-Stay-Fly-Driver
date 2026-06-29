@@ -13,7 +13,7 @@ interface Props {
   background: BackgroundId
   onBackgroundChange: (id: BackgroundId) => void
   wallpaper: string | null
-  onWallpaperChange: (dataUrl: string) => void
+  onWallpaperChange: (dataUrl: string | null) => void
 }
 
 export default function TopBar({
