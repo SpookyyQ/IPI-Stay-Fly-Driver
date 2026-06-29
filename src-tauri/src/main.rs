@@ -30,6 +30,8 @@ fn main() {
             commands::cmd_set_angle,
             commands::cmd_list_hid_devices,
             commands::cmd_factory_reset,
+            commands::cmd_reset_buttons,
+            commands::cmd_set_button,
             commands::cmd_raw,
         ])
         .run(tauri::generate_context!())
