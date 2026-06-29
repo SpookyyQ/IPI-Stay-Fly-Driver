@@ -118,7 +118,7 @@ pub fn cmd_status() -> StatusInfo {
             Ok((s, b))
         }) {
             Ok((s, b)) => {
-                let pct = parse_status_battery_percent(&s).or_else(|| parse_battery_percent(&b)).unwrap_or(0);
+                let pct = parse_battery_percent(&b).or_else(|| parse_status_battery_percent(&s)).unwrap_or(0);
                 (
                     hex_str(&s),
                     hex_str(&b),
@@ -323,6 +323,29 @@ pub fn cmd_factory_reset() -> Result<(), String> {
 }
 
 #[tauri::command]
+pub fn cmd_reset_buttons() -> Result<(), String> {
+    let frames = protocol::cmd_buttons_restore_defaults();
+    with_device(|dev| {
+        for frame in &frames {
+            dev.write(frame)?;
+        }
+        Ok(())
+    })
+}
+
+#[tauri::command]
+pub fn cmd_set_button(slot: u8, code: u8) -> Result<(), String> {
+    if !protocol::is_valid_button_slot(slot) {
+        return Err(format!("unknown button slot 0x{slot:02x}"));
+    }
+    if !protocol::is_valid_mouse_action(code) {
+        return Err(format!("unsupported mouse action code 0x{code:02x}"));
+    }
+    let frame = protocol::cmd_button(slot, protocol::ACTION_MOUSE, code, 0x00);
+    with_device(|dev| dev.write(&frame))
+}
+
+#[tauri::command]
 pub fn cmd_raw(hex_frame: String) -> Result<String, String> {
     let bytes: Vec<u8> = hex_frame
         .split_whitespace()
@@ -345,12 +368,58 @@ fn parse_battery_percent(frame: &[u8; 16]) -> Option<u8> {
         return None;
     }
 
-    // Battery replies observed as:
-    // 04 00 00 00 02 37 00 0f ad ... -> byte[8] - 0x60 = 77%.
-    // byte[5] looks like a secondary/raw battery field and can disagree with
-    // the official web driver, so prefer the encoded percent from byte[8].
-    // Reject 0/1 status-like bytes so transient/wrong replies do not show 0%/1%.
-    decode_offset_percent(frame[8]).or_else(|| plausible_percent(frame[5]))
+    // The 0x04 reply carries the battery voltage in millivolts as a big-endian
+    // u16 in bytes [7..=8], e.g. `04 .. 02 19 00 0e e5` -> 0x0EE5 = 3813 mV.
+    // The official IPI web driver maps this voltage to a percentage through a
+    // Li-Ion discharge curve (3813 mV ~= 42%, 4013 mV ~= 77%), so we mirror that
+    // here. byte[5] is a separate raw field that does not match the UI percent.
+    let millivolts = u16::from_be_bytes([frame[7], frame[8]]);
+    voltage_to_percent(millivolts)
+}
+
+/// Maps a Li-Ion cell voltage (mV) to an approximate charge percentage using a
+/// piecewise-linear discharge curve anchored on captured (voltage, percent)
+/// points from the official IPI web driver.
+fn voltage_to_percent(mv: u16) -> Option<u8> {
+    // Curve nodes, high -> low. Anchored on real captures: 4013 mV = 77%,
+    // 3813 mV = 42%. Remaining nodes follow a typical 1S Li-Ion discharge shape.
+    const CURVE: [(u16, u8); 12] = [
+        (4200, 100),
+        (4100, 90),
+        (4013, 77),
+        (3900, 58),
+        (3850, 50),
+        (3813, 42),
+        (3750, 30),
+        (3700, 22),
+        (3650, 15),
+        (3600, 10),
+        (3500, 4),
+        (3400, 0),
+    ];
+
+    // A 0 mV reading means the device did not report a voltage yet.
+    if mv == 0 {
+        return None;
+    }
+    if mv >= CURVE[0].0 {
+        return Some(100);
+    }
+    if mv <= CURVE[CURVE.len() - 1].0 {
+        return Some(0);
+    }
+
+    for pair in CURVE.windows(2) {
+        let (hi_mv, hi_pct) = pair[0];
+        let (lo_mv, lo_pct) = pair[1];
+        if mv <= hi_mv && mv >= lo_mv {
+            let span = (hi_mv - lo_mv) as u32;
+            let pct_span = (hi_pct - lo_pct) as u32;
+            let pct = lo_pct as u32 + ((mv - lo_mv) as u32 * pct_span) / span;
+            return Some(pct as u8);
+        }
+    }
+    None
 }
 
 fn parse_status_battery_percent(frame: &[u8; 16]) -> Option<u8> {
@@ -368,25 +437,30 @@ fn plausible_percent(value: u8) -> Option<u8> {
     (2..=100).contains(&value).then_some(value)
 }
 
-fn decode_offset_percent(value: u8) -> Option<u8> {
-    value
-        .checked_sub(0x60)
-        .and_then(plausible_percent)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn parses_dedicated_battery_reply() {
-        let frame = [0x04, 0x00, 0x00, 0x00, 0x02, 0x37, 0x00, 0x0f, 0xad, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x54];
-        assert_eq!(parse_battery_percent(&frame), Some(77));
+    fn parses_battery_voltage_reply() {
+        // Captured from the IPI web driver at 42% battery: 0x0EE5 = 3813 mV.
+        let frame = [0x04, 0x00, 0x00, 0x00, 0x02, 0x19, 0x00, 0x0e, 0xe5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3b];
+        assert_eq!(parse_battery_percent(&frame), Some(42));
     }
 
     #[test]
-    fn rejects_status_like_zero_one_battery_values() {
-        let frame = [0x04, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00, 0x0f, 0x61, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88];
+    fn battery_voltage_curve_matches_anchor_points() {
+        // 4013 mV was reported as 77% by the official driver.
+        assert_eq!(voltage_to_percent(4013), Some(77));
+        assert_eq!(voltage_to_percent(3813), Some(42));
+        assert_eq!(voltage_to_percent(4300), Some(100));
+        assert_eq!(voltage_to_percent(3300), Some(0));
+    }
+
+    #[test]
+    fn rejects_missing_battery_voltage() {
+        // A reply with no voltage yet (bytes [7..=8] == 0) is not a valid level.
+        let frame = [0x04, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88];
         assert_eq!(parse_battery_percent(&frame), None);
     }
 

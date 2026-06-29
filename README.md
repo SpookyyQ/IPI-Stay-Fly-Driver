@@ -79,13 +79,13 @@ Control receiver LED behavior, high-power modes, long-distance mode, angle snapp
 
 ![Advanced settings screen](Pics/advanced.png)
 
-> [!WARNING]
-> **Known Issues / Bugs**
+> [!NOTE]
+> **Recently implemented**
 >
-> Sorry for the current limitations. Reverse-engineering the complete mouse protocol and rebuilding the driver UI from scratch takes a lot of time, so some areas are still incomplete.
+> - **Battery level**: the battery percentage is now read from the device. The mouse reports its cell voltage, which is mapped to a charge percentage through a Li-Ion discharge curve.
+> - **Button remapping**: the buttons tab now applies real changes to the mouse. Each physical button (left, right, middle, and both side buttons) can be reassigned to any standard mouse action, and **Restore Default** puts every button back to its factory mapping.
 >
-> - **Battery level**: the battery status is difficult to read reliably from the device and is not implemented yet.
-> - **Button remapping**: a button remapping tab exists in the app, but it is currently only a visual preview of how the feature could look. It does not apply changes to the mouse yet.
+> Still in progress: non-mouse button actions (DPI shortcuts, keyboard keys and macros) are not exposed yet.
 
 ## Supported Hardware
 

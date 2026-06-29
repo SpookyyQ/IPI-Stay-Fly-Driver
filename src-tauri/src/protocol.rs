@@ -65,6 +65,86 @@ pub fn cmd_set_dpi(stage: u8, dpi: u16) -> [u8; FRAME_LEN] {
     f
 }
 
+/// Assign an action to a physical button slot (block write at `0x07`).
+///
+/// Captured remap of the forward side button to Left Click:
+///   `07 00 00 70 04 01 01 00 53 00 00 00 00 00 00 7d`
+///
+/// Layout: byte[3] = slot address, byte[4] = 0x04 (length),
+/// byte[5] = action category, byte[6] = action code, byte[7] = modifier (0),
+/// byte[8] = action checksum `(0x55 - cat - code - mod)`. The global checksum
+/// (byte 0) and tail checksum (byte 15) follow the usual rules. The mini
+/// checksum at byte 6 is NOT applied here — byte 6 carries the action code.
+pub fn cmd_button(slot: u8, category: u8, code: u8, modifier: u8) -> [u8; FRAME_LEN] {
+    let mut f = [0u8; FRAME_LEN];
+    f[3] = slot;
+    f[4] = 0x04;
+    f[5] = category;
+    f[6] = code;
+    f[7] = modifier;
+    f[8] = 0x55u8
+        .wrapping_sub(category)
+        .wrapping_sub(code)
+        .wrapping_sub(modifier);
+    tail_checksum(&mut f);
+    checksum(&mut f);
+    f
+}
+
+/// Mouse-button action category.
+pub const ACTION_MOUSE: u8 = 0x01;
+
+// Mouse-button action codes (category `ACTION_MOUSE`). Confirmed from captures:
+// these are a standard HID button bitmask.
+pub const MOUSE_LEFT: u8 = 0x01;
+pub const MOUSE_RIGHT: u8 = 0x02;
+pub const MOUSE_MIDDLE: u8 = 0x04;
+pub const MOUSE_BACK: u8 = 0x08; // side button 4
+pub const MOUSE_FORWARD: u8 = 0x10; // side button 5
+
+// Physical button slot addresses, confirmed from per-button remap + factory
+// reset captures. The reset restored each slot to its default action code.
+pub const SLOT_LEFT: u8 = 0x60; // default Left  (0x01)
+pub const SLOT_RIGHT: u8 = 0x64; // default Right (0x02)
+pub const SLOT_MIDDLE: u8 = 0x68; // default Middle (0x04)
+pub const SLOT_SIDE_BACK: u8 = 0x6c; // default Back  (0x08)
+pub const SLOT_SIDE_FORWARD: u8 = 0x70; // default Forward (0x10)
+
+/// Default (slot, action code) assignments, as restored by the factory reset.
+pub const BUTTON_DEFAULTS: [(u8, u8); 5] = [
+    (SLOT_LEFT, MOUSE_LEFT),
+    (SLOT_RIGHT, MOUSE_RIGHT),
+    (SLOT_MIDDLE, MOUSE_MIDDLE),
+    (SLOT_SIDE_BACK, MOUSE_BACK),
+    (SLOT_SIDE_FORWARD, MOUSE_FORWARD),
+];
+
+/// Mouse action codes that the app is allowed to assign to a button.
+pub const MOUSE_ACTIONS: [u8; 5] = [
+    MOUSE_LEFT,
+    MOUSE_RIGHT,
+    MOUSE_MIDDLE,
+    MOUSE_BACK,
+    MOUSE_FORWARD,
+];
+
+pub fn is_valid_button_slot(slot: u8) -> bool {
+    BUTTON_DEFAULTS.iter().any(|&(s, _)| s == slot)
+}
+
+pub fn is_valid_mouse_action(code: u8) -> bool {
+    MOUSE_ACTIONS.contains(&code)
+}
+
+/// Frames that restore every physical button to its default mouse action.
+pub fn cmd_buttons_restore_defaults() -> [[u8; FRAME_LEN]; 5] {
+    let mut frames = [[0u8; FRAME_LEN]; 5];
+    for (i, &(slot, code)) in BUTTON_DEFAULTS.iter().enumerate() {
+        frames[i] = cmd_button(slot, ACTION_MOUSE, code, 0x00);
+    }
+    frames
+}
+
 #[derive(serde::Deserialize, serde::Serialize, Clone, Copy, Debug)]
 #[serde(rename_all = "camelCase")]
 pub enum DpiLedMode {
@@ -410,6 +490,45 @@ mod tests {
     #[test]
     fn test_status_poll() {
         assert_eq!(cmd_status(), hex("03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4a"));
+    }
+
+    #[test]
+    fn test_button_side_to_left_click() {
+        // Captured: side button slot 0x70 reassigned to Left Click.
+        assert_eq!(
+            cmd_button(SLOT_SIDE_FORWARD, ACTION_MOUSE, MOUSE_LEFT, 0x00),
+            hex("07 00 00 70 04 01 01 00 53 00 00 00 00 00 00 7d")
+        );
+    }
+
+    #[test]
+    fn test_button_default_assignments() {
+        // Captured factory-reset writes restoring each slot's default action.
+        assert_eq!(
+            cmd_button(SLOT_RIGHT, ACTION_MOUSE, MOUSE_RIGHT, 0x00),
+            hex("07 00 00 64 04 01 02 00 52 00 00 00 00 00 00 89")
+        );
+        assert_eq!(
+            cmd_button(SLOT_MIDDLE, ACTION_MOUSE, MOUSE_MIDDLE, 0x00),
+            hex("07 00 00 68 04 01 04 00 50 00 00 00 00 00 00 85")
+        );
+        assert_eq!(
+            cmd_button(SLOT_SIDE_BACK, ACTION_MOUSE, MOUSE_BACK, 0x00),
+            hex("07 00 00 6c 04 01 08 00 4c 00 00 00 00 00 00 81")
+        );
+        assert_eq!(
+            cmd_button(SLOT_SIDE_FORWARD, ACTION_MOUSE, MOUSE_FORWARD, 0x00),
+            hex("07 00 00 70 04 01 10 00 44 00 00 00 00 00 00 7d")
+        );
+    }
+
+    #[test]
+    fn test_button_left_slot_to_left_click() {
+        // Captured: left button slot 0x60 set to Left Click.
+        assert_eq!(
+            cmd_button(SLOT_LEFT, ACTION_MOUSE, MOUSE_LEFT, 0x00),
+            hex("07 00 00 60 04 01 01 00 53 00 00 00 00 00 00 8d")
+        );
     }
 
     #[test]
