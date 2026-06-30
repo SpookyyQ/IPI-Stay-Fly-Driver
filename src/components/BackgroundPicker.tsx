@@ -11,6 +11,8 @@ interface Props {
   onBackgroundChange: (id: BackgroundId) => void
   hasWallpaper: boolean
   onWallpaperChange: (dataUrl: string | null) => void
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 export default function BackgroundPicker({
@@ -18,12 +20,14 @@ export default function BackgroundPicker({
   onBackgroundChange,
   hasWallpaper,
   onWallpaperChange,
+  open,
+  onOpenChange,
 }: Props) {
-  const [open, setOpen] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+  const setOpen = onOpenChange
 
   useEffect(() => {
     if (!open) return
@@ -52,7 +56,7 @@ export default function BackgroundPicker({
     <div ref={rootRef} className="relative z-50" onPointerDown={event => event.stopPropagation()}>
       <button
         type="button"
-        onClick={() => setOpen(value => !value)}
+        onClick={() => setOpen(!open)}
         className="grid h-8 w-8 place-items-center rounded-lg text-white/55 transition hover:bg-white/[.08] hover:text-accent"
         title="Background"
         aria-label="Change background"

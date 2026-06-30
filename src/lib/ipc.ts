@@ -58,6 +58,7 @@ export const ipc = {
   factoryReset: () => invoke<void>('cmd_factory_reset'),
   resetButtons: () => invoke<void>('cmd_reset_buttons'),
   setButton: (slot: number, code: number) => invoke<void>('cmd_set_button', { slot, code }),
+  setButtonKey: (slot: number, keycode: number) => invoke<void>('cmd_set_button_key', { slot, keycode }),
   readSettings: () => invoke<DeviceSettings>('cmd_read_settings'),
   sendRaw: (hexFrame: string) => invoke<string>('cmd_raw', { hexFrame }),
 }

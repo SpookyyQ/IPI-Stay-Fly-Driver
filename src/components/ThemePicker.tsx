@@ -2,8 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Check, Palette } from 'lucide-react'
 import { applyTheme, getStoredTheme, THEME_STORAGE_KEY, ThemeId, themes } from '../lib/themes'
 
-export default function ThemePicker() {
-  const [open, setOpen] = useState(false)
+interface Props {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+export default function ThemePicker({ open, onOpenChange }: Props) {
+  const setOpen = onOpenChange
   const [theme, setTheme] = useState<ThemeId>(() => getStoredTheme())
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -27,7 +32,7 @@ export default function ThemePicker() {
     <div ref={rootRef} className="relative z-50" onPointerDown={event => event.stopPropagation()}>
       <button
         type="button"
-        onClick={() => setOpen(value => !value)}
+        onClick={() => setOpen(!open)}
         className="grid h-8 w-8 place-items-center rounded-lg text-white/55 transition hover:bg-white/[.08] hover:text-accent"
         title="Change theme"
         aria-label="Change theme"

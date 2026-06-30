@@ -346,6 +346,23 @@ pub fn cmd_set_button(slot: u8, code: u8) -> Result<(), String> {
 }
 
 #[tauri::command]
+pub fn cmd_set_button_key(slot: u8, keycode: u8) -> Result<(), String> {
+    if !protocol::is_valid_button_slot(slot) {
+        return Err(format!("unknown button slot 0x{slot:02x}"));
+    }
+    if keycode == 0 {
+        return Err("keycode must not be zero".to_string());
+    }
+    let frames = protocol::cmd_button_keyboard(slot, keycode);
+    with_device(|dev| {
+        for frame in &frames {
+            dev.write(frame)?;
+        }
+        Ok(())
+    })
+}
+
+#[tauri::command]
 pub fn cmd_raw(hex_frame: String) -> Result<String, String> {
     let bytes: Vec<u8> = hex_frame
         .split_whitespace()

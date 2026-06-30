@@ -1,6 +1,21 @@
 import { useTranslation } from 'react-i18next'
-import { Boxes, ChevronDown, Gauge, Home, Languages, Mouse, SlidersHorizontal, Wand2, Zap } from 'lucide-react'
+import {
+  Battery,
+  BatteryFull,
+  BatteryLow,
+  BatteryMedium,
+  Boxes,
+  ChevronDown,
+  Gauge,
+  Home,
+  Languages,
+  Mouse,
+  SlidersHorizontal,
+  Wand2,
+  Zap,
+} from 'lucide-react'
 import mouseImage from '../assets/fly-pro-top.png'
+import { StatusInfo } from '../lib/ipc'
 
 type Tab = 'home' | 'dpi' | 'performance' | 'buttons' | 'advanced' | 'other' | 'lightning'
 
@@ -9,6 +24,14 @@ export type { Tab }
 interface Props {
   activeTab: Tab
   onTabChange: (tab: Tab) => void
+  status: StatusInfo
+}
+
+function batteryVisual(percent: number) {
+  if (percent >= 80) return { Icon: BatteryFull, color: 'text-emerald-300' }
+  if (percent >= 45) return { Icon: BatteryMedium, color: 'text-emerald-300' }
+  if (percent >= 20) return { Icon: BatteryLow, color: 'text-amber-300' }
+  return { Icon: Battery, color: 'text-red-300' }
 }
 
 const navItems: { id: Tab; labelKey: string; icon: typeof Mouse }[] = [
@@ -32,8 +55,10 @@ const languageOptions = [
   { code: 'zh', label: '中文（简体）' },
 ]
 
-export default function Sidebar({ activeTab, onTabChange }: Props) {
+export default function Sidebar({ activeTab, onTabChange, status }: Props) {
   const { i18n, t } = useTranslation()
+  const battery = batteryVisual(status.battery_percent)
+  const BatteryIcon = battery.Icon
   const activeLanguage = i18n.resolvedLanguage ?? i18n.language
   const baseLanguage = activeLanguage.split('-')[0]
   const selectedLanguage = languageOptions.some(option => option.code === activeLanguage)
@@ -51,6 +76,15 @@ export default function Sidebar({ activeTab, onTabChange }: Props) {
               <div className="flex items-center gap-2">
                 <img src={mouseImage} alt="" className="h-8 w-8 object-contain opacity-80" draggable={false} />
                 <p className="text-base font-semibold">IPI STAY FLY</p>
+                {status.connected && (
+                  <span
+                    className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[.06] px-1.5 py-0.5 text-xs font-semibold text-white/80"
+                    title={`${t('topbar.battery', 'Battery')}: ${status.battery_percent}%`}
+                  >
+                    <BatteryIcon size={14} className={battery.color} />
+                    {status.battery_percent}%
+                  </span>
+                )}
               </div>
               <Home size={14} className="text-white/40" />
             </div>
