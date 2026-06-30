@@ -94,6 +94,55 @@ pub fn cmd_button(slot: u8, category: u8, code: u8, modifier: u8) -> [u8; FRAME_
 /// Mouse-button action category.
 pub const ACTION_MOUSE: u8 = 0x01;
 
+/// Keyboard-key action category (category `0x05` in the button-slot write).
+pub const ACTION_KEYBOARD: u8 = 0x05;
+
+/// Macro-buffer block-write address used to stage a single key-press/release
+/// sequence before the button slot is pointed at category `ACTION_KEYBOARD`.
+const MACRO_BUFFER_ADDR: u8 = 0x20;
+
+/// Build the macro-buffer write that stages a single keyboard key (press then
+/// release of `keycode`, no modifiers).
+///
+/// Captured remap of the right button to keyboard `a` (0x04):
+///   `07 00 01 20 08 02 81 04 00 41 04 00 89 00 00 c8`
+///
+/// Layout: byte[2]=0x01 (macro marker), byte[3]=0x20 (buffer addr),
+/// byte[4]=0x08 (data length), byte[5]=0x02 (event count: down+up),
+/// byte[6]=0x81/byte[9]=0x41 (key-down / key-up event tags),
+/// byte[7]/byte[10]=keycode, byte[8]/byte[11]=0x00 (inter-event delay),
+/// byte[12]=inner checksum `0x55 - sum(byte[5..=11])`, byte[15]=tail checksum
+/// `0xF1 - byte[2] - byte[3] - byte[4]`, byte[0]=global checksum.
+pub fn cmd_keyboard_macro(keycode: u8) -> [u8; FRAME_LEN] {
+    let mut f = [0u8; FRAME_LEN];
+    f[2] = 0x01;
+    f[3] = MACRO_BUFFER_ADDR;
+    f[4] = 0x08;
+    f[5] = 0x02; // two events: key down, key up
+    f[6] = 0x81; // key-down event tag
+    f[7] = keycode;
+    f[8] = 0x00; // delay
+    f[9] = 0x41; // key-up event tag
+    f[10] = keycode;
+    f[11] = 0x00; // delay
+    let inner: u8 = f[5..=11].iter().fold(0u8, |a, &b| a.wrapping_add(b));
+    f[12] = 0x55u8.wrapping_sub(inner);
+    // Tail rule generalised to include byte[2] (0 for ordinary config frames).
+    f[15] = 0xF1u8.wrapping_sub(f[2]).wrapping_sub(f[3]).wrapping_sub(f[4]);
+    checksum(&mut f);
+    f
+}
+
+/// The two frames that remap a physical button slot to a single keyboard key:
+/// first the macro-buffer stage, then the button-slot write pointing the slot
+/// at category `ACTION_KEYBOARD` with the keycode in the modifier byte.
+pub fn cmd_button_keyboard(slot: u8, keycode: u8) -> [[u8; FRAME_LEN]; 2] {
+    [
+        cmd_keyboard_macro(keycode),
+        cmd_button(slot, ACTION_KEYBOARD, 0x00, keycode),
+    ]
+}
+
 // Mouse-button action codes (category `ACTION_MOUSE`). Confirmed from captures:
 // these are a standard HID button bitmask.
 pub const MOUSE_LEFT: u8 = 0x01;
@@ -519,6 +568,21 @@ mod tests {
         assert_eq!(
             cmd_button(SLOT_SIDE_FORWARD, ACTION_MOUSE, MOUSE_FORWARD, 0x00),
             hex("07 00 00 70 04 01 10 00 44 00 00 00 00 00 00 7d")
+        );
+    }
+
+    #[test]
+    fn test_button_right_slot_to_keyboard_a() {
+        // Captured: right button slot 0x64 remapped to keyboard 'a' (0x04).
+        // The official software sends the macro-buffer stage then the slot write.
+        let frames = cmd_button_keyboard(SLOT_RIGHT, 0x04);
+        assert_eq!(
+            frames[0],
+            hex("07 00 01 20 08 02 81 04 00 41 04 00 89 00 00 c8")
+        );
+        assert_eq!(
+            frames[1],
+            hex("07 00 00 64 04 05 00 04 4c 00 00 00 00 00 00 89")
         );
     }
 

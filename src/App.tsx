@@ -116,7 +116,7 @@ export default function App() {
     <div className={`atk-shell flex h-screen w-screen overflow-hidden text-white ${demoMode ? 'demo-shell' : ''}`}>
       <div className="atk-ribbon" />
       <BackgroundLayer mode={background} wallpaper={wallpaper} />
-      {tab !== 'home' && <Sidebar activeTab={tab} onTabChange={setTab} />}
+      {tab !== 'home' && <Sidebar activeTab={tab} onTabChange={setTab} status={status} />}
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopBar
           status={status}

@@ -66,7 +66,8 @@
   },
   "buttons": {
     "title": "Button Assignment",
-    "placeholder": "Button remapping will be available in later versions."
+    "placeholder": "Button remapping will be available in later versions.",
+    "keyboardKey": "Keyboard key…"
   },
   "advanced": {
     "title": "Advanced",

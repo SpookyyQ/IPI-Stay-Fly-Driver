@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Minus, MonitorPlay, Square, X, Wifi, WifiOff } from 'lucide-react'
 import { appWindow } from '@tauri-apps/api/window'
@@ -26,6 +27,7 @@ export default function TopBar({
   onWallpaperChange,
 }: Props) {
   const { t } = useTranslation()
+  const [openMenu, setOpenMenu] = useState<'background' | 'theme' | null>(null)
 
   return (
     <header
@@ -77,8 +79,13 @@ export default function TopBar({
           onBackgroundChange={onBackgroundChange}
           hasWallpaper={!!wallpaper}
           onWallpaperChange={onWallpaperChange}
+          open={openMenu === 'background'}
+          onOpenChange={next => setOpenMenu(next ? 'background' : null)}
         />
-        <ThemePicker />
+        <ThemePicker
+          open={openMenu === 'theme'}
+          onOpenChange={next => setOpenMenu(next ? 'theme' : null)}
+        />
         <button
           onClick={() => appWindow.minimize()}
           className="grid h-8 w-8 place-items-center rounded-lg text-white/50 transition hover:bg-white/[.08] hover:text-white"

@@ -3,6 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { RotateCcw } from 'lucide-react'
 import mouseTopImage from '../../assets/fly-pro-top.png'
 import { ipc } from '../../lib/ipc'
+import { KEY_GROUPS, keyLabel } from '../../lib/keycodes'
+
+// Per-button assignment: either a mouse action or a single keyboard key.
+type Assignment =
+  | { type: 'mouse'; code: number }
+  | { type: 'key'; keycode: number }
+
+// Default keyboard key when a button is first switched to keyboard mode ('A').
+const DEFAULT_KEYCODE = 0x04
 
 // Confirmed mouse-button action codes (HID button bitmask).
 const ACTIONS = [
@@ -28,15 +37,15 @@ type Status = { kind: 'idle' | 'ok' | 'error'; text: string }
 
 export default function ButtonsTab() {
   const { t } = useTranslation()
-  const [mapping, setMapping] = useState<Record<number, number>>(
-    () => Object.fromEntries(BUTTONS.map(b => [b.slot, b.defaultCode])),
+  const [mapping, setMapping] = useState<Record<number, Assignment>>(
+    () => Object.fromEntries(BUTTONS.map(b => [b.slot, { type: 'mouse', code: b.defaultCode }])),
   )
   const [busy, setBusy] = useState(false)
   const [status, setStatus] = useState<Status>({ kind: 'idle', text: '' })
 
-  async function assign(slot: number, code: number) {
+  async function assignMouse(slot: number, code: number) {
     const previous = mapping[slot]
-    setMapping(m => ({ ...m, [slot]: code }))
+    setMapping(m => ({ ...m, [slot]: { type: 'mouse', code } }))
     setBusy(true)
     try {
       await ipc.setButton(slot, code)
@@ -50,11 +59,38 @@ export default function ButtonsTab() {
     }
   }
 
+  async function assignKey(slot: number, keycode: number) {
+    const previous = mapping[slot]
+    setMapping(m => ({ ...m, [slot]: { type: 'key', keycode } }))
+    setBusy(true)
+    try {
+      await ipc.setButtonKey(slot, keycode)
+      setStatus({ kind: 'ok', text: `Saved: Key ${keyLabel(keycode)}` })
+    } catch (err) {
+      setMapping(m => ({ ...m, [slot]: previous }))
+      setStatus({ kind: 'error', text: String(err) })
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  // Handle a change of the main action <select>. Mouse actions encode as
+  // `m:<code>`; the sentinel `k` switches the button into keyboard mode.
+  function handleActionChange(slot: number, value: string) {
+    if (value === 'k') {
+      const current = mapping[slot]
+      const keycode = current.type === 'key' ? current.keycode : DEFAULT_KEYCODE
+      void assignKey(slot, keycode)
+    } else if (value.startsWith('m:')) {
+      void assignMouse(slot, Number(value.slice(2)))
+    }
+  }
+
   async function restoreDefaults() {
     setBusy(true)
     try {
       await ipc.resetButtons()
-      setMapping(Object.fromEntries(BUTTONS.map(b => [b.slot, b.defaultCode])))
+      setMapping(Object.fromEntries(BUTTONS.map(b => [b.slot, { type: 'mouse', code: b.defaultCode }])))
       setStatus({ kind: 'ok', text: 'All buttons restored to default' })
     } catch (err) {
       setStatus({ kind: 'error', text: String(err) })
@@ -141,18 +177,47 @@ export default function ButtonsTab() {
             >
               <div className="rounded-lg bg-zinc-900/80 px-4 py-2 shadow-xl shadow-black/30 ring-1 ring-white/10 backdrop-blur">
                 <p className="text-[10px] uppercase tracking-wider text-white/42">{item.label}</p>
-                <select
-                  value={mapping[item.slot]}
-                  disabled={busy}
-                  onChange={e => assign(item.slot, Number(e.target.value))}
-                  className="mt-1 w-full rounded-md bg-white/[.06] px-2 py-1 text-sm font-bold text-white outline-none ring-1 ring-white/10 transition hover:bg-white/[.1] focus:ring-accent disabled:opacity-60"
-                >
-                  {ACTIONS.map(a => (
-                    <option key={a.code} value={a.code} className="bg-zinc-900 text-white">
-                      {a.label}
-                    </option>
-                  ))}
-                </select>
+                {(() => {
+                  const assignment = mapping[item.slot]
+                  const selectValue = assignment.type === 'key' ? 'k' : `m:${assignment.code}`
+                  return (
+                    <>
+                      <select
+                        value={selectValue}
+                        disabled={busy}
+                        onChange={e => handleActionChange(item.slot, e.target.value)}
+                        className="mt-1 w-full rounded-md bg-white/[.06] px-2 py-1 text-sm font-bold text-white outline-none ring-1 ring-white/10 transition hover:bg-white/[.1] focus:ring-accent disabled:opacity-60"
+                      >
+                        {ACTIONS.map(a => (
+                          <option key={a.code} value={`m:${a.code}`} className="bg-zinc-900 text-white">
+                            {a.label}
+                          </option>
+                        ))}
+                        <option value="k" className="bg-zinc-900 text-white">
+                          ⌨ {t('buttons.keyboardKey', 'Keyboard key…')}
+                        </option>
+                      </select>
+                      {assignment.type === 'key' && (
+                        <select
+                          value={assignment.keycode}
+                          disabled={busy}
+                          onChange={e => assignKey(item.slot, Number(e.target.value))}
+                          className="mt-1.5 w-full rounded-md bg-white/[.06] px-2 py-1 text-sm font-bold text-white outline-none ring-1 ring-accent/40 transition hover:bg-white/[.1] focus:ring-accent disabled:opacity-60"
+                        >
+                          {KEY_GROUPS.map(g => (
+                            <optgroup key={g.group} label={g.group} className="bg-zinc-900">
+                              {g.keys.map(k => (
+                                <option key={k.code} value={k.code} className="bg-zinc-900 text-white">
+                                  {k.label}
+                                </option>
+                              ))}
+                            </optgroup>
+                          ))}
+                        </select>
+                      )}
+                    </>
+                  )
+                })()}
               </div>
             </div>
           ))}
