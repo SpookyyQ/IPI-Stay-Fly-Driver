@@ -35,7 +35,7 @@ export default function HomeTab({ status, demoMode, onNavigate }: Props) {
       <div className="flex-1 flex items-center justify-center">
         <img
           src={mouseImage}
-          alt="IPI FLY PRO"
+          alt="IPI STAY FLY"
           draggable={false}
           className={`h-[280px] object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,.55)] transition ${
             status.connected ? '' : 'opacity-25 grayscale'
@@ -44,7 +44,7 @@ export default function HomeTab({ status, demoMode, onNavigate }: Props) {
       </div>
 
       <div className="px-5 py-4 bg-black/35 border-t border-white/10">
-        <p className="text-lg font-black tracking-tight">IPI FLY PRO</p>
+        <p className="text-lg font-black tracking-tight">IPI STAY FLY</p>
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center gap-3">
             {status.connected

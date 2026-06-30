@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Driver IPI FLY PRO",
+    "title": "Driver IPI STAY FLY",
     "noDevice": "Nessun dispositivo collegato",
     "connecting": "Connessione…",
     "language": "Lingua"
@@ -76,7 +76,7 @@
     "receiverLedWarning": "Solo avviso"
   },
   "other": {
-    "title": "IPI FLY PRO",
+    "title": "IPI STAY FLY",
     "specs": "Specifiche",
     "spec_sensor": "Sensore",
     "spec_dpi": "Intervallo DPI",
@@ -93,7 +93,7 @@
     "confirm": "Conferma",
     "cancel": "Annulla",
     "about": "Informazioni",
-    "aboutText": "Driver open-source sostitutivo per il mouse gaming wireless IPI FLY PRO."
+    "aboutText": "Driver open-source sostitutivo per il mouse gaming wireless IPI STAY FLY."
   },
   "dev": {
     "title": "Pannello sviluppatore",

@@ -65,7 +65,7 @@ fn open_device() -> Result<HidDevice, String> {
         .collect::<Vec<_>>();
 
     if candidates.is_empty() {
-        return Err("FLY PRO HID device not found".to_string());
+        return Err("STAY FLY HID device not found".to_string());
     }
 
     candidates.sort_by_key(|candidate| (!candidate.exact_match, candidate.interface_number));
@@ -85,7 +85,7 @@ fn open_device() -> Result<HidDevice, String> {
         }
     }
 
-    Err("unable to open matching FLY PRO HID interface".to_string())
+    Err("unable to open matching STAY FLY HID interface".to_string())
 }
 
 fn write_frame(dev: &HidDevice, frame: &[u8; 16]) -> Result<(), String> {

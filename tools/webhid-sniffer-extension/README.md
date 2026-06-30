@@ -5,7 +5,7 @@ Local Chrome extension for capturing WebHID frames from mouse web drivers.
 Supported pages:
 
 - `https://hub.atk.pro` for ATK / VXE devices
-- `https://qbz.ipigame.cn` for the IPI FLY PRO
+- `https://qbz.ipigame.cn` for the IPI STAY FLY
 
 The overlay also records UI actions (`click`, `change`, `input`) and attaches the
 most recent action to following HID frames. This makes it easier to see which

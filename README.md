@@ -2,7 +2,7 @@
 
 ![IPI STAY FLY Driver home screen](Pics/home.png)
 
-Open-source desktop driver for the **IPI FLY PRO** wireless gaming mouse.  
+Open-source desktop driver for the **IPI STAY FLY** wireless gaming mouse.  
 Built as a fast native Windows app with Tauri, React and Rust, it replaces the closed web driver with a local configuration tool for DPI, latency, wireless behavior and advanced sensor options.
 
 ## Why This Exists
@@ -18,7 +18,7 @@ Support for more devices depends on community help. If you own a related mouse s
 
 ## Highlights
 
-- Native Windows app for the IPI FLY PRO
+- Native Windows app for the IPI STAY FLY
 - Device detection with connected-state overview
 - Four DPI stages from 50 to 42,000 DPI
 - Polling rates from 125 Hz up to 8,000 Hz
@@ -33,7 +33,7 @@ Support for more devices depends on community help. If you own a related mouse s
 
 ### Demo Mode
 
-The top bar includes a **Demo** button. When enabled, the app spawns a virtual IPI FLY PRO so users can open the device card, navigate through every configuration tab and try the interface without owning or connecting the mouse.
+The top bar includes a **Demo** button. When enabled, the app spawns a virtual IPI STAY FLY so users can open the device card, navigate through every configuration tab and try the interface without owning or connecting the mouse.
 
 Demo mode is clearly marked with a banner and badge inside the app. While it is active, hardware polling and all HID write/read calls are disabled, so changing settings only affects the local demo state and never sends commands to a real device.
 
@@ -91,7 +91,7 @@ Control receiver LED behavior, high-power modes, long-distance mode, angle snapp
 
 | Field | Value |
 | --- | --- |
-| Mouse | IPI FLY PRO |
+| Mouse | IPI STAY FLY |
 | Vendor ID | `0x3554` |
 | Product ID | `0xF517` |
 | Sensor | PixArt PAW3950 |
@@ -179,7 +179,7 @@ Press **Ctrl+Shift+D** while the app is running to open the raw HID frame panel.
 
 ## Contributing
 
-Pull requests and protocol captures are welcome. If you own an IPI FLY PRO and can verify unimplemented settings, open an issue with device details, app version and captured USB/HID behavior where possible.
+Pull requests and protocol captures are welcome. If you own an IPI STAY FLY and can verify unimplemented settings, open an issue with device details, app version and captured USB/HID behavior where possible.
 
 ## License
 

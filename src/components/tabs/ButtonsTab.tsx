@@ -87,7 +87,7 @@ export default function ButtonsTab() {
           <div className="absolute inset-10 rounded-full bg-black/30 blur-3xl" />
           <img
             src={mouseTopImage}
-            alt="IPI FLY PRO mouse top view"
+            alt="IPI STAY FLY mouse top view"
             className="relative h-full w-full object-contain drop-shadow-[0_46px_60px_rgba(0,0,0,.45)]"
             draggable={false}
           />

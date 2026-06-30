@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "IPI FLY PRO Treiber",
+    "title": "IPI STAY FLY Treiber",
     "noDevice": "Kein Gerät verbunden",
     "connecting": "Verbinde…",
     "language": "Sprache"
@@ -76,7 +76,7 @@
     "receiverLedWarning": "Nur Warnung"
   },
   "other": {
-    "title": "IPI FLY PRO",
+    "title": "IPI STAY FLY",
     "specs": "Technische Daten",
     "spec_sensor": "Sensor",
     "spec_dpi": "DPI-Bereich",
@@ -93,7 +93,7 @@
     "confirm": "Bestätigen",
     "cancel": "Abbrechen",
     "about": "Über",
-    "aboutText": "Open-Source Ersatztreiber für die IPI FLY PRO kabellose Gaming-Maus."
+    "aboutText": "Open-Source Ersatztreiber für die IPI STAY FLY kabellose Gaming-Maus."
   },
   "dev": {
     "title": "Entwickler-Panel",

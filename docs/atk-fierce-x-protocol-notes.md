@@ -14,7 +14,7 @@ Capture source: `https://hub.atk.pro/` with `tools/webhid-sniffer-extension`.
 
 ## Confirmed Frame Shape
 
-The ATK FIERCE X uses the same 16-byte report style as the IPI FLY PRO.
+The ATK FIERCE X uses the same 16-byte report style as the IPI STAY FLY.
 
 The global checksum appears to match the existing rule:
 

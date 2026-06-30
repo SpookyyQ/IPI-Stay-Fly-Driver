@@ -1,4 +1,4 @@
-/// IPI FLY PRO – HID frame builder and checksum helpers.
+/// IPI STAY FLY – HID frame builder and checksum helpers.
 ///
 /// All frames are 16 bytes. Byte 0 is the global checksum:
 ///   byte[0] = (0x4D - sum(byte[2..=15])) & 0xFF

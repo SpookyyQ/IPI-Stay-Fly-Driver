@@ -50,7 +50,7 @@ export default function Sidebar({ activeTab, onTabChange }: Props) {
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
                 <img src={mouseImage} alt="" className="h-8 w-8 object-contain opacity-80" draggable={false} />
-                <p className="text-base font-semibold">IPI FLY PRO</p>
+                <p className="text-base font-semibold">IPI STAY FLY</p>
               </div>
               <Home size={14} className="text-white/40" />
             </div>

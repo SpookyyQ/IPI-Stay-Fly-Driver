@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "IPI FLY PRO 驱动",
+    "title": "IPI STAY FLY 驱动",
     "noDevice": "未连接设备",
     "connecting": "正在连接…",
     "language": "语言"
@@ -76,7 +76,7 @@
     "receiverLedWarning": "仅警告"
   },
   "other": {
-    "title": "IPI FLY PRO",
+    "title": "IPI STAY FLY",
     "specs": "规格",
     "spec_sensor": "传感器",
     "spec_dpi": "DPI 范围",
@@ -93,7 +93,7 @@
     "confirm": "确认",
     "cancel": "取消",
     "about": "关于",
-    "aboutText": "用于 IPI FLY PRO 无线游戏鼠标的开源替代驱动。"
+    "aboutText": "用于 IPI STAY FLY 无线游戏鼠标的开源替代驱动。"
   },
   "dev": {
     "title": "开发者面板",

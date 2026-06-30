@@ -6,8 +6,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "IPI FLY PRO Driver",
-    "version": "1.3.3"
+    "productName": "IPI STAY FLY Driver",
+    "version": "1.3.4"
   },
   "tauri": {
     "allowlist": {
@@ -44,7 +44,7 @@
         "fullscreen": false,
         "decorations": false,
         "resizable": true,
-        "title": "IPI FLY PRO Driver",
+        "title": "IPI STAY FLY Driver",
         "width": 1280,
         "height": 800,
         "minWidth": 900,

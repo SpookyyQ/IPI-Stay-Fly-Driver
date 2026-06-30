@@ -46,14 +46,14 @@ impl Device {
 
         if candidates.is_empty() {
             return Err(format!(
-                "FLY PRO not found for VID=0x{VID:04x} PID=0x{PID:04x}. Is the mouse/receiver connected and powered on?"
+                "STAY FLY not found for VID=0x{VID:04x} PID=0x{PID:04x}. Is the mouse/receiver connected and powered on?"
             ));
         }
 
         candidates.sort_by_key(|candidate| (!candidate.exact_match, candidate.interface_number));
 
         eprintln!(
-            "FLY PRO HID candidates for VID=0x{VID:04x} PID=0x{PID:04x}:"
+            "STAY FLY HID candidates for VID=0x{VID:04x} PID=0x{PID:04x}:"
         );
         for candidate in &candidates {
             eprintln!("  - {}", describe_candidate(candidate));
@@ -78,7 +78,7 @@ impl Device {
         }
 
         Err(format!(
-            "Unable to open any matching FLY PRO HID interface.\n{}",
+            "Unable to open any matching STAY FLY HID interface.\n{}",
             open_errors.join("\n")
         ))
     }

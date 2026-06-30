@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Driver IPI FLY PRO",
+    "title": "Driver IPI STAY FLY",
     "noDevice": "Nenhum dispositivo conectado",
     "connecting": "Conectando…",
     "language": "Idioma"
@@ -76,7 +76,7 @@
     "receiverLedWarning": "Apenas aviso"
   },
   "other": {
-    "title": "IPI FLY PRO",
+    "title": "IPI STAY FLY",
     "specs": "Especificações",
     "spec_sensor": "Sensor",
     "spec_dpi": "Faixa de DPI",
@@ -93,7 +93,7 @@
     "confirm": "Confirmar",
     "cancel": "Cancelar",
     "about": "Sobre",
-    "aboutText": "Driver open-source substituto para o mouse gamer sem fio IPI FLY PRO."
+    "aboutText": "Driver open-source substituto para o mouse gamer sem fio IPI STAY FLY."
   },
   "dev": {
     "title": "Painel de desenvolvedor",

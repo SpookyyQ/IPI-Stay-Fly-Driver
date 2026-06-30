@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Pilote IPI FLY PRO",
+    "title": "Pilote IPI STAY FLY",
     "noDevice": "Aucun appareil connecté",
     "connecting": "Connexion…",
     "language": "Langue"
@@ -76,7 +76,7 @@
     "receiverLedWarning": "Avertissement uniquement"
   },
   "other": {
-    "title": "IPI FLY PRO",
+    "title": "IPI STAY FLY",
     "specs": "Caractéristiques",
     "spec_sensor": "Capteur",
     "spec_dpi": "Plage DPI",
@@ -93,7 +93,7 @@
     "confirm": "Confirmer",
     "cancel": "Annuler",
     "about": "À propos",
-    "aboutText": "Pilote open-source de remplacement pour la souris gaming sans fil IPI FLY PRO."
+    "aboutText": "Pilote open-source de remplacement pour la souris gaming sans fil IPI STAY FLY."
   },
   "dev": {
     "title": "Panneau développeur",

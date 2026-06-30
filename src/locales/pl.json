@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Sterownik IPI FLY PRO",
+    "title": "Sterownik IPI STAY FLY",
     "noDevice": "Brak podłączonego urządzenia",
     "connecting": "Łączenie…",
     "language": "Język"
@@ -76,7 +76,7 @@
     "receiverLedWarning": "Tylko ostrzeżenie"
   },
   "other": {
-    "title": "IPI FLY PRO",
+    "title": "IPI STAY FLY",
     "specs": "Specyfikacja",
     "spec_sensor": "Sensor",
     "spec_dpi": "Zakres DPI",
@@ -93,7 +93,7 @@
     "confirm": "Potwierdź",
     "cancel": "Anuluj",
     "about": "O aplikacji",
-    "aboutText": "Open-source'owy zamiennik sterownika dla bezprzewodowej myszy gamingowej IPI FLY PRO."
+    "aboutText": "Open-source'owy zamiennik sterownika dla bezprzewodowej myszy gamingowej IPI STAY FLY."
   },
   "dev": {
     "title": "Panel deweloperski",

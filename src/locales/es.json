@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Controlador IPI FLY PRO",
+    "title": "Controlador IPI STAY FLY",
     "noDevice": "No hay ningún dispositivo conectado",
     "connecting": "Conectando…",
     "language": "Idioma"
@@ -76,7 +76,7 @@
     "receiverLedWarning": "Solo advertencia"
   },
   "other": {
-    "title": "IPI FLY PRO",
+    "title": "IPI STAY FLY",
     "specs": "Especificaciones",
     "spec_sensor": "Sensor",
     "spec_dpi": "Rango de DPI",
@@ -93,7 +93,7 @@
     "confirm": "Confirmar",
     "cancel": "Cancelar",
     "about": "Acerca de",
-    "aboutText": "Controlador open-source de reemplazo para el mouse gaming inalámbrico IPI FLY PRO."
+    "aboutText": "Controlador open-source de reemplazo para el mouse gaming inalámbrico IPI STAY FLY."
   },
   "dev": {
     "title": "Panel de desarrollador",

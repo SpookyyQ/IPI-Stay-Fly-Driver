@@ -86,7 +86,7 @@ export default function AddDeviceDialog({ onClose, onConnect }: Props) {
 
         <div className="px-6 py-4 border-t border-white/10">
           <p className="text-xs text-white/35 text-center">
-            Plug in your IPI FLY PRO USB receiver — it will be detected automatically
+            Plug in your IPI STAY FLY USB receiver — it will be detected automatically
           </p>
         </div>
       </div>
