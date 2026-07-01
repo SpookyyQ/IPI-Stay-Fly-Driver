@@ -73,12 +73,6 @@ Configure four DPI stages and tune every stage in precise 50 DPI steps.
 
 ![DPI settings screen](Pics/DPI.png)
 
-### Lighting
-
-Choose the LED effect (off, solid or breathing) and set the brightness level.
-
-![Lightning settings screen](Pics/lightning.png)
-
 ### Latency Control
 
 Adjust the performance profile, polling rate, debounce time, lift-off distance and motion options from one focused screen.
@@ -90,12 +84,6 @@ Adjust the performance profile, polling rate, debounce time, lift-off distance a
 Control receiver LED behavior, high-power modes, long-distance mode, angle snapping and the 20K FPS sensor scan mode.
 
 ![Advanced settings screen](Pics/advanced.png)
-
-### Device Info & Reset
-
-Review the full hardware specification and perform a factory reset from the Other tab.
-
-![Other tab with device specifications and factory reset](Pics/other.png)
 
 > [!NOTE]
 > **Recently implemented**
