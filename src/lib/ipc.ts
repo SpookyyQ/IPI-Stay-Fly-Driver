@@ -61,4 +61,6 @@ export const ipc = {
   setButtonKey: (slot: number, keycode: number) => invoke<void>('cmd_set_button_key', { slot, keycode }),
   readSettings: () => invoke<DeviceSettings>('cmd_read_settings'),
   sendRaw: (hexFrame: string) => invoke<string>('cmd_raw', { hexFrame }),
+  showMain: () => invoke<void>('cmd_show_main'),
+  quit: () => invoke<void>('cmd_quit'),
 }

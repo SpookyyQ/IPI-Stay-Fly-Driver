@@ -1,6 +1,26 @@
 use crate::device::with_device;
 use crate::protocol::{self, DpiLedMode, Lod, PollingRate};
 use serde::{Deserialize, Serialize};
+use tauri::Manager;
+
+/// Bring the main window back from the system tray and hide the tray flyout.
+#[tauri::command]
+pub fn cmd_show_main(app: tauri::AppHandle) {
+    if let Some(w) = app.get_window("main") {
+        let _ = w.unminimize();
+        let _ = w.show();
+        let _ = w.set_focus();
+    }
+    if let Some(t) = app.get_window("tray") {
+        let _ = t.hide();
+    }
+}
+
+/// Fully quit the application from the tray flyout.
+#[tauri::command]
+pub fn cmd_quit(app: tauri::AppHandle) {
+    app.exit(0);
+}
 
 #[derive(Serialize)]
 pub struct StatusInfo {
