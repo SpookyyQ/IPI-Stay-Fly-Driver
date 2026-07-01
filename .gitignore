@@ -10,3 +10,7 @@ src/assets/*.msi
 .claude/
 *.pem
 *.crx
+
+# Exported website source (published via gh-pages branch, not tracked on main)
+IPI STAY FLY Driver - Landing Page.html
+IPI STAY FLY Driver - Docs.html
