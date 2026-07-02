@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { MonitorPlay, Power } from 'lucide-react'
+import { appWindow } from '@tauri-apps/api/window'
 import { ipc, StatusInfo } from '../lib/ipc'
 
 const EMPTY: StatusInfo = {
@@ -21,12 +23,16 @@ function batteryColor(pct: number): string {
  * ring plus buttons to reopen the main app or quit entirely.
  */
 export default function TrayFlyout() {
+  const { t } = useTranslation()
   const [status, setStatus] = useState<StatusInfo>(EMPTY)
 
   useEffect(() => {
     let alive = true
     const poll = async () => {
       try {
+        // The flyout window always exists but is hidden most of the time;
+        // don't hit the hardware unless it is actually on screen.
+        if (!(await appWindow.isVisible())) return
         const s = await ipc.getStatus()
         if (alive) setStatus(s)
       } catch {
@@ -35,9 +41,12 @@ export default function TrayFlyout() {
     }
     poll()
     const id = setInterval(poll, 3000)
+    // Refresh immediately when the flyout is opened (it gets focused on show).
+    const unlisten = appWindow.listen('tauri://focus', poll)
     return () => {
       alive = false
       clearInterval(id)
+      unlisten.then(fn => fn())
     }
   }, [])
 
@@ -72,7 +81,7 @@ export default function TrayFlyout() {
           {connected ? (
             <span className="text-sm font-black leading-none">{pct}<span className="text-[8px] font-bold text-white/45">%</span></span>
           ) : (
-            <span className="text-[10px] font-bold text-white/40">Off</span>
+            <span className="text-[10px] font-bold text-white/40">{t('tray.off')}</span>
           )}
         </div>
       </div>
@@ -83,14 +92,14 @@ export default function TrayFlyout() {
           className="flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-accent/15 text-sm font-bold text-accent ring-1 ring-accent/40 transition hover:bg-accent/25"
         >
           <MonitorPlay size={15} />
-          Open Software
+          {t('tray.open')}
         </button>
         <button
           onClick={() => ipc.quit()}
           className="flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-white/[.06] text-sm font-bold text-white/70 transition hover:bg-red-500/80 hover:text-white"
         >
           <Power size={15} />
-          Quit
+          {t('tray.quit')}
         </button>
       </div>
     </div>

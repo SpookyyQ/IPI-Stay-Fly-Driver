@@ -1,17 +1,12 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import { ipc } from '../lib/ipc'
-
-interface CapturedFrame { ts: number; hex: string }
 
 export default function DevPanel({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation()
   const [frame, setFrame] = useState('')
   const [response, setResponse] = useState('')
-  const [capturing, setCapturing] = useState(false)
-  const [captured, setCaptured] = useState<CapturedFrame[]>([])
-  const captureStart = useRef<CapturedFrame[]>([])
 
   const send = async () => {
     try {
@@ -19,16 +14,6 @@ export default function DevPanel({ onClose }: { onClose: () => void }) {
       setResponse(res)
     } catch (e) {
       setResponse(String(e))
-    }
-  }
-
-  const toggleCapture = () => {
-    if (capturing) {
-      setCaptured(captureStart.current)
-      setCapturing(false)
-    } else {
-      captureStart.current = []
-      setCapturing(true)
     }
   }
 
@@ -63,37 +48,6 @@ export default function DevPanel({ onClose }: { onClose: () => void }) {
               <pre className="bg-surface-900 rounded p-3 text-xs font-mono overflow-x-auto">{response}</pre>
             </div>
           )}
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <p className="text-sm">{t('dev.diffCapture')}</p>
-              <button
-                onClick={toggleCapture}
-                className={`px-3 py-1 rounded text-xs font-medium ${
-                  capturing ? 'bg-red-600 hover:bg-red-500' : 'bg-surface-700 hover:bg-surface-600'
-                }`}
-              >
-                {capturing ? t('dev.stopCapture') : t('dev.startCapture')}
-              </button>
-            </div>
-            {captured.length > 0 && (
-              <table className="w-full text-xs font-mono">
-                <thead>
-                  <tr className="text-surface-200">
-                    <th className="text-left py-1">T+ms</th>
-                    <th className="text-left py-1">Frame</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {captured.map((f, i) => (
-                    <tr key={i} className="border-t border-surface-700">
-                      <td className="py-1 pr-4">{f.ts}</td>
-                      <td className="py-1">{f.hex}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
         </div>
       </div>
     </div>

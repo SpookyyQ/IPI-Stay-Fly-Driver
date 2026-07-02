@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import Card from '../ui/Card'
 import Slider from '../ui/Slider'
 import { ipc, DeviceSettings } from '../../lib/ipc'
+import { notifyError } from '../../lib/toast'
 
 const STAGE_COLORS = ['#ef4444', '#22c55e', '#3b82f6', '#ec4899']
 const DEFAULT_DPIS = [400, 800, 1600, 5600]
@@ -20,6 +21,10 @@ export default function DpiTab({ connected, demoMode = false, initialSettings }:
   const { t } = useTranslation()
   const [activeStage, setActiveStage] = useState(0)
   const [dpis, setDpis] = useState(DEFAULT_DPIS)
+  // Raw text while the user is typing in the number field; null = not editing.
+  // Normalizing only on commit keeps the field typeable (e.g. "8" on the way
+  // to "800" must not be clamped to 50 mid-keystroke).
+  const [draft, setDraft] = useState<string | null>(null)
 
   useEffect(() => {
     if (!initialSettings) return
@@ -30,8 +35,13 @@ export default function DpiTab({ connected, demoMode = false, initialSettings }:
 
   const handleStageClick = async (i: number) => {
     setActiveStage(i)
+    setDraft(null)
     if (demoMode) return
-    try { await ipc.setDpiStage(i) } catch {}
+    try {
+      await ipc.setDpiStage(i)
+    } catch (e) {
+      notifyError(t('errors.applyFailed', { error: String(e) }))
+    }
   }
 
   const normalizeDpi = (value: number) => {
@@ -45,14 +55,27 @@ export default function DpiTab({ connected, demoMode = false, initialSettings }:
     if (demoMode) return
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(async () => {
-      try { await ipc.setDpiValue(activeStage, nextDpi) } catch {}
+      try {
+        await ipc.setDpiValue(activeStage, nextDpi)
+      } catch (e) {
+        notifyError(t('errors.applyFailed', { error: String(e) }))
+      }
     }, 200)
+  }
+
+  const commitDraft = () => {
+    if (draft === null) return
+    const parsed = Number(draft)
+    if (draft.trim() !== '' && Number.isFinite(parsed)) {
+      handleDpiChange(parsed)
+    }
+    setDraft(null)
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[.32em] text-accent/80">Sensor tuning</p>
+        <p className="text-xs uppercase tracking-[.32em] text-accent/80">{t('dpi.eyebrow')}</p>
         <h2 className="mt-2 text-3xl font-black tracking-tight">{t('dpi.title')}</h2>
       </div>
 
@@ -71,7 +94,7 @@ export default function DpiTab({ connected, demoMode = false, initialSettings }:
               }`}
             >
               <span className="mb-3 block h-1.5 w-10 rounded-full" style={{ backgroundColor: STAGE_COLORS[i] }} />
-              <p className="text-xs text-white/50">Stage {i + 1}</p>
+              <p className="text-xs text-white/50">{t('dpi.stageLabel', { num: i + 1 })}</p>
               <p className="text-2xl font-black">{dpi}</p>
             </button>
           ))}
@@ -88,10 +111,11 @@ export default function DpiTab({ connected, demoMode = false, initialSettings }:
               min={DPI_MIN}
               max={DPI_MAX}
               step={DPI_STEP}
-              value={dpis[activeStage]}
+              value={draft ?? String(dpis[activeStage])}
               disabled={!connected}
-              onChange={e => handleDpiChange(Number(e.target.value))}
-              onBlur={e => handleDpiChange(Number(e.target.value))}
+              onChange={e => setDraft(e.target.value)}
+              onBlur={commitDraft}
+              onKeyDown={e => { if (e.key === 'Enter') commitDraft() }}
               className="w-32 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-right text-xl font-black text-accent outline-none transition-colors focus:border-accent disabled:opacity-40"
             />
             <span className="text-sm text-white/55">DPI</span>

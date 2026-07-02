@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Settings2, Wifi, WifiOff, Plus } from 'lucide-react'
 import mouseImage from '../../assets/fly-pro-top.png'
-import { ipc, StatusInfo } from '../../lib/ipc'
+import { StatusInfo } from '../../lib/ipc'
 import type { Tab } from '../Sidebar'
 import AddDeviceDialog from '../AddDeviceDialog'
 
@@ -9,16 +10,13 @@ interface Props {
   status: StatusInfo
   demoMode: boolean
   onNavigate: (tab: Tab) => void
+  /** Triggers an immediate status refresh so the card updates without waiting for the poll. */
+  onRefresh: () => void
 }
 
-export default function HomeTab({ status, demoMode, onNavigate }: Props) {
+export default function HomeTab({ status, demoMode, onNavigate, onRefresh }: Props) {
+  const { t } = useTranslation()
   const [addOpen, setAddOpen] = useState(false)
-
-  const handleConnect = useCallback(() => {
-    if (demoMode) return
-    // trigger immediate status refresh so the card updates without waiting 5s
-    ipc.getStatus().catch(() => {})
-  }, [demoMode])
 
   const mouseCard = (
     <div
@@ -29,7 +27,7 @@ export default function HomeTab({ status, demoMode, onNavigate }: Props) {
     >
       {demoMode && (
         <div className="absolute left-4 top-4 z-10 rounded-full border border-accent/40 bg-accent/15 px-3 py-1 text-xs font-black uppercase tracking-[.18em] text-accent shadow-[0_0_24px_rgb(var(--color-accent)/.16)]">
-          Demo Mode
+          {t('home.demoBadge')}
         </div>
       )}
       <div className="flex-1 flex items-center justify-center">
@@ -53,14 +51,14 @@ export default function HomeTab({ status, demoMode, onNavigate }: Props) {
             <span className={`text-sm ${
               status.connected ? 'text-white/65' : 'text-white/30'
             }`}>
-              {demoMode ? 'Demo mouse' : status.connected ? 'Connected' : 'Not connected'}
+              {demoMode ? t('home.demoMouse') : status.connected ? t('home.connected') : t('home.notConnected')}
             </span>
           </div>
           {status.connected && (
             <button
               onClick={e => { e.stopPropagation(); onNavigate('buttons') }}
               className="p-1.5 rounded-lg hover:bg-white/15 text-white/45 hover:text-white transition"
-              title="Configure"
+              title={t('home.configure')}
             >
               <Settings2 size={15} />
             </button>
@@ -78,7 +76,7 @@ export default function HomeTab({ status, demoMode, onNavigate }: Props) {
       <div className="w-16 h-16 rounded-full bg-white/[.06] flex items-center justify-center">
         <Plus size={28} className="text-white/35" />
       </div>
-      <p className="text-sm text-white/35">Add Device</p>
+      <p className="text-sm text-white/35">{t('home.addDevice')}</p>
     </button>
   )
 
@@ -88,7 +86,7 @@ export default function HomeTab({ status, demoMode, onNavigate }: Props) {
         {!status.connected && addCard}
         {mouseCard}
       </div>
-      {addOpen && <AddDeviceDialog onClose={() => setAddOpen(false)} onConnect={handleConnect} />}
+      {addOpen && <AddDeviceDialog onClose={() => setAddOpen(false)} onConnect={onRefresh} />}
     </div>
   )
 }

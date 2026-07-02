@@ -12,6 +12,20 @@ export interface DeviceSettings {
   full_power: number
   work_mode: number
   rage_time: number
+  debounce: number
+  dpi_led_mode: number // 0=off, 1=solid, 2=breathing
+  dpi_led_brightness: number // 0-10 UI level
+  breathing_speed: number // 1-5
+  fps20k: boolean
+  angle_enabled: boolean
+  angle: number // -45..45
+}
+
+export interface ButtonAssignment {
+  slot: number
+  category: number
+  code: number
+  modifier: number
 }
 
 export interface HidDeviceInfo {
@@ -59,6 +73,7 @@ export const ipc = {
   resetButtons: () => invoke<void>('cmd_reset_buttons'),
   setButton: (slot: number, code: number) => invoke<void>('cmd_set_button', { slot, code }),
   setButtonKey: (slot: number, keycode: number) => invoke<void>('cmd_set_button_key', { slot, keycode }),
+  readButtons: () => invoke<ButtonAssignment[]>('cmd_read_buttons'),
   readSettings: () => invoke<DeviceSettings>('cmd_read_settings'),
   sendRaw: (hexFrame: string) => invoke<string>('cmd_raw', { hexFrame }),
   showMain: () => invoke<void>('cmd_show_main'),

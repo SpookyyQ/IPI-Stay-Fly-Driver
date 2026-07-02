@@ -1,13 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Card from '../ui/Card'
 import Switch from '../ui/Switch'
-import { ipc } from '../../lib/ipc'
+import { ipc, DeviceSettings } from '../../lib/ipc'
+import { notifyError } from '../../lib/toast'
 
-interface Props { connected: boolean; demoMode?: boolean }
+interface Props {
+  connected: boolean
+  demoMode?: boolean
+  initialSettings: DeviceSettings | null
+}
 
-export default function AdvancedTab({ connected, demoMode = false }: Props) {
+export default function AdvancedTab({ connected, demoMode = false, initialSettings }: Props) {
   const { t } = useTranslation()
+  // Receiver LED and long-distance mode are written to the dongle and have no
+  // known read-back, so they keep local defaults until changed.
   const [receiverLed, setReceiverLed] = useState(2) // modes: 1=Hz, 2=battery, 3=warning
   const [fps20k, setFps20k] = useState(false)
   const [longDistance, setLongDistance] = useState(false)
@@ -15,56 +22,77 @@ export default function AdvancedTab({ connected, demoMode = false }: Props) {
   const [rageTime, setRageTime] = useState(6)
   const [angleEnabled, setAngleEnabled] = useState(false)
   const [angle, setAngle] = useState(0)
+  const angleRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const RAGE_TIMES = [1, 3, 6, 12, 18, 36, 60, 90]
 
+  useEffect(() => {
+    if (!initialSettings) return
+    setFps20k(initialSettings.fps20k)
+    setWorkingMode(initialSettings.full_power)
+    setRageTime(initialSettings.rage_time)
+    setAngleEnabled(initialSettings.angle_enabled)
+    setAngle(initialSettings.angle)
+  }, [initialSettings])
+
+  const reportError = (e: unknown) => notifyError(t('errors.applyFailed', { error: String(e) }))
+
   const handleReceiverLed = async (mode: number) => {
+    const previous = receiverLed
     setReceiverLed(mode)
     if (demoMode) return
-    try { await ipc.setReceiverLed(mode) } catch {}
+    try { await ipc.setReceiverLed(mode) } catch (e) { setReceiverLed(previous); reportError(e) }
   }
 
   const handleFps20k = async (enabled: boolean) => {
+    const previous = fps20k
     setFps20k(enabled)
     if (demoMode) return
-    try { await ipc.setFps20k(enabled) } catch {}
+    try { await ipc.setFps20k(enabled) } catch (e) { setFps20k(previous); reportError(e) }
   }
 
   const handleLongDistance = async (enabled: boolean) => {
+    const previous = longDistance
     setLongDistance(enabled)
     if (demoMode) return
-    try { await ipc.setLongDistance(enabled) } catch {}
+    try { await ipc.setLongDistance(enabled) } catch (e) { setLongDistance(previous); reportError(e) }
   }
 
   const handleWorkingMode = async (enabled: boolean) => {
+    const previous = workingMode
     const mode = enabled ? 1 : 0
     setWorkingMode(mode)
     if (demoMode) return
-    try { await ipc.setWorkingMode(mode) } catch {}
+    try { await ipc.setWorkingMode(mode) } catch (e) { setWorkingMode(previous); reportError(e) }
   }
 
   const handleRageTime = async (seconds: number) => {
+    const previous = rageTime
     setRageTime(seconds)
     if (demoMode) return
-    try { await ipc.setRageTime(seconds) } catch {}
+    try { await ipc.setRageTime(seconds) } catch (e) { setRageTime(previous); reportError(e) }
   }
 
   const handleAngleEnabled = async (enabled: boolean) => {
+    const previous = angleEnabled
     setAngleEnabled(enabled)
     if (demoMode) return
-    try { await ipc.setAngle(enabled, angle) } catch {}
+    try { await ipc.setAngle(enabled, angle) } catch (e) { setAngleEnabled(previous); reportError(e) }
   }
 
-  const handleAngle = async (val: number) => {
+  const handleAngle = (val: number) => {
     setAngle(val)
-    if (demoMode) return
-    if (angleEnabled) try { await ipc.setAngle(true, val) } catch {}
+    if (demoMode || !angleEnabled) return
+    if (angleRef.current) clearTimeout(angleRef.current)
+    angleRef.current = setTimeout(async () => {
+      try { await ipc.setAngle(true, val) } catch (e) { reportError(e) }
+    }, 150)
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[.32em] text-accent/80">Device behavior</p>
+        <p className="text-xs uppercase tracking-[.32em] text-accent/80">{t('advanced.eyebrow')}</p>
         <h2 className="mt-2 text-3xl font-black tracking-tight">{t('advanced.title')}</h2>
       </div>
       <Card>
@@ -127,14 +155,14 @@ export default function AdvancedTab({ connected, demoMode = false }: Props) {
 
       <Card>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-semibold">Angle Snapping</p>
+          <p className="text-sm font-semibold">{t('advanced.angleTitle')}</p>
           <Switch checked={angleEnabled} onChange={handleAngleEnabled} disabled={!connected} />
         </div>
-        <p className="text-xs text-white/55 mb-4">Corrects cursor drift when the mouse is held at a slight angle. Range: −45° to +45°.</p>
+        <p className="text-xs text-white/55 mb-4">{t('advanced.angleDesc')}</p>
         {angleEnabled && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-white/50">Angle</span>
+              <span className="text-xs text-white/50">{t('advanced.angleLabel')}</span>
               <span className="text-sm font-bold tabular-nums">{angle > 0 ? `+${angle}` : angle}°</span>
             </div>
             <input

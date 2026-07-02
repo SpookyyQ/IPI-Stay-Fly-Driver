@@ -3,7 +3,8 @@
     "title": "IPI STAY FLY 驱动",
     "noDevice": "未连接设备",
     "connecting": "正在连接…",
-    "language": "语言"
+    "language": "语言",
+    "mouseConfig": "鼠标配置"
   },
   "tabs": {
     "home": "主页",
@@ -19,12 +20,21 @@
     "connected": "已连接",
     "disconnected": "未连接",
     "demo": "演示",
-    "demoMode": "演示模式"
+    "demoMode": "演示模式",
+    "demoModeTag": "演示模式",
+    "demoBanner": "虚拟鼠标已激活 — 硬件通信已禁用",
+    "changeTheme": "更换主题",
+    "changeBackground": "更换背景",
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "close": "关闭"
   },
   "dpi": {
     "title": "DPI 设置",
     "stage": "DPI 档位",
-    "value": "DPI 数值"
+    "value": "DPI 数值",
+    "eyebrow": "传感器调校",
+    "stageLabel": "档位 {{num}}"
   },
   "lightning": {
     "title": "灯光",
@@ -33,7 +43,8 @@
     "ledSolid": "常亮",
     "ledBreathing": "呼吸",
     "brightness": "亮度",
-    "speed": "速度"
+    "speed": "速度",
+    "eyebrow": "LED"
   },
   "performance": {
     "title": "性能",
@@ -62,18 +73,38 @@
     "workMode": "工作模式",
     "lowPower": "低功耗",
     "highPerf": "高性能",
-    "ultraPerf": "Ultra Performance"
+    "ultraPerf": "Ultra Performance",
+    "eyebrow": "延迟控制",
+    "experimentalHint": "在该数据帧验证之前不会发送到鼠标。"
   },
   "buttons": {
     "title": "按键分配",
-    "placeholder": "按键重映射将在后续版本中提供。"
+    "restoreDefault": "恢复默认",
+    "savedAction": "已保存：{{action}}",
+    "savedKey": "已保存：按键 {{key}}",
+    "restored": "所有按键已恢复默认",
+    "keyboardKey": "键盘按键…",
+    "actionLeft": "左键点击",
+    "actionRight": "右键点击",
+    "actionMiddle": "中键点击",
+    "actionBack": "后退",
+    "actionForward": "前进",
+    "nameLeft": "左键",
+    "nameRight": "右键",
+    "nameMiddle": "中键",
+    "nameSideForward": "侧键（前）",
+    "nameSideBack": "侧键（后）"
   },
   "advanced": {
     "title": "高级",
     "receiverLed": "接收器 LED",
     "receiverLedHz": "Hz 指示",
     "receiverLedBattery": "电量指示",
-    "receiverLedWarning": "仅警告"
+    "receiverLedWarning": "仅警告",
+    "eyebrow": "设备行为",
+    "angleTitle": "角度校正",
+    "angleDesc": "当鼠标略微倾斜握持时校正光标漂移。范围：−45° 至 +45°。",
+    "angleLabel": "角度"
   },
   "other": {
     "title": "IPI STAY FLY",
@@ -93,15 +124,53 @@
     "confirm": "确认",
     "cancel": "取消",
     "about": "关于",
-    "aboutText": "用于 IPI STAY FLY 无线游戏鼠标的开源替代驱动。"
+    "aboutText": "用于 IPI STAY FLY 无线游戏鼠标的开源替代驱动。",
+    "eyebrow": "设备"
   },
   "dev": {
     "title": "开发者面板",
     "sendFrame": "发送帧（hex）",
     "send": "发送",
-    "response": "响应",
-    "diffCapture": "差异捕获",
-    "startCapture": "开始",
-    "stopCapture": "停止"
+    "response": "响应"
+  },
+  "home": {
+    "demoBadge": "演示模式",
+    "demoMouse": "演示鼠标",
+    "connected": "已连接",
+    "notConnected": "未连接",
+    "addDevice": "添加设备",
+    "configure": "配置"
+  },
+  "dialog": {
+    "selectDevice": "选择设备",
+    "scanning": "正在扫描 USB 设备…",
+    "noDevices": "未找到 HID 设备",
+    "unknownDevice": "未知设备",
+    "connect": "连接",
+    "hint": "插入 IPI STAY FLY USB 接收器 — 将自动检测"
+  },
+  "tray": {
+    "open": "打开软件",
+    "quit": "退出",
+    "off": "关"
+  },
+  "bg": {
+    "animation": "动画",
+    "wallpaper": "壁纸",
+    "default": "默认",
+    "custom": "自定义",
+    "upload": "上传壁纸…",
+    "replace": "更换壁纸…",
+    "loading": "加载中…",
+    "loadError": "无法加载该图片。",
+    "none": "无",
+    "constellation": "星座",
+    "particles": "漂浮圆点",
+    "starfield": "星空",
+    "waves": "极光波浪"
+  },
+  "errors": {
+    "applyFailed": "无法应用设置：{{error}}",
+    "wallpaperTooLarge": "壁纸过大，无法保存 — 下次启动时将重置。"
   }
 }

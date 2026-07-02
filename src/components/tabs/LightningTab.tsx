@@ -1,38 +1,48 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import Card from '../ui/Card'
 import Slider from '../ui/Slider'
-import { ipc } from '../../lib/ipc'
+import { ipc, DeviceSettings, DpiLedMode } from '../../lib/ipc'
+import { notifyError } from '../../lib/toast'
+
+type LedMode = 'off' | 'solid' | 'breathing'
+
+const LED_MODE_FROM_RAW: Record<number, LedMode> = { 0: 'off', 1: 'solid', 2: 'breathing' }
+const LED_MODE_TO_IPC: Record<LedMode, DpiLedMode> = { off: 'Off', solid: 'Solid', breathing: 'Breathing' }
 
 interface Props {
   connected: boolean
   demoMode?: boolean
+  initialSettings: DeviceSettings | null
 }
 
-export default function LightningTab({ connected, demoMode = false }: Props) {
+export default function LightningTab({ connected, demoMode = false, initialSettings }: Props) {
   const { t } = useTranslation()
-  const [ledMode, setLedMode] = useState<'off' | 'solid' | 'breathing'>('off')
+  const [ledMode, setLedMode] = useState<LedMode>('off')
   const [brightness, setBrightness] = useState(5)
   const [speed, setSpeed] = useState(3)
   const brightnessRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const speedRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const handleLedOff = async () => {
-    setLedMode('off')
-    if (demoMode) return
-    try { await ipc.setDpiLedMode('Off') } catch {}
-  }
+  useEffect(() => {
+    if (!initialSettings) return
+    setLedMode(LED_MODE_FROM_RAW[initialSettings.dpi_led_mode] ?? 'off')
+    setBrightness(Math.min(10, Math.max(1, initialSettings.dpi_led_brightness)))
+    setSpeed(Math.min(5, Math.max(1, initialSettings.breathing_speed)))
+  }, [initialSettings])
 
-  const handleLedSolid = async () => {
-    setLedMode('solid')
-    if (demoMode) return
-    try { await ipc.setDpiLedMode('Solid') } catch {}
-  }
+  const reportError = (e: unknown) => notifyError(t('errors.applyFailed', { error: String(e) }))
 
-  const handleLedBreathing = async () => {
-    setLedMode('breathing')
+  const handleLedMode = async (mode: LedMode) => {
+    const previous = ledMode
+    setLedMode(mode)
     if (demoMode) return
-    try { await ipc.setDpiLedMode('Breathing') } catch {}
+    try {
+      await ipc.setDpiLedMode(LED_MODE_TO_IPC[mode])
+    } catch (e) {
+      setLedMode(previous)
+      reportError(e)
+    }
   }
 
   const handleBrightness = (v: number) => {
@@ -40,7 +50,7 @@ export default function LightningTab({ connected, demoMode = false }: Props) {
     if (demoMode) return
     if (brightnessRef.current) clearTimeout(brightnessRef.current)
     brightnessRef.current = setTimeout(async () => {
-      try { await ipc.setDpiLedBrightness(v) } catch {}
+      try { await ipc.setDpiLedBrightness(v) } catch (e) { reportError(e) }
     }, 150)
   }
 
@@ -49,14 +59,14 @@ export default function LightningTab({ connected, demoMode = false }: Props) {
     if (demoMode) return
     if (speedRef.current) clearTimeout(speedRef.current)
     speedRef.current = setTimeout(async () => {
-      try { await ipc.setBreathingSpeed(v) } catch {}
+      try { await ipc.setBreathingSpeed(v) } catch (e) { reportError(e) }
     }, 150)
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[.32em] text-accent/80">LED</p>
+        <p className="text-xs uppercase tracking-[.32em] text-accent/80">{t('lightning.eyebrow')}</p>
         <h2 className="mt-2 text-3xl font-black tracking-tight">{t('lightning.title')}</h2>
       </div>
 
@@ -69,7 +79,7 @@ export default function LightningTab({ connected, demoMode = false }: Props) {
                 type="radio"
                 name="lightning-led"
                 checked={ledMode === mode}
-                onChange={mode === 'off' ? handleLedOff : mode === 'solid' ? handleLedSolid : handleLedBreathing}
+                onChange={() => handleLedMode(mode)}
                 disabled={!connected}
                 className="accent-accent"
               />

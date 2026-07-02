@@ -25,7 +25,7 @@ export default function OtherTab({ onReset }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[.32em] text-accent/80">Device</p>
+        <p className="text-xs uppercase tracking-[.32em] text-accent/80">{t('other.eyebrow')}</p>
         <h2 className="mt-2 text-3xl font-black tracking-tight">{t('other.title')}</h2>
       </div>
 

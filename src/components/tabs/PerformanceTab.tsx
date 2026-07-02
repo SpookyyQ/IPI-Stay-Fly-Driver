@@ -4,6 +4,7 @@ import Card from '../ui/Card'
 import Slider from '../ui/Slider'
 import Switch from '../ui/Switch'
 import { ipc, PollingRate, Lod, DeviceSettings } from '../../lib/ipc'
+import { notifyError } from '../../lib/toast'
 
 const POLLING_OPTIONS: { label: string; value: PollingRate; experimental?: boolean }[] = [
   { label: '125 Hz', value: 'Hz125' },
@@ -49,32 +50,39 @@ export default function PerformanceTab({ connected, demoMode = false, initialSet
     setMotionSync(initialSettings.motion_sync)
     setSleep(initialSettings.sleep)
     setWorkMode(initialSettings.work_mode)
+    setDebounce(initialSettings.debounce)
   }, [initialSettings])
+
+  const reportError = (e: unknown) => notifyError(t('errors.applyFailed', { error: String(e) }))
 
   const handleSleep = (v: number) => {
     setSleep(v)
     if (demoMode) return
     if (sleepRef.current) clearTimeout(sleepRef.current)
     sleepRef.current = setTimeout(async () => {
-      try { await ipc.setSleep(v) } catch {}
+      try { await ipc.setSleep(v) } catch (e) { reportError(e) }
     }, 200)
   }
 
   const handleMotionSync = async (enabled: boolean) => {
+    const previous = motionSync
     setMotionSync(enabled)
     if (demoMode) return
-    try { await ipc.setMotionSync(enabled) } catch {}
+    try { await ipc.setMotionSync(enabled) } catch (e) { setMotionSync(previous); reportError(e) }
   }
 
   const handleWorkMode = async (mode: number) => {
+    const previous = workMode
     setWorkMode(mode)
     if (demoMode) return
-    try { await ipc.setWorkMode(mode) } catch {}
+    try { await ipc.setWorkMode(mode) } catch (e) { setWorkMode(previous); reportError(e) }
   }
 
   const handlePolling = async (rate: PollingRate) => {
     const option = POLLING_OPTIONS.find(o => o.value === rate)
     if (!option || !isEnabledOption(option.experimental)) return
+    const previousRate = pollingRate
+    const previousMode = workMode
     setPollingRate(rate)
     if (demoMode) {
       if (isHighPolling(rate)) setWorkMode(2)
@@ -93,34 +101,41 @@ export default function PerformanceTab({ connected, demoMode = false, initialSet
           setWorkMode(1)
         }
       }
-    } catch {}
+    } catch (e) {
+      setPollingRate(previousRate)
+      setWorkMode(previousMode)
+      reportError(e)
+    }
   }
 
   const handleLod = async (l: Lod) => {
     const option = LOD_OPTIONS.find(o => o.value === l)
     if (!option || !isEnabledOption(option.experimental)) return
 
+    const previous = lod
     setLod(l)
     if (demoMode) return
-    try { await ipc.setLod(l) } catch {}
+    try { await ipc.setLod(l) } catch (e) { setLod(previous); reportError(e) }
   }
 
   const handleLinearCorrection = async (enabled: boolean) => {
+    const previous = linearCorrection
     setLinearCorrection(enabled)
     if (demoMode) return
-    try { await ipc.setLinearCorrection(enabled) } catch {}
+    try { await ipc.setLinearCorrection(enabled) } catch (e) { setLinearCorrection(previous); reportError(e) }
   }
 
   const handleWaveformControl = async (enabled: boolean) => {
+    const previous = ripple
     setRipple(enabled)
     if (demoMode) return
-    try { await ipc.setWaveformControl(enabled) } catch {}
+    try { await ipc.setWaveformControl(enabled) } catch (e) { setRipple(previous); reportError(e) }
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-[.32em] text-accent/80">Latency control</p>
+        <p className="text-xs uppercase tracking-[.32em] text-accent/80">{t('performance.eyebrow')}</p>
         <h2 className="mt-2 text-3xl font-black tracking-tight">{t('performance.title')}</h2>
       </div>
 
@@ -150,7 +165,7 @@ export default function PerformanceTab({ connected, demoMode = false, initialSet
                   ? 'border-accent bg-accent/15 text-accent shadow-[0_0_22px_rgb(var(--color-accent)/.12)]'
                   : 'border-white/10 bg-white/[.05] text-white/78 hover:border-white/25 hover:bg-white/[.09]'
               } disabled:cursor-not-allowed disabled:opacity-40`}
-              title={o.experimental ? 'Not sent to the mouse until this frame is verified.' : undefined}
+              title={o.experimental ? t('performance.experimentalHint') : undefined}
             >
               {o.label}{o.experimental && <span className="ml-1 opacity-50">({t('performance.experimental')})</span>}
             </button>
@@ -168,7 +183,7 @@ export default function PerformanceTab({ connected, demoMode = false, initialSet
           if (demoMode) return
           if (debounceRef.current) clearTimeout(debounceRef.current)
           debounceRef.current = setTimeout(async () => {
-            try { await ipc.setDebounce(v) } catch {}
+            try { await ipc.setDebounce(v) } catch (e) { reportError(e) }
           }, 200)
         }} disabled={!connected} />
         <div className="flex justify-between text-xs text-white/45 mt-2"><span>0 ms</span><span>20 ms</span></div>
@@ -197,16 +212,13 @@ export default function PerformanceTab({ connected, demoMode = false, initialSet
 
       <Card className="space-y-4">
         {([
-          ['linear', linearCorrection, handleLinearCorrection, true],
-          ['ripple', ripple, handleWaveformControl, true],
-          ['motionSync', motionSync, handleMotionSync, true],
-        ] as const).map(([key, val, set, wired]) => (
+          ['linear', linearCorrection, handleLinearCorrection],
+          ['ripple', ripple, handleWaveformControl],
+          ['motionSync', motionSync, handleMotionSync],
+        ] as const).map(([key, val, set]) => (
           <div key={key} className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <p className="text-sm">{t(`performance.${key}`)}</p>
-              {!wired && <span className="rounded-full border border-accent/30 px-2 py-0.5 text-[10px] uppercase tracking-wide text-accent/80">Not wired</span>}
-            </div>
-            <Switch checked={val} onChange={v => set(v)} disabled={!connected || !wired} />
+            <p className="text-sm">{t(`performance.${key}`)}</p>
+            <Switch checked={val} onChange={v => set(v)} disabled={!connected} />
           </div>
         ))}
       </Card>

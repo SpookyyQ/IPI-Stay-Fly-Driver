@@ -3,7 +3,8 @@
     "title": "Driver IPI STAY FLY",
     "noDevice": "Nenhum dispositivo conectado",
     "connecting": "Conectando…",
-    "language": "Idioma"
+    "language": "Idioma",
+    "mouseConfig": "Configuração do mouse"
   },
   "tabs": {
     "home": "Início",
@@ -19,12 +20,21 @@
     "connected": "Conectado",
     "disconnected": "Desconectado",
     "demo": "Demo",
-    "demoMode": "Modo demo"
+    "demoMode": "Modo demo",
+    "demoModeTag": "MODO DEMO",
+    "demoBanner": "Mouse virtual ativo — comunicação com o hardware desativada",
+    "changeTheme": "Mudar tema",
+    "changeBackground": "Mudar plano de fundo",
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "close": "Fechar"
   },
   "dpi": {
     "title": "Configurações de DPI",
     "stage": "Estágio de DPI",
-    "value": "Valor de DPI"
+    "value": "Valor de DPI",
+    "eyebrow": "Ajuste do sensor",
+    "stageLabel": "Nível {{num}}"
   },
   "lightning": {
     "title": "Iluminação",
@@ -33,7 +43,8 @@
     "ledSolid": "Fixo",
     "ledBreathing": "Respiração",
     "brightness": "Brilho",
-    "speed": "Velocidade"
+    "speed": "Velocidade",
+    "eyebrow": "LED"
   },
   "performance": {
     "title": "Desempenho",
@@ -62,18 +73,38 @@
     "workMode": "Modo de trabalho",
     "lowPower": "Baixo consumo",
     "highPerf": "Alto desempenho",
-    "ultraPerf": "Ultra Performance"
+    "ultraPerf": "Ultra Performance",
+    "eyebrow": "Controle de latência",
+    "experimentalHint": "Não é enviado ao mouse até que este frame seja verificado."
   },
   "buttons": {
     "title": "Atribuição de botões",
-    "placeholder": "O remapeamento de botões estará disponível em versões futuras."
+    "restoreDefault": "Restaurar padrão",
+    "savedAction": "Salvo: {{action}}",
+    "savedKey": "Salvo: tecla {{key}}",
+    "restored": "Todos os botões restaurados para o padrão",
+    "keyboardKey": "Tecla do teclado…",
+    "actionLeft": "Clique esquerdo",
+    "actionRight": "Clique direito",
+    "actionMiddle": "Clique do meio",
+    "actionBack": "Voltar",
+    "actionForward": "Avançar",
+    "nameLeft": "Botão esquerdo",
+    "nameRight": "Botão direito",
+    "nameMiddle": "Botão do meio",
+    "nameSideForward": "Lateral frontal",
+    "nameSideBack": "Lateral traseiro"
   },
   "advanced": {
     "title": "Avançado",
     "receiverLed": "LED do receptor",
     "receiverLedHz": "Indicador de Hz",
     "receiverLedBattery": "Indicador de bateria",
-    "receiverLedWarning": "Apenas aviso"
+    "receiverLedWarning": "Apenas aviso",
+    "eyebrow": "Comportamento do dispositivo",
+    "angleTitle": "Correção de ângulo",
+    "angleDesc": "Corrige o desvio do cursor quando o mouse é segurado levemente inclinado. Faixa: −45° a +45°.",
+    "angleLabel": "Ângulo"
   },
   "other": {
     "title": "IPI STAY FLY",
@@ -93,15 +124,53 @@
     "confirm": "Confirmar",
     "cancel": "Cancelar",
     "about": "Sobre",
-    "aboutText": "Driver open-source substituto para o mouse gamer sem fio IPI STAY FLY."
+    "aboutText": "Driver open-source substituto para o mouse gamer sem fio IPI STAY FLY.",
+    "eyebrow": "Dispositivo"
   },
   "dev": {
     "title": "Painel de desenvolvedor",
     "sendFrame": "Enviar frame (hex)",
     "send": "Enviar",
-    "response": "Resposta",
-    "diffCapture": "Captura diff",
-    "startCapture": "Iniciar",
-    "stopCapture": "Parar"
+    "response": "Resposta"
+  },
+  "home": {
+    "demoBadge": "Modo demo",
+    "demoMouse": "Mouse de demonstração",
+    "connected": "Conectado",
+    "notConnected": "Não conectado",
+    "addDevice": "Adicionar dispositivo",
+    "configure": "Configurar"
+  },
+  "dialog": {
+    "selectDevice": "Selecionar dispositivo",
+    "scanning": "Procurando dispositivos USB…",
+    "noDevices": "Nenhum dispositivo HID encontrado",
+    "unknownDevice": "Dispositivo desconhecido",
+    "connect": "Conectar",
+    "hint": "Conecte o receptor USB IPI STAY FLY — ele será detectado automaticamente"
+  },
+  "tray": {
+    "open": "Abrir software",
+    "quit": "Sair",
+    "off": "Desligado"
+  },
+  "bg": {
+    "animation": "Animação",
+    "wallpaper": "Papel de parede",
+    "default": "Padrão",
+    "custom": "Personalizado",
+    "upload": "Enviar papel de parede…",
+    "replace": "Substituir papel de parede…",
+    "loading": "Carregando…",
+    "loadError": "Não foi possível carregar a imagem.",
+    "none": "Nenhuma",
+    "constellation": "Constelação",
+    "particles": "Pontos flutuantes",
+    "starfield": "Campo de estrelas",
+    "waves": "Ondas de aurora"
+  },
+  "errors": {
+    "applyFailed": "Não foi possível aplicar a configuração: {{error}}",
+    "wallpaperTooLarge": "O papel de parede é grande demais para ser salvo — ele será redefinido na próxima inicialização."
   }
 }

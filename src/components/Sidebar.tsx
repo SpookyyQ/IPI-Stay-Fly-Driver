@@ -94,7 +94,7 @@ export default function Sidebar({ activeTab, onTabChange, status }: Props) {
       </div>
 
       <nav className="flex-1 px-3 py-5">
-        <p className="px-3 pb-3 text-xs text-white/42">Mouse Configuration</p>
+        <p className="px-3 pb-3 text-xs text-white/42">{t('app.mouseConfig')}</p>
         <div className="space-y-1.5">
           {navItems.map(item => {
             const Icon = item.icon

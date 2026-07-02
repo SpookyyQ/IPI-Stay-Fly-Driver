@@ -44,6 +44,13 @@ pub struct DeviceSettings {
     pub full_power: u8,   // 0xB5: rage-mode toggle
     pub work_mode: u8,    // 0xB9: 0=low, 1=high, 2=ultra(unverified)
     pub rage_time: u8,    // 0xB7: full-power duration in seconds
+    pub debounce: u8,     // 0xA9: key debounce in ms
+    pub dpi_led_mode: u8, // 0=off (0x52 apply byte), 1=solid, 2=breathing (0x4C)
+    pub dpi_led_brightness: u8, // 0-10 UI level, decoded from raw 0-255 (0x4E)
+    pub breathing_speed: u8,    // 1-5 (0x50)
+    pub fps20k: bool,     // 0xE1
+    pub angle_enabled: bool, // 0xBF
+    pub angle: i8,        // 0xBD: -45..=45, two's complement
 }
 
 #[tauri::command]
@@ -52,33 +59,65 @@ pub fn cmd_read_settings() -> Result<DeviceSettings, String> {
         let b00  = dev.exchange(&protocol::cmd_block_read(0x00))?;
         let b0a  = dev.exchange(&protocol::cmd_block_read(0x0A))?;
         let b14  = dev.exchange(&protocol::cmd_block_read(0x14))?;
-        let baa  = dev.exchange(&protocol::cmd_block_read(0xAA))?;
+        // Read from 0xA9 so the debounce byte is included alongside the
+        // capture-confirmed 0xAB/0xAD/0xAF/0xB1 values.
+        let ba9  = dev.exchange(&protocol::cmd_block_read(0xA9))?;
         let bb4  = dev.exchange(&protocol::cmd_block_read(0xB4))?;
-        let stage_frame = dev.exchange(&protocol::cmd_read_dpi_stage())?;
+        // LED (0x4C..0x52), angle (0xBD/0xBF) and FPS20K (0xE1) live at their
+        // write ENCAP addresses, matching the layout confirmed for the blocks
+        // above. Keep these reads non-fatal so an unexpected reply degrades to
+        // defaults instead of failing the whole settings load.
+        let b4c  = dev.exchange(&protocol::cmd_block_read(0x4C)).ok();
+        let bbd  = dev.exchange(&protocol::cmd_block_read(0xBD)).ok();
+        let be1  = dev.exchange(&protocol::cmd_block_read(0xE1)).ok();
 
         // Each block response: bytes[5..15] are the 10 data bytes at [addr..addr+9]
         let polling_raw = b00[5];
         let lod_raw     = b0a[5]; // addr 0x0A = b0a offset 0
 
-        // DPI values: (val, val) pairs; (val+1)*50 = DPI
+        // DPI values: low byte doubled at slot+0/+1, high bits at slot+2;
+        // ((hi << 8 | lo) + 1) * 50 = DPI.
         // Stage 1 at addr 0x0C = b0a offset 2, Stage 2 at 0x10 = offset 6
-        let dpi1 = (b0a[7]  as u16 + 1) * 50;
-        let dpi2 = (b0a[11] as u16 + 1) * 50;
+        let dpi_from = |lo: u8, hi: u8| ((((hi as u16) << 8) | lo as u16) + 1) * 50;
+        let dpi1 = dpi_from(b0a[7],  b0a[9]);
+        let dpi2 = dpi_from(b0a[11], b0a[13]);
         // Stage 3 at addr 0x14 = b14 offset 0, Stage 4 at 0x18 = offset 4
-        let dpi3 = (b14[5] as u16 + 1) * 50;
-        let dpi4 = (b14[9] as u16 + 1) * 50;
+        let dpi3 = dpi_from(b14[5], b14[7]);
+        let dpi4 = dpi_from(b14[9], b14[11]);
 
-        // Block 0xAA: motion_sync@0xAB=off+1, rage_time@0xAD=off+3,
-        //             linear@0xAF=off+5, waveform@0xB1=off+7
-        let motion_sync       = baa[6]  != 0; // offset 1  (0xAB)
-        let sleep             = baa[8];        // offset 3  (0xAD) — confirmed by capture
-        let linear_correction = baa[10] != 0; // offset 5  (0xAF)
-        let waveform_control  = baa[12] != 0; // offset 7  (0xB1)
+        // Block 0xA9: debounce@0xA9=off+0, motion_sync@0xAB=off+2,
+        //             sleep@0xAD=off+4, linear@0xAF=off+6, waveform@0xB1=off+8
+        let debounce          = ba9[5];        // offset 0  (0xA9)
+        let motion_sync       = ba9[7]  != 0; // offset 2  (0xAB)
+        let sleep             = ba9[9];        // offset 4  (0xAD) — confirmed by capture
+        let linear_correction = ba9[11] != 0; // offset 6  (0xAF)
+        let waveform_control  = ba9[13] != 0; // offset 8  (0xB1)
 
         // Block 0xB4: full_power@0xB5, rage_time@0xB7, work_mode@0xB9
         let full_power = bb4[6];  // offset 1  (0xB5)
         let rage_time  = bb4[8];  // offset 3  (0xB7)
         let work_mode  = bb4[10]; // offset 5  (0xB9): 0=low, 1=high
+
+        // Block 0x4C: led mode@0x4C, brightness@0x4E, breathing speed@0x50,
+        // apply/active@0x52 (0 = LED off regardless of mode byte).
+        let (dpi_led_mode, dpi_led_brightness, breathing_speed) = match b4c {
+            Some(b) => {
+                let active = b[11] != 0; // offset 6 (0x52)
+                let mode = if active { b[5].clamp(1, 2) } else { 0 };
+                let brightness = protocol::raw_to_brightness(b[7]); // offset 2 (0x4E)
+                let speed = b[9].clamp(1, 5); // offset 4 (0x50)
+                (mode, brightness, speed)
+            }
+            None => (0, 5, 3),
+        };
+
+        // Block 0xBD: angle value@0xBD, angle enable@0xBF
+        let (angle_enabled, angle) = match bbd {
+            Some(b) => (b[7] != 0, (b[5] as i8).clamp(-45, 45)),
+            None => (false, 0),
+        };
+
+        let fps20k = be1.map(|b| b[5] != 0).unwrap_or(false);
 
         // addr 0x04 in block 0x00 = currentDpi index (0-based), matches web driver dpiGear
         let active_stage = b00[9].min(3); // b00[5+4] = addr 0x04
@@ -100,6 +139,13 @@ pub fn cmd_read_settings() -> Result<DeviceSettings, String> {
             full_power,
             work_mode,
             rage_time,
+            debounce,
+            dpi_led_mode,
+            dpi_led_brightness,
+            breathing_speed,
+            fps20k,
+            angle_enabled,
+            angle,
         })
     })
 }
@@ -148,11 +194,9 @@ pub fn cmd_status() -> StatusInfo {
                 )
             }
             Err(err) => {
+                // with_device already dropped the cached handle on failure,
+                // so the next call re-opens the device.
                 eprintln!("cmd_status failed: {err}");
-                // clear cached device so next call re-opens
-                if let Ok(mut g) = crate::device::DEVICE.lock() {
-                    *g = None;
-                }
                 (String::new(), String::new(), false, 0, err)
             }
         };
@@ -162,12 +206,21 @@ pub fn cmd_status() -> StatusInfo {
 
 #[tauri::command]
 pub fn cmd_set_dpi_stage(stage: u8) -> Result<(), String> {
+    if stage > 3 {
+        return Err(format!("DPI stage {stage} out of range (0-3)"));
+    }
     let frame = protocol::cmd_select_stage(stage);
     with_device(|dev| dev.write(&frame))
 }
 
 #[tauri::command]
 pub fn cmd_set_dpi_value(stage: u8, dpi: u16) -> Result<(), String> {
+    if stage > 3 {
+        return Err(format!("DPI stage {stage} out of range (0-3)"));
+    }
+    if !(50..=42000).contains(&dpi) || dpi % 50 != 0 {
+        return Err(format!("DPI {dpi} out of range (50-42000, step 50)"));
+    }
     let frame = protocol::cmd_set_dpi(stage, dpi);
     with_device(|dev| dev.write(&frame))
 }
@@ -250,18 +303,30 @@ pub fn cmd_set_sleep(sleep: u8) -> Result<(), String> {
 
 #[tauri::command]
 pub fn cmd_set_work_mode(mode: u8) -> Result<(), String> {
+    // 0=low and 1=high are capture-verified; 2=ultra follows the same ENCAP
+    // 0xB9 shape and is required for 2000+ Hz polling, so it is allowed but
+    // extrapolated rather than captured.
+    if mode > 2 {
+        return Err(format!("work mode {mode} out of range (0-2)"));
+    }
     let frame = protocol::cmd_work_mode(mode);
     with_device(|dev| dev.write(&frame))
 }
 
 #[tauri::command]
 pub fn cmd_set_debounce(ms: u8) -> Result<(), String> {
+    if ms > 20 {
+        return Err(format!("debounce {ms} ms out of range (0-20)"));
+    }
     let frame = protocol::cmd_debounce(ms);
     with_device(|dev| dev.write(&frame))
 }
 
 #[tauri::command]
 pub fn cmd_set_working_mode(mode: u8) -> Result<(), String> {
+    if mode > 1 {
+        return Err(format!("full-power mode {mode} out of range (0-1)"));
+    }
     let frame = protocol::cmd_working_mode(mode);
     with_device(|dev| dev.write(&frame))
 }
@@ -286,6 +351,9 @@ pub fn cmd_set_fps20k(enabled: bool) -> Result<(), String> {
 
 #[tauri::command]
 pub fn cmd_set_receiver_led(mode: u8) -> Result<(), String> {
+    if !(1..=3).contains(&mode) {
+        return Err(format!("receiver LED mode {mode} out of range (1-3)"));
+    }
     let frame = protocol::cmd_receiver_led(mode);
     with_device(|dev| dev.write(&frame))
 }
@@ -300,6 +368,9 @@ pub struct HidDeviceInfo {
 
 #[tauri::command]
 pub fn cmd_set_angle(enabled: bool, angle: i8) -> Result<(), String> {
+    if !(-45..=45).contains(&angle) {
+        return Err(format!("angle {angle} out of range (-45..45)"));
+    }
     with_device(|dev| {
         if enabled {
             dev.write(&protocol::cmd_angle_enable(true))?;
@@ -363,6 +434,45 @@ pub fn cmd_set_button(slot: u8, code: u8) -> Result<(), String> {
     }
     let frame = protocol::cmd_button(slot, protocol::ACTION_MOUSE, code, 0x00);
     with_device(|dev| dev.write(&frame))
+}
+
+#[derive(Serialize)]
+pub struct ButtonAssignment {
+    pub slot: u8,
+    pub category: u8,
+    pub code: u8,
+    pub modifier: u8,
+}
+
+/// Read the current assignment of every physical button slot. The slots live
+/// at 0x60..=0x73 (4 bytes each: category, code, modifier, checksum), so two
+/// block reads cover all five buttons.
+#[tauri::command]
+pub fn cmd_read_buttons() -> Result<Vec<ButtonAssignment>, String> {
+    with_device(|dev| {
+        let b60 = dev.exchange(&protocol::cmd_block_read(0x60))?; // 0x60..0x69
+        let b6a = dev.exchange(&protocol::cmd_block_read(0x6A))?; // 0x6A..0x73
+
+        // Response data starts at byte 5; addr X maps to b[5 + (X - base)].
+        let at = |base: u8, block: &[u8; 16], addr: u8| block[5 + (addr - base) as usize];
+        let read_slot = |slot: u8| -> ButtonAssignment {
+            let field = |offset: u8| {
+                let addr = slot + offset;
+                if addr <= 0x69 { at(0x60, &b60, addr) } else { at(0x6A, &b6a, addr) }
+            };
+            ButtonAssignment {
+                slot,
+                category: field(0),
+                code: field(1),
+                modifier: field(2),
+            }
+        };
+
+        Ok(protocol::BUTTON_DEFAULTS
+            .iter()
+            .map(|&(slot, _)| read_slot(slot))
+            .collect())
+    })
 }
 
 #[tauri::command]

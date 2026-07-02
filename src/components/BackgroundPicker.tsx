@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Check, Image as ImageIcon, Monitor, Sparkles, Upload } from 'lucide-react'
 import {
   BackgroundId,
@@ -23,6 +24,7 @@ export default function BackgroundPicker({
   open,
   onOpenChange,
 }: Props) {
+  const { t } = useTranslation()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -58,8 +60,8 @@ export default function BackgroundPicker({
         type="button"
         onClick={() => setOpen(!open)}
         className="grid h-8 w-8 place-items-center rounded-lg text-white/55 transition hover:bg-white/[.08] hover:text-accent"
-        title="Background"
-        aria-label="Change background"
+        title={t('topbar.changeBackground')}
+        aria-label={t('topbar.changeBackground')}
         aria-expanded={open}
       >
         <Sparkles size={15} />
@@ -71,7 +73,7 @@ export default function BackgroundPicker({
           onPointerDown={event => event.stopPropagation()}
         >
           <p className="px-3 pb-1 pt-1 text-[10px] font-bold uppercase tracking-[.18em] text-white/35">
-            Animation
+            {t('bg.animation')}
           </p>
           {backgrounds.map(option => {
             const active = option.id === background
@@ -92,7 +94,7 @@ export default function BackgroundPicker({
                 <span className="grid h-4 w-4 place-items-center text-accent">
                   <Sparkles size={12} />
                 </span>
-                <span className="flex-1 font-semibold">{option.label}</span>
+                <span className="flex-1 font-semibold">{t(`bg.${option.id}`, option.label)}</span>
                 {active && <Check size={14} className="text-accent" />}
               </button>
             )
@@ -101,7 +103,7 @@ export default function BackgroundPicker({
           <div className="my-1 border-t border-white/10" />
 
           <p className="px-3 pb-1 pt-1 text-[10px] font-bold uppercase tracking-[.18em] text-white/35">
-            Wallpaper
+            {t('bg.wallpaper')}
           </p>
 
           <button
@@ -118,7 +120,7 @@ export default function BackgroundPicker({
             <span className="grid h-4 w-4 place-items-center text-accent">
               <Monitor size={13} />
             </span>
-            <span className="flex-1 font-semibold">Default</span>
+            <span className="flex-1 font-semibold">{t('bg.default')}</span>
             {!hasWallpaper && <Check size={14} className="text-accent" />}
           </button>
 
@@ -138,7 +140,7 @@ export default function BackgroundPicker({
               {hasWallpaper ? <ImageIcon size={14} /> : <Upload size={13} />}
             </span>
             <span className="flex-1 font-semibold">
-              {busy ? 'Loading…' : hasWallpaper ? 'Custom' : 'Upload wallpaper…'}
+              {busy ? t('bg.loading') : hasWallpaper ? t('bg.custom') : t('bg.upload')}
             </span>
             {hasWallpaper && <Check size={14} className="text-accent" />}
           </button>
@@ -157,12 +159,12 @@ export default function BackgroundPicker({
               <span className="grid h-4 w-4 place-items-center text-accent">
                 <Upload size={12} />
               </span>
-              <span className="flex-1 font-semibold">Replace wallpaper…</span>
+              <span className="flex-1 font-semibold">{t('bg.replace')}</span>
             </button>
           )}
 
           {error && (
-            <p className="px-3 pb-1 pt-0.5 text-xs text-red-300">Could not load that image.</p>
+            <p className="px-3 pb-1 pt-0.5 text-xs text-red-300">{t('bg.loadError')}</p>
           )}
 
           <input

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { X, Usb } from 'lucide-react'
 import { ipc, HidDeviceInfo } from '../lib/ipc'
 
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function AddDeviceDialog({ onClose, onConnect }: Props) {
+  const { t } = useTranslation()
   const [devices, setDevices] = useState<HidDeviceInfo[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -34,7 +36,7 @@ export default function AddDeviceDialog({ onClose, onConnect }: Props) {
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <p className="font-semibold">Select Device</p>
+          <p className="font-semibold">{t('dialog.selectDevice')}</p>
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-white/10 text-white/50 hover:text-white transition"
@@ -45,10 +47,10 @@ export default function AddDeviceDialog({ onClose, onConnect }: Props) {
 
         <div className="p-4 max-h-[360px] overflow-y-auto space-y-2">
           {loading && (
-            <p className="text-sm text-white/50 text-center py-10">Scanning USB devices…</p>
+            <p className="text-sm text-white/50 text-center py-10">{t('dialog.scanning')}</p>
           )}
           {!loading && devices.length === 0 && (
-            <p className="text-sm text-white/50 text-center py-10">No HID devices found</p>
+            <p className="text-sm text-white/50 text-center py-10">{t('dialog.noDevices')}</p>
           )}
           {devices.map((d, i) => {
             const compat = isCompatible(d)
@@ -68,7 +70,7 @@ export default function AddDeviceDialog({ onClose, onConnect }: Props) {
                   <p className={`text-sm font-semibold truncate ${
                     compat ? 'text-white' : 'text-white/55'
                   }`}>
-                    {d.product_string || 'Unknown Device'}
+                    {d.product_string || t('dialog.unknownDevice')}
                   </p>
                   <p className="text-xs text-white/30 mt-0.5">
                     {d.manufacturer_string ? `${d.manufacturer_string} · ` : ''}
@@ -77,7 +79,7 @@ export default function AddDeviceDialog({ onClose, onConnect }: Props) {
                   </p>
                 </div>
                 {compat && (
-                  <span className="shrink-0 text-xs font-bold text-accent">Connect</span>
+                  <span className="shrink-0 text-xs font-bold text-accent">{t('dialog.connect')}</span>
                 )}
               </button>
             )
@@ -86,7 +88,7 @@ export default function AddDeviceDialog({ onClose, onConnect }: Props) {
 
         <div className="px-6 py-4 border-t border-white/10">
           <p className="text-xs text-white/35 text-center">
-            Plug in your IPI STAY FLY USB receiver — it will be detected automatically
+            {t('dialog.hint')}
           </p>
         </div>
       </div>

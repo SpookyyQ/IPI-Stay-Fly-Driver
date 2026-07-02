@@ -96,6 +96,7 @@ fn main() {
             commands::cmd_reset_buttons,
             commands::cmd_set_button,
             commands::cmd_set_button_key,
+            commands::cmd_read_buttons,
             commands::cmd_raw,
             commands::cmd_show_main,
             commands::cmd_quit,

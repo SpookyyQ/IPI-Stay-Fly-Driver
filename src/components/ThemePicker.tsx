@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Check, Palette } from 'lucide-react'
 import { applyTheme, getStoredTheme, THEME_STORAGE_KEY, ThemeId, themes } from '../lib/themes'
 
@@ -8,13 +9,18 @@ interface Props {
 }
 
 export default function ThemePicker({ open, onOpenChange }: Props) {
+  const { t } = useTranslation()
   const setOpen = onOpenChange
   const [theme, setTheme] = useState<ThemeId>(() => getStoredTheme())
   const rootRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     applyTheme(theme)
-    localStorage.setItem(THEME_STORAGE_KEY, theme)
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme)
+    } catch {
+      // Persisting the preference is best-effort; ignore quota errors.
+    }
   }, [theme])
 
   useEffect(() => {
@@ -34,8 +40,8 @@ export default function ThemePicker({ open, onOpenChange }: Props) {
         type="button"
         onClick={() => setOpen(!open)}
         className="grid h-8 w-8 place-items-center rounded-lg text-white/55 transition hover:bg-white/[.08] hover:text-accent"
-        title="Change theme"
-        aria-label="Change theme"
+        title={t('topbar.changeTheme')}
+        aria-label={t('topbar.changeTheme')}
         aria-expanded={open}
       >
         <Palette size={15} />

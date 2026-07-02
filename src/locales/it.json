@@ -3,7 +3,8 @@
     "title": "Driver IPI STAY FLY",
     "noDevice": "Nessun dispositivo collegato",
     "connecting": "Connessione…",
-    "language": "Lingua"
+    "language": "Lingua",
+    "mouseConfig": "Configurazione del mouse"
   },
   "tabs": {
     "home": "Home",
@@ -19,12 +20,21 @@
     "connected": "Connesso",
     "disconnected": "Disconnesso",
     "demo": "Demo",
-    "demoMode": "Modalità demo"
+    "demoMode": "Modalità demo",
+    "demoModeTag": "MODALITÀ DEMO",
+    "demoBanner": "Mouse virtuale attivo — comunicazione hardware disattivata",
+    "changeTheme": "Cambia tema",
+    "changeBackground": "Cambia sfondo",
+    "minimize": "Riduci a icona",
+    "maximize": "Ingrandisci",
+    "close": "Chiudi"
   },
   "dpi": {
     "title": "Impostazioni DPI",
     "stage": "Livello DPI",
-    "value": "Valore DPI"
+    "value": "Valore DPI",
+    "eyebrow": "Regolazione del sensore",
+    "stageLabel": "Livello {{num}}"
   },
   "lightning": {
     "title": "Illuminazione",
@@ -33,7 +43,8 @@
     "ledSolid": "Fisso",
     "ledBreathing": "Respiro",
     "brightness": "Luminosità",
-    "speed": "Velocità"
+    "speed": "Velocità",
+    "eyebrow": "LED"
   },
   "performance": {
     "title": "Prestazioni",
@@ -62,18 +73,38 @@
     "workMode": "Modalità operativa",
     "lowPower": "Basso consumo",
     "highPerf": "Alte prestazioni",
-    "ultraPerf": "Ultra Performance"
+    "ultraPerf": "Ultra Performance",
+    "eyebrow": "Controllo della latenza",
+    "experimentalHint": "Non inviato al mouse finché questo frame non è verificato."
   },
   "buttons": {
     "title": "Assegnazione pulsanti",
-    "placeholder": "La rimappatura dei pulsanti sarà disponibile nelle versioni future."
+    "restoreDefault": "Ripristina predefiniti",
+    "savedAction": "Salvato: {{action}}",
+    "savedKey": "Salvato: tasto {{key}}",
+    "restored": "Tutti i pulsanti ripristinati ai valori predefiniti",
+    "keyboardKey": "Tasto della tastiera…",
+    "actionLeft": "Clic sinistro",
+    "actionRight": "Clic destro",
+    "actionMiddle": "Clic centrale",
+    "actionBack": "Indietro",
+    "actionForward": "Avanti",
+    "nameLeft": "Pulsante sinistro",
+    "nameRight": "Pulsante destro",
+    "nameMiddle": "Pulsante centrale",
+    "nameSideForward": "Laterale avanti",
+    "nameSideBack": "Laterale indietro"
   },
   "advanced": {
     "title": "Avanzate",
     "receiverLed": "LED ricevitore",
     "receiverLedHz": "Indicatore Hz",
     "receiverLedBattery": "Indicatore batteria",
-    "receiverLedWarning": "Solo avviso"
+    "receiverLedWarning": "Solo avviso",
+    "eyebrow": "Comportamento del dispositivo",
+    "angleTitle": "Correzione dell'angolo",
+    "angleDesc": "Corregge la deriva del cursore quando il mouse è tenuto leggermente inclinato. Intervallo: da −45° a +45°.",
+    "angleLabel": "Angolo"
   },
   "other": {
     "title": "IPI STAY FLY",
@@ -93,15 +124,53 @@
     "confirm": "Conferma",
     "cancel": "Annulla",
     "about": "Informazioni",
-    "aboutText": "Driver open-source sostitutivo per il mouse gaming wireless IPI STAY FLY."
+    "aboutText": "Driver open-source sostitutivo per il mouse gaming wireless IPI STAY FLY.",
+    "eyebrow": "Dispositivo"
   },
   "dev": {
     "title": "Pannello sviluppatore",
     "sendFrame": "Invia frame (hex)",
     "send": "Invia",
-    "response": "Risposta",
-    "diffCapture": "Cattura diff",
-    "startCapture": "Avvia",
-    "stopCapture": "Ferma"
+    "response": "Risposta"
+  },
+  "home": {
+    "demoBadge": "Modalità demo",
+    "demoMouse": "Mouse demo",
+    "connected": "Connesso",
+    "notConnected": "Non connesso",
+    "addDevice": "Aggiungi dispositivo",
+    "configure": "Configura"
+  },
+  "dialog": {
+    "selectDevice": "Seleziona dispositivo",
+    "scanning": "Ricerca dispositivi USB…",
+    "noDevices": "Nessun dispositivo HID trovato",
+    "unknownDevice": "Dispositivo sconosciuto",
+    "connect": "Connetti",
+    "hint": "Collega il ricevitore USB IPI STAY FLY — verrà rilevato automaticamente"
+  },
+  "tray": {
+    "open": "Apri software",
+    "quit": "Esci",
+    "off": "Spento"
+  },
+  "bg": {
+    "animation": "Animazione",
+    "wallpaper": "Sfondo",
+    "default": "Predefinito",
+    "custom": "Personalizzato",
+    "upload": "Carica sfondo…",
+    "replace": "Sostituisci sfondo…",
+    "loading": "Caricamento…",
+    "loadError": "Impossibile caricare l'immagine.",
+    "none": "Nessuna",
+    "constellation": "Costellazione",
+    "particles": "Punti fluttuanti",
+    "starfield": "Campo stellare",
+    "waves": "Onde aurora"
+  },
+  "errors": {
+    "applyFailed": "Impossibile applicare l'impostazione: {{error}}",
+    "wallpaperTooLarge": "Lo sfondo è troppo grande per essere salvato — verrà ripristinato al prossimo avvio."
   }
 }

@@ -3,7 +3,8 @@
     "title": "Sterownik IPI STAY FLY",
     "noDevice": "Brak podłączonego urządzenia",
     "connecting": "Łączenie…",
-    "language": "Język"
+    "language": "Język",
+    "mouseConfig": "Konfiguracja myszy"
   },
   "tabs": {
     "home": "Start",
@@ -19,12 +20,21 @@
     "connected": "Połączono",
     "disconnected": "Rozłączono",
     "demo": "Demo",
-    "demoMode": "Tryb demo"
+    "demoMode": "Tryb demo",
+    "demoModeTag": "TRYB DEMO",
+    "demoBanner": "Wirtualna mysz aktywna — komunikacja ze sprzętem wyłączona",
+    "changeTheme": "Zmień motyw",
+    "changeBackground": "Zmień tło",
+    "minimize": "Minimalizuj",
+    "maximize": "Maksymalizuj",
+    "close": "Zamknij"
   },
   "dpi": {
     "title": "Ustawienia DPI",
     "stage": "Poziom DPI",
-    "value": "Wartość DPI"
+    "value": "Wartość DPI",
+    "eyebrow": "Strojenie sensora",
+    "stageLabel": "Poziom {{num}}"
   },
   "lightning": {
     "title": "Podświetlenie",
@@ -33,7 +43,8 @@
     "ledSolid": "Stałe",
     "ledBreathing": "Oddychanie",
     "brightness": "Jasność",
-    "speed": "Prędkość"
+    "speed": "Prędkość",
+    "eyebrow": "LED"
   },
   "performance": {
     "title": "Wydajność",
@@ -62,18 +73,38 @@
     "workMode": "Tryb pracy",
     "lowPower": "Niskie zużycie energii",
     "highPerf": "Wysoka wydajność",
-    "ultraPerf": "Ultra Performance"
+    "ultraPerf": "Ultra Performance",
+    "eyebrow": "Kontrola opóźnień",
+    "experimentalHint": "Nie zostanie wysłane do myszy, dopóki ta ramka nie zostanie zweryfikowana."
   },
   "buttons": {
     "title": "Przypisanie przycisków",
-    "placeholder": "Mapowanie przycisków będzie dostępne w późniejszych wersjach."
+    "restoreDefault": "Przywróć domyślne",
+    "savedAction": "Zapisano: {{action}}",
+    "savedKey": "Zapisano: klawisz {{key}}",
+    "restored": "Przywrócono domyślne ustawienia wszystkich przycisków",
+    "keyboardKey": "Klawisz klawiatury…",
+    "actionLeft": "Kliknięcie lewym",
+    "actionRight": "Kliknięcie prawym",
+    "actionMiddle": "Kliknięcie środkowym",
+    "actionBack": "Wstecz",
+    "actionForward": "Dalej",
+    "nameLeft": "Lewy przycisk",
+    "nameRight": "Prawy przycisk",
+    "nameMiddle": "Środkowy przycisk",
+    "nameSideForward": "Boczny przedni",
+    "nameSideBack": "Boczny tylny"
   },
   "advanced": {
     "title": "Zaawansowane",
     "receiverLed": "LED odbiornika",
     "receiverLedHz": "Wskaźnik Hz",
     "receiverLedBattery": "Wskaźnik baterii",
-    "receiverLedWarning": "Tylko ostrzeżenie"
+    "receiverLedWarning": "Tylko ostrzeżenie",
+    "eyebrow": "Zachowanie urządzenia",
+    "angleTitle": "Korekcja kąta",
+    "angleDesc": "Koryguje dryf kursora, gdy mysz jest trzymana pod lekkim kątem. Zakres: od −45° do +45°.",
+    "angleLabel": "Kąt"
   },
   "other": {
     "title": "IPI STAY FLY",
@@ -93,15 +124,53 @@
     "confirm": "Potwierdź",
     "cancel": "Anuluj",
     "about": "O aplikacji",
-    "aboutText": "Open-source'owy zamiennik sterownika dla bezprzewodowej myszy gamingowej IPI STAY FLY."
+    "aboutText": "Open-source'owy zamiennik sterownika dla bezprzewodowej myszy gamingowej IPI STAY FLY.",
+    "eyebrow": "Urządzenie"
   },
   "dev": {
     "title": "Panel deweloperski",
     "sendFrame": "Wyślij ramkę (hex)",
     "send": "Wyślij",
-    "response": "Odpowiedź",
-    "diffCapture": "Przechwytywanie diff",
-    "startCapture": "Start",
-    "stopCapture": "Stop"
+    "response": "Odpowiedź"
+  },
+  "home": {
+    "demoBadge": "Tryb demo",
+    "demoMouse": "Mysz demonstracyjna",
+    "connected": "Połączono",
+    "notConnected": "Nie połączono",
+    "addDevice": "Dodaj urządzenie",
+    "configure": "Konfiguruj"
+  },
+  "dialog": {
+    "selectDevice": "Wybierz urządzenie",
+    "scanning": "Skanowanie urządzeń USB…",
+    "noDevices": "Nie znaleziono urządzeń HID",
+    "unknownDevice": "Nieznane urządzenie",
+    "connect": "Połącz",
+    "hint": "Podłącz odbiornik USB IPI STAY FLY — zostanie wykryty automatycznie"
+  },
+  "tray": {
+    "open": "Otwórz oprogramowanie",
+    "quit": "Zakończ",
+    "off": "Wył."
+  },
+  "bg": {
+    "animation": "Animacja",
+    "wallpaper": "Tapeta",
+    "default": "Domyślna",
+    "custom": "Własna",
+    "upload": "Prześlij tapetę…",
+    "replace": "Zamień tapetę…",
+    "loading": "Wczytywanie…",
+    "loadError": "Nie udało się wczytać obrazu.",
+    "none": "Brak",
+    "constellation": "Konstelacja",
+    "particles": "Unoszące się kropki",
+    "starfield": "Pole gwiazd",
+    "waves": "Fale zorzy"
+  },
+  "errors": {
+    "applyFailed": "Nie udało się zastosować ustawienia: {{error}}",
+    "wallpaperTooLarge": "Tapeta jest zbyt duża, aby ją zapisać — zostanie zresetowana przy następnym uruchomieniu."
   }
 }

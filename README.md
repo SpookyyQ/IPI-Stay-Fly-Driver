@@ -130,6 +130,8 @@ Control receiver LED behavior, high-power modes, long-distance mode, angle snapp
 
 Windows 11 usually includes WebView2 already. On Windows 10, install it from Microsoft if the app cannot start.
 
+> **Note on releases:** the prebuilt binaries are not code-signed, so Windows SmartScreen may warn on first launch ("More info" → "Run anyway"). The app also has no auto-updater — check the [releases page](https://github.com/SpookyyQ/IPI-Stay-Fly-Driver/releases) for new versions.
+
 ## Getting Started
 
 ```sh
@@ -178,7 +180,6 @@ Press **Ctrl+Shift+D** while the app is running to open the raw HID frame panel.
 
 ## Roadmap
 
-- Button remapping
 - Additional lighting options
 - More captured protocol frames for unverified device features
 - Packaged public releases

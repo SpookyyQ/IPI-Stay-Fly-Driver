@@ -88,18 +88,24 @@ export default function TopBar({
         />
         <button
           onClick={() => appWindow.minimize()}
+          title={t('topbar.minimize')}
+          aria-label={t('topbar.minimize')}
           className="grid h-8 w-8 place-items-center rounded-lg text-white/50 transition hover:bg-white/[.08] hover:text-white"
         >
           <Minus size={14} />
         </button>
         <button
           onClick={() => appWindow.toggleMaximize()}
+          title={t('topbar.maximize')}
+          aria-label={t('topbar.maximize')}
           className="grid h-8 w-8 place-items-center rounded-lg text-white/50 transition hover:bg-white/[.08] hover:text-white"
         >
           <Square size={12} />
         </button>
         <button
           onClick={() => appWindow.close()}
+          title={t('topbar.close')}
+          aria-label={t('topbar.close')}
           className="grid h-8 w-8 place-items-center rounded-lg text-white/50 transition hover:bg-red-500/80 hover:text-white"
         >
           <X size={14} />

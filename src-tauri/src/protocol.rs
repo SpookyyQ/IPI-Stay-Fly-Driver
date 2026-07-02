@@ -49,17 +49,33 @@ pub fn cmd_select_stage(stage: u8) -> [u8; FRAME_LEN] {
     build(f)
 }
 
+/// DPI stage slot addresses in config memory: 0x0C, 0x10, 0x14, 0x18.
+/// Confirmed by the block reads in `cmd_read_settings` (stage N is read back
+/// from 0x0C + 4*N) and the captured stage-4 write at address 0x18.
+pub fn dpi_stage_addr(stage: u8) -> u8 {
+    0x0C + 4 * (stage & 0x03)
+}
+
 pub fn cmd_set_dpi(stage: u8, dpi: u16) -> [u8; FRAME_LEN] {
-    // dpi = 50..=42000, step 50. Byte 5 == byte 6 == (dpi/50)-1.
-    // Byte 8 purpose is unverified; 0x77 is the only captured working value so far.
-    let _stage = stage;
-    let val = ((dpi / 50).saturating_sub(1)) as u8;
+    // dpi = 50..=42000, step 50. Bytes 5 and 6 both carry the low byte of
+    // (dpi/50)-1; byte 7 carries the high bits (0 for DPI <= 12800 — values
+    // above that are extrapolated from the encoding and not yet captured).
+    //
+    // The frame is the same block-write shape as cmd_button: byte[3] = slot
+    // address, byte[4] = 0x04 (length), byte[8] = inner checksum
+    // (0x55 - byte[5] - byte[6] - byte[7]). The captured stage-4 / 5600 DPI
+    // frame (07 00 00 18 04 6f 6f 00 77 ...) satisfies both rules:
+    // 0x55 - 0x6f - 0x6f - 0x00 = 0x77.
+    let raw = (dpi / 50).saturating_sub(1);
+    let lo = (raw & 0xFF) as u8;
+    let hi = (raw >> 8) as u8;
     let mut f = [0u8; FRAME_LEN];
-    f[3] = 0x18;
+    f[3] = dpi_stage_addr(stage);
     f[4] = 0x04;
-    f[5] = val;
-    f[6] = val;  // not mini-checksum; both bytes carry the encoded DPI
-    f[8] = 0x77;
+    f[5] = lo;
+    f[6] = lo;
+    f[7] = hi;
+    f[8] = 0x55u8.wrapping_sub(lo).wrapping_sub(lo).wrapping_sub(hi);
     tail_checksum(&mut f);
     checksum(&mut f);
     f
@@ -247,6 +263,11 @@ pub fn cmd_dpi_led_brightness(raw: u8) -> [u8; FRAME_LEN] {
 
 pub fn brightness_to_raw(level: u8) -> u8 {
     ((level.min(10) as u16 * 255) / 10) as u8
+}
+
+/// Inverse of `brightness_to_raw`: raw 0-255 back to the 0-10 slider level.
+pub fn raw_to_brightness(raw: u8) -> u8 {
+    (((raw as u16) * 10 + 127) / 255) as u8
 }
 
 /// Breathing speed. ENCAP=0x50, raw value 1-5 (verified: 2,3,4,5 from captures).
@@ -509,6 +530,9 @@ pub fn cmd_factory_reset() -> [u8; FRAME_LEN] {
 }
 
 /// Scalar read that returns the currently active DPI stage index (0-3).
+/// Currently unused at runtime (the stage is read from config block 0x00),
+/// but kept because the frame is capture-verified.
+#[allow(dead_code)]
 pub fn cmd_read_dpi_stage() -> [u8; FRAME_LEN] {
     // byte[15] = 0x3B; checksum = 0x4D - 0x3B = 0x12
     let mut f = [0u8; FRAME_LEN];
@@ -853,5 +877,44 @@ mod tests {
     #[test]
     fn test_set_dpi_5600_stage4() {
         assert_eq!(cmd_set_dpi(3, 5600), hex("07 00 00 18 04 6f 6f 00 77 00 00 00 00 00 00 d5"));
+    }
+
+    #[test]
+    fn test_set_dpi_stage_addresses() {
+        assert_eq!(dpi_stage_addr(0), 0x0C);
+        assert_eq!(dpi_stage_addr(1), 0x10);
+        assert_eq!(dpi_stage_addr(2), 0x14);
+        assert_eq!(dpi_stage_addr(3), 0x18);
+        // Each stage write targets its own slot address.
+        assert_eq!(cmd_set_dpi(0, 5600)[3], 0x0C);
+        assert_eq!(cmd_set_dpi(1, 5600)[3], 0x10);
+        assert_eq!(cmd_set_dpi(2, 5600)[3], 0x14);
+    }
+
+    #[test]
+    fn test_set_dpi_inner_checksum() {
+        // 400 DPI: raw = 400/50 - 1 = 7. Inner checksum 0x55 - 7 - 7 = 0x47.
+        let f = cmd_set_dpi(0, 400);
+        assert_eq!(f[5], 0x07);
+        assert_eq!(f[6], 0x07);
+        assert_eq!(f[7], 0x00);
+        assert_eq!(f[8], 0x47);
+        // 800 DPI: raw = 15. 0x55 - 15 - 15 = 0x37.
+        let f = cmd_set_dpi(1, 800);
+        assert_eq!(f[5], 0x0F);
+        assert_eq!(f[8], 0x37);
+    }
+
+    #[test]
+    fn test_set_dpi_high_range_uses_high_byte() {
+        // 42000 DPI: raw = 839 = 0x0347 -> lo 0x47, hi 0x03 (extrapolated).
+        let f = cmd_set_dpi(3, 42000);
+        assert_eq!(f[5], 0x47);
+        assert_eq!(f[6], 0x47);
+        assert_eq!(f[7], 0x03);
+        assert_eq!(
+            f[8],
+            0x55u8.wrapping_sub(0x47).wrapping_sub(0x47).wrapping_sub(0x03)
+        );
     }
 }

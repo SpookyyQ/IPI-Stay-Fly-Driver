@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RotateCcw } from 'lucide-react'
 import mouseTopImage from '../../assets/fly-pro-top.png'
@@ -13,44 +13,84 @@ type Assignment =
 // Default keyboard key when a button is first switched to keyboard mode ('A').
 const DEFAULT_KEYCODE = 0x04
 
+// Action categories as written to the button slots (see protocol.rs).
+const CATEGORY_MOUSE = 0x01
+const CATEGORY_KEYBOARD = 0x05
+
 // Confirmed mouse-button action codes (HID button bitmask).
 const ACTIONS = [
-  { code: 0x01, label: 'Left Click' },
-  { code: 0x02, label: 'Right Click' },
-  { code: 0x04, label: 'Middle Click' },
-  { code: 0x08, label: 'Back' },
-  { code: 0x10, label: 'Forward' },
+  { code: 0x01, labelKey: 'buttons.actionLeft' },
+  { code: 0x02, labelKey: 'buttons.actionRight' },
+  { code: 0x04, labelKey: 'buttons.actionMiddle' },
+  { code: 0x08, labelKey: 'buttons.actionBack' },
+  { code: 0x10, labelKey: 'buttons.actionForward' },
 ] as const
 
 // Confirmed physical button slot addresses and their factory-default action.
 // `marker` is the dot position on the mouse image (percent of the square image).
 // `side` picks the callout column; `cardY` is the card's vertical position (%).
 const BUTTONS = [
-  { slot: 0x60, label: 'Left Button', defaultCode: 0x01, marker: { x: 39, y: 21 }, side: 'left', cardY: 14 },
-  { slot: 0x70, label: 'Side Forward', defaultCode: 0x10, marker: { x: 29, y: 40 }, side: 'left', cardY: 44 },
-  { slot: 0x6c, label: 'Side Back', defaultCode: 0x08, marker: { x: 29, y: 48 }, side: 'left', cardY: 66 },
-  { slot: 0x68, label: 'Middle Button', defaultCode: 0x04, marker: { x: 50, y: 20 }, side: 'right', cardY: 16 },
-  { slot: 0x64, label: 'Right Button', defaultCode: 0x02, marker: { x: 61, y: 21 }, side: 'right', cardY: 44 },
+  { slot: 0x60, labelKey: 'buttons.nameLeft', defaultCode: 0x01, marker: { x: 39, y: 21 }, side: 'left', cardY: 14 },
+  { slot: 0x70, labelKey: 'buttons.nameSideForward', defaultCode: 0x10, marker: { x: 29, y: 40 }, side: 'left', cardY: 44 },
+  { slot: 0x6c, labelKey: 'buttons.nameSideBack', defaultCode: 0x08, marker: { x: 29, y: 48 }, side: 'left', cardY: 66 },
+  { slot: 0x68, labelKey: 'buttons.nameMiddle', defaultCode: 0x04, marker: { x: 50, y: 20 }, side: 'right', cardY: 16 },
+  { slot: 0x64, labelKey: 'buttons.nameRight', defaultCode: 0x02, marker: { x: 61, y: 21 }, side: 'right', cardY: 44 },
 ] as const
 
 type Status = { kind: 'idle' | 'ok' | 'error'; text: string }
 
-export default function ButtonsTab() {
+interface Props {
+  connected: boolean
+  demoMode?: boolean
+}
+
+function defaultMapping(): Record<number, Assignment> {
+  return Object.fromEntries(BUTTONS.map(b => [b.slot, { type: 'mouse', code: b.defaultCode }]))
+}
+
+export default function ButtonsTab({ connected, demoMode = false }: Props) {
   const { t } = useTranslation()
-  const [mapping, setMapping] = useState<Record<number, Assignment>>(
-    () => Object.fromEntries(BUTTONS.map(b => [b.slot, { type: 'mouse', code: b.defaultCode }])),
-  )
+  const [mapping, setMapping] = useState<Record<number, Assignment>>(defaultMapping)
   const [busy, setBusy] = useState(false)
   const [status, setStatus] = useState<Status>({ kind: 'idle', text: '' })
+
+  // Hydrate the mapping from the mouse so the UI reflects reality after a
+  // restart. Demo mode keeps the local defaults.
+  useEffect(() => {
+    if (!connected || demoMode) return
+    let alive = true
+    ipc.readButtons()
+      .then(assignments => {
+        if (!alive) return
+        setMapping(prev => {
+          const next = { ...prev }
+          for (const a of assignments) {
+            if (a.category === CATEGORY_MOUSE && ACTIONS.some(x => x.code === a.code)) {
+              next[a.slot] = { type: 'mouse', code: a.code }
+            } else if (a.category === CATEGORY_KEYBOARD && a.modifier > 0) {
+              next[a.slot] = { type: 'key', keycode: a.modifier }
+            }
+          }
+          return next
+        })
+      })
+      .catch(() => {
+        // Read-back is best-effort; keep the defaults if the device declines.
+      })
+    return () => { alive = false }
+  }, [connected, demoMode])
+
+  const controlsDisabled = busy || (!connected && !demoMode)
 
   async function assignMouse(slot: number, code: number) {
     const previous = mapping[slot]
     setMapping(m => ({ ...m, [slot]: { type: 'mouse', code } }))
+    if (demoMode) return
     setBusy(true)
     try {
       await ipc.setButton(slot, code)
-      const action = ACTIONS.find(a => a.code === code)?.label ?? ''
-      setStatus({ kind: 'ok', text: `Saved: ${action}` })
+      const action = ACTIONS.find(a => a.code === code)
+      setStatus({ kind: 'ok', text: t('buttons.savedAction', { action: action ? t(action.labelKey) : '' }) })
     } catch (err) {
       setMapping(m => ({ ...m, [slot]: previous }))
       setStatus({ kind: 'error', text: String(err) })
@@ -62,10 +102,11 @@ export default function ButtonsTab() {
   async function assignKey(slot: number, keycode: number) {
     const previous = mapping[slot]
     setMapping(m => ({ ...m, [slot]: { type: 'key', keycode } }))
+    if (demoMode) return
     setBusy(true)
     try {
       await ipc.setButtonKey(slot, keycode)
-      setStatus({ kind: 'ok', text: `Saved: Key ${keyLabel(keycode)}` })
+      setStatus({ kind: 'ok', text: t('buttons.savedKey', { key: keyLabel(keycode) }) })
     } catch (err) {
       setMapping(m => ({ ...m, [slot]: previous }))
       setStatus({ kind: 'error', text: String(err) })
@@ -87,11 +128,16 @@ export default function ButtonsTab() {
   }
 
   async function restoreDefaults() {
+    if (demoMode) {
+      setMapping(defaultMapping())
+      setStatus({ kind: 'ok', text: t('buttons.restored') })
+      return
+    }
     setBusy(true)
     try {
       await ipc.resetButtons()
-      setMapping(Object.fromEntries(BUTTONS.map(b => [b.slot, { type: 'mouse', code: b.defaultCode }])))
-      setStatus({ kind: 'ok', text: 'All buttons restored to default' })
+      setMapping(defaultMapping())
+      setStatus({ kind: 'ok', text: t('buttons.restored') })
     } catch (err) {
       setStatus({ kind: 'error', text: String(err) })
     } finally {
@@ -103,16 +149,16 @@ export default function ButtonsTab() {
     <div className="min-h-[calc(100vh-7rem)]">
       <div className="mb-8 flex items-end justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[.32em] text-accent/80">Mouse Configuration</p>
+          <p className="text-xs uppercase tracking-[.32em] text-accent/80">{t('app.mouseConfig')}</p>
           <h2 className="mt-2 text-3xl font-black tracking-tight">{t('buttons.title')}</h2>
         </div>
         <button
           onClick={restoreDefaults}
-          disabled={busy}
+          disabled={controlsDisabled}
           className="flex items-center gap-2 rounded-xl bg-white/[.09] px-5 py-2 text-sm font-semibold text-white/85 transition hover:bg-white/[.14] disabled:cursor-not-allowed disabled:opacity-50"
         >
           <RotateCcw size={16} />
-          Restore Default
+          {t('buttons.restoreDefault')}
         </button>
       </div>
 
@@ -176,7 +222,7 @@ export default function ButtonsTab() {
               style={{ top: `${item.cardY}%` }}
             >
               <div className="rounded-lg bg-zinc-900/80 px-4 py-2 shadow-xl shadow-black/30 ring-1 ring-white/10 backdrop-blur">
-                <p className="text-[10px] uppercase tracking-wider text-white/42">{item.label}</p>
+                <p className="text-[10px] uppercase tracking-wider text-white/42">{t(item.labelKey)}</p>
                 {(() => {
                   const assignment = mapping[item.slot]
                   const selectValue = assignment.type === 'key' ? 'k' : `m:${assignment.code}`
@@ -184,23 +230,23 @@ export default function ButtonsTab() {
                     <>
                       <select
                         value={selectValue}
-                        disabled={busy}
+                        disabled={controlsDisabled}
                         onChange={e => handleActionChange(item.slot, e.target.value)}
                         className="mt-1 w-full rounded-md bg-white/[.06] px-2 py-1 text-sm font-bold text-white outline-none ring-1 ring-white/10 transition hover:bg-white/[.1] focus:ring-accent disabled:opacity-60"
                       >
                         {ACTIONS.map(a => (
                           <option key={a.code} value={`m:${a.code}`} className="bg-zinc-900 text-white">
-                            {a.label}
+                            {t(a.labelKey)}
                           </option>
                         ))}
                         <option value="k" className="bg-zinc-900 text-white">
-                          ⌨ {t('buttons.keyboardKey', 'Keyboard key…')}
+                          ⌨ {t('buttons.keyboardKey')}
                         </option>
                       </select>
                       {assignment.type === 'key' && (
                         <select
                           value={assignment.keycode}
-                          disabled={busy}
+                          disabled={controlsDisabled}
                           onChange={e => assignKey(item.slot, Number(e.target.value))}
                           className="mt-1.5 w-full rounded-md bg-white/[.06] px-2 py-1 text-sm font-bold text-white outline-none ring-1 ring-accent/40 transition hover:bg-white/[.1] focus:ring-accent disabled:opacity-60"
                         >

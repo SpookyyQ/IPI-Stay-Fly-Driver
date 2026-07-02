@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import Sidebar from './components/Sidebar'
 import type { Tab } from './components/Sidebar'
 import TopBar from './components/TopBar'
@@ -11,7 +12,9 @@ import OtherTab from './components/tabs/OtherTab'
 import HomeTab from './components/tabs/HomeTab'
 import DevPanel from './components/DevPanel'
 import BackgroundLayer from './components/BackgroundLayer'
+import Toasts from './components/Toasts'
 import { ipc, StatusInfo, DeviceSettings } from './lib/ipc'
+import { notifyError } from './lib/toast'
 import {
   BackgroundId,
   BG_STORAGE_KEY,
@@ -40,9 +43,17 @@ const DEMO_SETTINGS: DeviceSettings = {
   full_power: 0,
   work_mode: 1,
   rage_time: 6,
+  debounce: 8,
+  dpi_led_mode: 1,
+  dpi_led_brightness: 5,
+  breathing_speed: 3,
+  fps20k: false,
+  angle_enabled: false,
+  angle: 0,
 }
 
 export default function App() {
+  const { t } = useTranslation()
   const [tab, setTab] = useState<Tab>('home')
   const [demoMode, setDemoMode] = useState(false)
   const [status, setStatus] = useState<StatusInfo>({
@@ -58,13 +69,22 @@ export default function App() {
   const [wallpaper, setWallpaper] = useState<string | null>(() => getStoredWallpaper())
 
   useEffect(() => {
-    localStorage.setItem(BG_STORAGE_KEY, background)
+    try {
+      localStorage.setItem(BG_STORAGE_KEY, background)
+    } catch {
+      // Persisting the preference is best-effort; ignore quota errors.
+    }
   }, [background])
 
   useEffect(() => {
-    if (wallpaper) localStorage.setItem(BG_WALLPAPER_KEY, wallpaper)
-    else localStorage.removeItem(BG_WALLPAPER_KEY)
-  }, [wallpaper])
+    try {
+      if (wallpaper) localStorage.setItem(BG_WALLPAPER_KEY, wallpaper)
+      else localStorage.removeItem(BG_WALLPAPER_KEY)
+    } catch {
+      // A too-large wallpaper must not crash the app; it just won't persist.
+      notifyError(t('errors.wallpaperTooLarge'))
+    }
+  }, [wallpaper, t])
 
   const pollStatus = useCallback(async () => {
     if (demoMode) {
@@ -130,37 +150,45 @@ export default function App() {
         {demoMode && (
           <div className="demo-mode-banner">
             <span className="demo-mode-dot" />
-            <span>DEMO MODE</span>
-            <span className="font-semibold text-white/68">Virtual mouse active - hardware communication disabled</span>
+            <span>{t('topbar.demoModeTag')}</span>
+            <span className="font-semibold text-white/68">{t('topbar.demoBanner')}</span>
           </div>
         )}
         <main className="relative flex-1 overflow-y-auto p-7">
           <div className="tab-switcher">
             <div className={`tab-panel ${tab === 'home' ? 'tab-panel-active' : ''}`}>
-              <HomeTab status={status} demoMode={demoMode} onNavigate={setTab} />
+              <HomeTab status={status} demoMode={demoMode} onNavigate={setTab} onRefresh={pollStatus} />
             </div>
-            <div className={`tab-panel ${tab === 'buttons' ? 'tab-panel-active' : ''}`}><ButtonsTab /></div>
+            <div className={`tab-panel ${tab === 'buttons' ? 'tab-panel-active' : ''}`}>
+              <ButtonsTab connected={status.connected} demoMode={demoMode} />
+            </div>
             <div className={`tab-panel ${tab === 'dpi' ? 'tab-panel-active' : ''}`}>
               <DpiTab connected={status.connected} demoMode={demoMode} initialSettings={settings} />
             </div>
             <div className={`tab-panel ${tab === 'lightning' ? 'tab-panel-active' : ''}`}>
-              <LightningTab connected={status.connected} demoMode={demoMode} />
+              <LightningTab connected={status.connected} demoMode={demoMode} initialSettings={settings} />
             </div>
             <div className={`tab-panel ${tab === 'performance' ? 'tab-panel-active' : ''}`}>
               <PerformanceTab connected={status.connected} demoMode={demoMode} initialSettings={settings} />
             </div>
-            <div className={`tab-panel ${tab === 'advanced' ? 'tab-panel-active' : ''}`}><AdvancedTab connected={status.connected} demoMode={demoMode} /></div>
+            <div className={`tab-panel ${tab === 'advanced' ? 'tab-panel-active' : ''}`}>
+              <AdvancedTab connected={status.connected} demoMode={demoMode} initialSettings={settings} />
+            </div>
             <div className={`tab-panel ${tab === 'other' ? 'tab-panel-active' : ''}`}>
               <OtherTab onReset={() =>
                 demoMode
                   ? Promise.resolve()
-                  : ipc.factoryReset().then(() => ipc.readSettings()).then(setSettings).catch(() => {})
+                  : ipc.factoryReset()
+                      .then(() => ipc.readSettings())
+                      .then(setSettings)
+                      .catch(e => notifyError(t('errors.applyFailed', { error: String(e) })))
               } />
             </div>
           </div>
         </main>
       </div>
       {devOpen && <DevPanel onClose={() => setDevOpen(false)} />}
+      <Toasts />
     </div>
   )
 }

@@ -34,24 +34,39 @@ jobs:
       - name: Build Tauri app
         run: npm run tauri build
 
+      - name: Build release notes from changelog
+        shell: bash
+        run: |
+          {
+            echo "## IPI Stay Fly Driver ${GITHUB_REF_NAME}"
+            echo
+            echo "Open-source replacement driver for the **IPI STAY FLY** wireless gaming mouse."
+            echo
+            # Extract this tag's section from CHANGELOG.md (between its
+            # "## [x.y.z]" header and the next one).
+            version="${GITHUB_REF_NAME#v}"
+            awk -v ver="$version" '
+              $0 ~ "^## \\[" ver "\\]" { found=1; next }
+              found && /^## \[/ { exit }
+              found { print }
+            ' CHANGELOG.md
+            echo
+            echo "### Requirements"
+            echo "- Windows 10/11 (64-bit)"
+            echo "- WebView2 runtime (pre-installed on Windows 11; [download for Windows 10](https://developer.microsoft.com/en-us/microsoft-edge/webview2/))"
+            echo
+            echo "### Installation"
+            echo "Download the portable **IPI STAY FLY Driver.exe** or use the Windows installer from the release assets."
+            echo "The binaries are not code-signed, so Windows SmartScreen may warn on first launch."
+          } > release-notes.md
+
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ github.ref_name }}
           draft: false
           prerelease: false
-          generate_release_notes: true
-          body: |
-            ## IPI Stay Fly Driver ${{ github.ref_name }}
-
-            Open-source replacement driver for the **IPI STAY FLY** wireless gaming mouse.
-
-            ### Requirements
-            - Windows 10/11 (64-bit)
-            - WebView2 runtime (pre-installed on Windows 11; [download for Windows 10](https://developer.microsoft.com/en-us/microsoft-edge/webview2/))
-
-            ### Installation
-            Download the portable **IPI STAY FLY Driver.exe** or use the Windows installer from the release assets.
+          body_path: release-notes.md
           files: |
             src-tauri/target/release/IPI STAY FLY Driver.exe
             src-tauri/target/release/bundle/nsis/IPI STAY FLY Driver_*.exe

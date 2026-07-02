@@ -128,7 +128,20 @@ impl Device {
         Ok(frame)
     }
 
+    /// Discard any input reports still queued from a previous exchange that
+    /// timed out, so a late reply is never attributed to the next command.
+    fn drain(&self) {
+        let mut buf = [0u8; READ_BUF_LEN];
+        for _ in 0..8 {
+            match self.dev.read_timeout(&mut buf, 0) {
+                Ok(n) if n > 0 => continue,
+                _ => break,
+            }
+        }
+    }
+
     pub fn exchange(&self, frame: &[u8; FRAME_LEN]) -> Result<[u8; FRAME_LEN], String> {
+        self.drain();
         self.write(frame)?;
         self.read()
     }
@@ -149,9 +162,16 @@ where
     F: FnOnce(&Device) -> Result<T, String>,
 {
     ensure_connected()?;
-    let guard = DEVICE.lock().map_err(|e| e.to_string())?;
+    let mut guard = DEVICE.lock().map_err(|e| e.to_string())?;
     let dev = guard.as_ref().ok_or("device not available")?;
-    f(dev)
+    let result = f(dev);
+    // Drop the cached handle on any failure so the next call re-opens the
+    // device; this makes unplug/replug recover on the very next command
+    // instead of waiting for a status poll.
+    if result.is_err() {
+        *guard = None;
+    }
+    result
 }
 
 fn describe_candidate(candidate: &CandidateDevice) -> String {

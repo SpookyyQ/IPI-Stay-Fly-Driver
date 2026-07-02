@@ -3,7 +3,8 @@
     "title": "IPI STAY FLY Driver",
     "noDevice": "No device connected",
     "connecting": "Connecting…",
-    "language": "Language"
+    "language": "Language",
+    "mouseConfig": "Mouse Configuration"
   },
   "tabs": {
     "home": "Home",
@@ -19,12 +20,21 @@
     "connected": "Connected",
     "disconnected": "Disconnected",
     "demo": "Demo",
-    "demoMode": "Demo mode"
+    "demoMode": "Demo mode",
+    "demoModeTag": "DEMO MODE",
+    "demoBanner": "Virtual mouse active — hardware communication disabled",
+    "changeTheme": "Change theme",
+    "changeBackground": "Change background",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
   },
   "dpi": {
     "title": "DPI Settings",
     "stage": "DPI Stage",
-    "value": "DPI Value"
+    "value": "DPI Value",
+    "eyebrow": "Sensor tuning",
+    "stageLabel": "Stage {{num}}"
   },
   "lightning": {
     "title": "Lightning",
@@ -33,7 +43,8 @@
     "ledSolid": "Solid",
     "ledBreathing": "Breathing",
     "brightness": "Brightness",
-    "speed": "Speed"
+    "speed": "Speed",
+    "eyebrow": "LED"
   },
   "performance": {
     "title": "Performance",
@@ -62,19 +73,38 @@
     "workMode": "Work Mode",
     "lowPower": "Low Power",
     "highPerf": "High Performance",
-    "ultraPerf": "Ultra Performance"
+    "ultraPerf": "Ultra Performance",
+    "eyebrow": "Latency control",
+    "experimentalHint": "Not sent to the mouse until this frame is verified."
   },
   "buttons": {
     "title": "Button Assignment",
-    "placeholder": "Button remapping will be available in later versions.",
-    "keyboardKey": "Keyboard key…"
+    "keyboardKey": "Keyboard key…",
+    "restoreDefault": "Restore Default",
+    "savedAction": "Saved: {{action}}",
+    "savedKey": "Saved: Key {{key}}",
+    "restored": "All buttons restored to default",
+    "actionLeft": "Left Click",
+    "actionRight": "Right Click",
+    "actionMiddle": "Middle Click",
+    "actionBack": "Back",
+    "actionForward": "Forward",
+    "nameLeft": "Left Button",
+    "nameRight": "Right Button",
+    "nameMiddle": "Middle Button",
+    "nameSideForward": "Side Forward",
+    "nameSideBack": "Side Back"
   },
   "advanced": {
     "title": "Advanced",
     "receiverLed": "Receiver LED",
     "receiverLedHz": "Hz indicator",
     "receiverLedBattery": "Battery indicator",
-    "receiverLedWarning": "Warning only"
+    "receiverLedWarning": "Warning only",
+    "eyebrow": "Device behavior",
+    "angleTitle": "Angle Snapping",
+    "angleDesc": "Corrects cursor drift when the mouse is held at a slight angle. Range: −45° to +45°.",
+    "angleLabel": "Angle"
   },
   "other": {
     "title": "IPI STAY FLY",
@@ -94,15 +124,53 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "about": "About",
-    "aboutText": "Open-source replacement driver for the IPI STAY FLY wireless gaming mouse."
+    "aboutText": "Open-source replacement driver for the IPI STAY FLY wireless gaming mouse.",
+    "eyebrow": "Device"
   },
   "dev": {
     "title": "Developer Panel",
     "sendFrame": "Send Frame (hex)",
     "send": "Send",
-    "response": "Response",
-    "diffCapture": "Diff Capture",
-    "startCapture": "Start",
-    "stopCapture": "Stop"
+    "response": "Response"
+  },
+  "home": {
+    "demoBadge": "Demo Mode",
+    "demoMouse": "Demo mouse",
+    "connected": "Connected",
+    "notConnected": "Not connected",
+    "addDevice": "Add Device",
+    "configure": "Configure"
+  },
+  "dialog": {
+    "selectDevice": "Select Device",
+    "scanning": "Scanning USB devices…",
+    "noDevices": "No HID devices found",
+    "unknownDevice": "Unknown Device",
+    "connect": "Connect",
+    "hint": "Plug in your IPI STAY FLY USB receiver — it will be detected automatically"
+  },
+  "tray": {
+    "open": "Open Software",
+    "quit": "Quit",
+    "off": "Off"
+  },
+  "bg": {
+    "animation": "Animation",
+    "wallpaper": "Wallpaper",
+    "default": "Default",
+    "custom": "Custom",
+    "upload": "Upload wallpaper…",
+    "replace": "Replace wallpaper…",
+    "loading": "Loading…",
+    "loadError": "Could not load that image.",
+    "none": "None",
+    "constellation": "Constellation",
+    "particles": "Floating Dots",
+    "starfield": "Starfield",
+    "waves": "Aurora Waves"
+  },
+  "errors": {
+    "applyFailed": "Couldn't apply setting: {{error}}",
+    "wallpaperTooLarge": "The wallpaper is too large to save — it will reset on next launch."
   }
 }
