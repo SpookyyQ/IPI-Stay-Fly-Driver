@@ -130,7 +130,13 @@ Control receiver LED behavior, high-power modes, long-distance mode, angle snapp
 
 Windows 11 usually includes WebView2 already. On Windows 10, install it from Microsoft if the app cannot start.
 
-> **Note on releases:** the prebuilt binaries are not code-signed, so Windows SmartScreen may warn on first launch ("More info" → "Run anyway"). The app also has no auto-updater — check the [releases page](https://github.com/SpookyyQ/IPI-Stay-Fly-Driver/releases) for new versions.
+> **Note on releases:** the prebuilt binaries are not code-signed, so Windows SmartScreen may warn on first launch ("More info" → "Run anyway").
+
+## Auto-Update
+
+Since v1.5.0 the app checks GitHub Releases on startup and offers a one-click **Install & restart** when a newer version is available. Updates are signed with a Tauri updater keypair and verified against the public key embedded in the app before installing — GitHub Releases is the only backend.
+
+The self-update applies to the installed app (NSIS setup or MSI). The portable exe shows the update notice too; installing from it switches to the installed version. Manual downloads remain available on the [releases page](https://github.com/SpookyyQ/IPI-Stay-Fly-Driver/releases).
 
 ## Getting Started
 

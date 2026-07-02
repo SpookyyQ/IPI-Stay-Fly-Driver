@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "IPI STAY FLY Driver",
-    "version": "1.4.0"
+    "version": "1.5.0"
   },
   "tauri": {
     "allowlist": {
@@ -15,6 +15,10 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "process": {
+        "all": false,
+        "relaunch": true
       },
       "window": {
         "all": false,
@@ -38,6 +42,14 @@
     },
     "security": {
       "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:"
+    },
+    "updater": {
+      "active": true,
+      "dialog": false,
+      "endpoints": [
+        "https://github.com/SpookyyQ/IPI-Stay-Fly-Driver/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ0N0VENTVFRTUxMjY0QTUKUldTbFpCTGxYdFYrUkR6UmtoU0p6OEFwclV5c00zR0Vua1BFWE1Sai9TRnhrV0l5MWZDN1R3MEgK"
     },
     "systemTray": {
       "iconPath": "icons/icon.ico",

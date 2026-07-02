@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "No se pudo aplicar el ajuste: {{error}}",
     "wallpaperTooLarge": "El fondo es demasiado grande para guardarse — se restablecerá al reiniciar."
+  },
+  "updater": {
+    "available": "La versión {{version}} está disponible",
+    "install": "Instalar y reiniciar",
+    "installing": "Instalando actualización…",
+    "dismiss": "Más tarde",
+    "failed": "Error al actualizar: {{error}}"
   }
 }

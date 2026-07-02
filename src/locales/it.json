@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "Impossibile applicare l'impostazione: {{error}}",
     "wallpaperTooLarge": "Lo sfondo è troppo grande per essere salvato — verrà ripristinato al prossimo avvio."
+  },
+  "updater": {
+    "available": "La versione {{version}} è disponibile",
+    "install": "Installa e riavvia",
+    "installing": "Installazione dell'aggiornamento…",
+    "dismiss": "Più tardi",
+    "failed": "Aggiornamento non riuscito: {{error}}"
   }
 }

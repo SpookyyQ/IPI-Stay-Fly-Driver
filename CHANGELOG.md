@@ -2,6 +2,27 @@
 
 All notable changes to the IPI STAY FLY Driver are documented in this file.
 
+## [1.5.0] - 2026-07-02
+
+### Added
+
+- **Auto-updater with GitHub Releases as the only source.** The app checks
+  `releases/latest/download/latest.json` on startup and shows an
+  "Install & restart" banner (localized in all 9 languages) when a newer
+  version exists. Updates are cryptographically signed (Tauri updater
+  keypair) and verified against the public key baked into the app before
+  installing — no server involved, just GitHub Releases.
+- The release workflow now builds the signed update bundle
+  (`*.nsis.zip` + `.sig`) and generates/uploads `latest.json` automatically
+  on every tagged release.
+
+### Notes
+
+- Only the *installed* app (NSIS setup or MSI) can self-update; the portable
+  exe shows the update banner, and installing from it switches to the
+  installed version.
+- Apps older than 1.5.0 have no updater and must update manually one last time.
+
 ## [1.4.0] - 2026-07-02
 
 Full-project review release: every finding from a top-to-bottom audit of the driver was fixed.

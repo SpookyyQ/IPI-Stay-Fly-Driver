@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "Couldn't apply setting: {{error}}",
     "wallpaperTooLarge": "The wallpaper is too large to save — it will reset on next launch."
+  },
+  "updater": {
+    "available": "Version {{version}} is available",
+    "install": "Install & restart",
+    "installing": "Installing update…",
+    "dismiss": "Later",
+    "failed": "Update failed: {{error}}"
   }
 }

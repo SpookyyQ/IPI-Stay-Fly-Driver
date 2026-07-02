@@ -13,6 +13,7 @@ import HomeTab from './components/tabs/HomeTab'
 import DevPanel from './components/DevPanel'
 import BackgroundLayer from './components/BackgroundLayer'
 import Toasts from './components/Toasts'
+import UpdateBanner from './components/UpdateBanner'
 import { ipc, StatusInfo, DeviceSettings } from './lib/ipc'
 import { notifyError } from './lib/toast'
 import {
@@ -189,6 +190,7 @@ export default function App() {
       </div>
       {devOpen && <DevPanel onClose={() => setDevOpen(false)} />}
       <Toasts />
+      <UpdateBanner />
     </div>
   )
 }

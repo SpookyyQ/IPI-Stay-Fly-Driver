@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "Einstellung konnte nicht übernommen werden: {{error}}",
     "wallpaperTooLarge": "Das Hintergrundbild ist zu groß zum Speichern — es wird beim nächsten Start zurückgesetzt."
+  },
+  "updater": {
+    "available": "Version {{version}} ist verfügbar",
+    "install": "Installieren & neu starten",
+    "installing": "Update wird installiert…",
+    "dismiss": "Später",
+    "failed": "Update fehlgeschlagen: {{error}}"
   }
 }

@@ -33,6 +33,35 @@ jobs:
 
       - name: Build Tauri app
         run: npm run tauri build
+        env:
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ""
+
+      - name: Generate updater manifest (latest.json)
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          zip_path=$(ls src-tauri/target/release/bundle/nsis/*.nsis.zip)
+          sig_path="${zip_path}.sig"
+          zip_name=$(basename "$zip_path")
+          # GitHub replaces spaces with dots in uploaded asset names.
+          asset_name="${zip_name// /.}"
+          signature=$(cat "$sig_path")
+          cat > latest.json <<EOF
+          {
+            "version": "${version}",
+            "notes": "See the changelog: https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md",
+            "pub_date": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "platforms": {
+              "windows-x86_64": {
+                "signature": "${signature}",
+                "url": "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/${asset_name}"
+              }
+            }
+          }
+          EOF
+          cat latest.json
 
       - name: Build release notes from changelog
         shell: bash
@@ -70,6 +99,9 @@ jobs:
           files: |
             src-tauri/target/release/IPI STAY FLY Driver.exe
             src-tauri/target/release/bundle/nsis/IPI STAY FLY Driver_*.exe
+            src-tauri/target/release/bundle/nsis/IPI STAY FLY Driver_*.nsis.zip
+            src-tauri/target/release/bundle/nsis/IPI STAY FLY Driver_*.nsis.zip.sig
             src-tauri/target/release/bundle/msi/IPI STAY FLY Driver_*.msi
+            latest.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

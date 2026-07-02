@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "Impossible d'appliquer le réglage : {{error}}",
     "wallpaperTooLarge": "Le fond d'écran est trop volumineux pour être enregistré — il sera réinitialisé au prochain démarrage."
+  },
+  "updater": {
+    "available": "La version {{version}} est disponible",
+    "install": "Installer et redémarrer",
+    "installing": "Installation de la mise à jour…",
+    "dismiss": "Plus tard",
+    "failed": "Échec de la mise à jour : {{error}}"
   }
 }

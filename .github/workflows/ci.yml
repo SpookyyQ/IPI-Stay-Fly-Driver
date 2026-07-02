@@ -38,3 +38,8 @@ jobs:
 
       - name: Build
         run: npm run tauri build
+        env:
+          # The updater bundler needs the signing key; fork PRs without access
+          # to secrets will fail this step, which is acceptable for now.
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ""

@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "Nie udało się zastosować ustawienia: {{error}}",
     "wallpaperTooLarge": "Tapeta jest zbyt duża, aby ją zapisać — zostanie zresetowana przy następnym uruchomieniu."
+  },
+  "updater": {
+    "available": "Dostępna jest wersja {{version}}",
+    "install": "Zainstaluj i uruchom ponownie",
+    "installing": "Instalowanie aktualizacji…",
+    "dismiss": "Później",
+    "failed": "Aktualizacja nie powiodła się: {{error}}"
   }
 }

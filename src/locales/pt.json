@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "Não foi possível aplicar a configuração: {{error}}",
     "wallpaperTooLarge": "O papel de parede é grande demais para ser salvo — ele será redefinido na próxima inicialização."
+  },
+  "updater": {
+    "available": "A versão {{version}} está disponível",
+    "install": "Instalar e reiniciar",
+    "installing": "Instalando atualização…",
+    "dismiss": "Mais tarde",
+    "failed": "Falha na atualização: {{error}}"
   }
 }

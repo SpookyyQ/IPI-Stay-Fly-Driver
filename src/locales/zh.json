@@ -172,5 +172,12 @@
   "errors": {
     "applyFailed": "无法应用设置：{{error}}",
     "wallpaperTooLarge": "壁纸过大，无法保存 — 下次启动时将重置。"
+  },
+  "updater": {
+    "available": "新版本 {{version}} 可用",
+    "install": "安装并重启",
+    "installing": "正在安装更新…",
+    "dismiss": "稍后",
+    "failed": "更新失败：{{error}}"
   }
 }
