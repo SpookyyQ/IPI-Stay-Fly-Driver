@@ -2,7 +2,10 @@ use hidapi::{HidApi, HidDevice};
 use std::{ffi::CString, sync::Mutex};
 
 const VID: u16 = 0x3554;
-const PID: u16 = 0xF517;
+// 0xF517 = 2.4GHz receiver (wireless), 0xF515 = direct USB (wired).
+// The same STAY FLY mouse enumerates under a different product id depending on
+// how it's connected, so accept both so the app connects plugged in as well.
+const PIDS: [u16; 2] = [0xF517, 0xF515];
 const USAGE_PAGE: u16 = 0xFF02;
 const USAGE: u16 = 0x0002;
 const FRAME_LEN: usize = 16;
@@ -31,7 +34,7 @@ impl Device {
 
         let mut candidates = api
             .device_list()
-            .filter(|info| info.vendor_id() == VID && info.product_id() == PID)
+            .filter(|info| info.vendor_id() == VID && PIDS.contains(&info.product_id()))
             .map(|info| CandidateDevice {
                 path: info.path().to_owned(),
                 usage_page: info.usage_page(),
@@ -46,14 +49,14 @@ impl Device {
 
         if candidates.is_empty() {
             return Err(format!(
-                "STAY FLY not found for VID=0x{VID:04x} PID=0x{PID:04x}. Is the mouse/receiver connected and powered on?"
+                "STAY FLY not found for VID=0x{VID:04x} PIDs={PIDS:x?}. Is the mouse/receiver connected and powered on?"
             ));
         }
 
         candidates.sort_by_key(|candidate| (!candidate.exact_match, candidate.interface_number));
 
         eprintln!(
-            "STAY FLY HID candidates for VID=0x{VID:04x} PID=0x{PID:04x}:"
+            "STAY FLY HID candidates for VID=0x{VID:04x} PIDs={PIDS:x?}:"
         );
         for candidate in &candidates {
             eprintln!("  - {}", describe_candidate(candidate));
