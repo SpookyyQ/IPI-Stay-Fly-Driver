@@ -2,6 +2,17 @@
 
 All notable changes to the IPI STAY FLY Driver are documented in this file.
 
+## [1.5.1] - 2026-09-22
+
+### Fixed
+
+- **Wired USB connection not detected.** The mouse enumerates under a
+  different USB product id (0xF515) when connected directly via cable
+  instead of through the 2.4GHz receiver (0xF517). Device lookup now
+  matches both, so the app finds/opens the mouse when plugged in wired.
+  Credit to [Cruzbb88](https://github.com/Cruzbb88/IPI-Stay-Fly-Driver)
+  for identifying the wired product id.
+
 ## [1.5.0] - 2026-07-02
 
 ### Added
